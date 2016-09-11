@@ -537,16 +537,6 @@ BOOL CBattleTask::Execute(DWORD time)
 		if(rand()%(50*60*3000)==0)
 			AddEffect(EFCTID_HATTEN,640, 5);//Hatten
 
-	//ストライカーカウント回復
-/*	if (g_config.GetStrikerCount() != 0){
-		for (int i = 0; i < 2; i++){
-			if (strikercount[i] == 0){	//残り0なら
-				if (bf_counter == striker_lastcall[i] + g_config.GetGameSpeed2() * 10)	//10秒で回復
-					strikercount[i]++;
-			}
-		}
-	}*/
-
 	g_system.PopSysTag();
 	
 	return battle_end ? FALSE : TRUE;
@@ -1677,7 +1667,6 @@ DWORD CBattleTask::MessageFromObject(DWORD oid,DWORD msg,DWORD prm)
 			{
 				//OK
 				strikercount[team]--;
-//				striker_lastcall[team] = bf_counter;
 				g_system.PopSysTag();
 				return(TRUE);
 			}

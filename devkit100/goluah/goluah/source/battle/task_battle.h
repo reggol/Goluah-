@@ -106,7 +106,6 @@ protected:
 	//状態
 	DWORD hprecratio[2][MAXNUM_TEAM];	//!<自由交代制のときの体力回復率
 	BOOL  battle_end;		//!<タスクをヌけるのに使用
-//	DWORD striker_lastcall[2];	//ストライカーを最後に呼んだのはいつか
 
 	//!デバッグテキスト表示用バッファ
 	TCHAR *debugmsgbuff;

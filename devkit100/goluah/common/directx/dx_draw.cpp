@@ -1541,7 +1541,7 @@ static BOOL GoluahReadFile(HANDLE hFile, LPBYTE bits, DWORD sizeimage, NowLoadin
 
 	*br = 0;
 
-	for (int i = 0; i < sizeimage; i += 524288)
+	for (DWORD i = 0; i < sizeimage; i += 524288)
 	{
 		DWORD LoadBytes = min(524288, sizeimage - i);
 

@@ -223,13 +223,9 @@ void CSystem::MainLoop()
 
 	//fps算出
 	static DWORD timepass=0;
-	static DWORD passCnt=0;
 	timepass += eat_time;
-	passCnt++;
 	if(timepass > 1000){
-		m_fps = passCnt;
 		timepass=0;
-		passCnt=0;
 	}
 
 	//ログを見やすくするために、挿入
