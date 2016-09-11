@@ -10,7 +10,7 @@
 #define _aki3d_h_
 
 #include <vector>
-#include "d3dx9.h"
+#include "d3dx8.h"
 #include <tchar.h>
 
 #define FAR_CLIP	(50.0f)
@@ -128,7 +128,7 @@ public:
 
 	//!初期化。全ての操作の前に行うこと
 	void Initialize(
-		LPDIRECT3DDEVICE9 d3d_device,		//!< D3Dデバイスオブジェクト
+		LPDIRECT3DDEVICE8 d3d_device,		//!< D3Dデバイスオブジェクト
 		const TCHAR*	tex_path,				//!< テクスチャロード用のベースディレクトリ
 		WarningReportFunctionPtr pwf=NULL	//!< エラーリポート用の関数ポインタ
 		);
@@ -169,17 +169,17 @@ public:
 	void SetBlend_Nega();
 
 	//テクスチャー
-	LPDIRECT3DTEXTURE9 LoadTexture(const TCHAR *filename);
-	void UnloadTexture(LPDIRECT3DTEXTURE9 ptex);
+	LPDIRECT3DTEXTURE8 LoadTexture(const TCHAR *filename);
+	void UnloadTexture(LPDIRECT3DTEXTURE8 ptex);
 
-	LPDIRECT3DDEVICE9 GetD3DDev(){ return d3ddev; }
+	LPDIRECT3DDEVICE8 GetD3DDev(){ return d3ddev; }
 
 	void LogWarning(const TCHAR* fmt,...);
 
 protected:
 	void Destroy();
 
-	LPDIRECT3DDEVICE9 d3ddev;		//D3Dデバイス
+	LPDIRECT3DDEVICE8 d3ddev;		//D3Dデバイス
 	WarningReportFunctionPtr warning_report;
 };
 

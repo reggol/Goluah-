@@ -1430,7 +1430,7 @@ void CTStoryParamWindow::COptionSelecter::Draw()
 
 	MYVERTEX3D* vb;
 
-	if ( !g_draw.pMyVertex || FAILED(g_draw.pMyVertex->Lock(0, 0, (void**)&vb, D3DLOCK_DISCARD)) )
+	if ( !g_draw.pMyVertex || FAILED(g_draw.pMyVertex->Lock(0, 0, (BYTE**)&vb, D3DLOCK_DISCARD)) )
 		return;
 
 	vb[0].color = color;
@@ -1459,8 +1459,8 @@ void CTStoryParamWindow::COptionSelecter::Draw()
 	g_draw.EnableZ(FALSE,FALSE);
 	g_draw.SetTransform(FALSE);
 	g_draw.d3ddev->SetTexture(0,NULL);
-	g_draw.d3ddev->SetStreamSource(0, g_draw.pMyVertex, 0, sizeof(MYVERTEX3D));
-	g_draw.d3ddev->SetFVF(FVF_3DVERTEX);
+	g_draw.d3ddev->SetStreamSource(0, g_draw.pMyVertex, sizeof(MYVERTEX3D));
+	g_draw.d3ddev->SetVertexShader(FVF_3DVERTEX);
 	g_draw.d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP,0,2);
 	g_draw.EnableZ();
 

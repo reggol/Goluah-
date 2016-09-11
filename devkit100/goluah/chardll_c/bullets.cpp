@@ -2106,7 +2106,7 @@ DWORD CBlood::DrawBack()
 {
 	if(pdat->aid==CBB_STATE_RUN)
 	{
-		LPDIRECT3DDEVICE9 d3ddev = GetD3DDevice();
+		LPDIRECT3DDEVICE8 d3ddev = GetD3DDevice();
 		if(d3ddev)
 		{
 			MYVERTEX3D vb[4];

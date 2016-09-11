@@ -128,7 +128,7 @@ protected:
 	//!支援攻撃要請用カウンタ
 	UINT strikercall_counter[2];
 
-	LPDIRECT3DTEXTURE9 tex_fb;
+	LPDIRECT3DTEXTURE8 tex_fb;
 
 	//! リプレイ保存ファイルデータ
 	CFile RepFile;

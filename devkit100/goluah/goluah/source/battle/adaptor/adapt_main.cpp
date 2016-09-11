@@ -1,5 +1,5 @@
 ﻿#include "StdAfx.h"
-#define LPDIRECT3DTEXTURE9 LPVOID
+#define LPDIRECT3DTEXTURE8 LPVOID
 
 // #define EXPORT extern "C" __declspec(dllexport) 
 

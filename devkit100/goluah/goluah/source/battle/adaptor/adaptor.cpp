@@ -1,9 +1,6 @@
-﻿/*
-2011/10/29	Marvelで空中での交代を不可に
-*/
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 
-#define LPDIRECT3DTEXTURE9 LPVOID
+#define LPDIRECT3DTEXTURE8 LPVOID
 
 #include "define_gcd.h"
 #include "gobject.h"

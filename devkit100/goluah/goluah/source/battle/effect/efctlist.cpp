@@ -20,7 +20,7 @@
 //インスタンスを2つ以上作らないこと
 CEffectList* CEffectList::pinst = NULL;
 
-LPDIRECT3DTEXTURE9 aki3dtexture_circle = NULL;
+LPDIRECT3DTEXTURE8 aki3dtexture_circle = NULL;
 
 /*---------------------------------------------------------------
 	生成
@@ -63,7 +63,7 @@ void CEffectList::Initialize()
 -----------------------------------------------------------------*/
 void CEffectList::LoadTextures()
 {
-	LPDIRECT3DTEXTURE9 p;
+	LPDIRECT3DTEXTURE8 p;
 	TCHAR *filename = new TCHAR [128];
 
 	for(int i=0;i<MAXNUM_SYSFXTEXTURES;i++){

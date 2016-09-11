@@ -1159,13 +1159,13 @@ void CTCharacterSelectBG::Draw()
 	g_draw.EnableZ(FALSE,FALSE);
 	
 	g_draw.d3ddev->SetTexture(0,ptex_cs1);
-	g_draw.d3ddev->SetFVF(FVF_3DVERTEX);
-	g_draw.d3ddev->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
-	g_draw.d3ddev->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
+	g_draw.d3ddev->SetVertexShader(FVF_3DVERTEX);
+	g_draw.d3ddev->SetTextureStageState(0, D3DTSS_ADDRESSU, D3DTADDRESS_WRAP);
+	g_draw.d3ddev->SetTextureStageState(0, D3DTSS_ADDRESSV, D3DTADDRESS_WRAP);
 	g_draw.d3ddev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,
 		2,vbg,sizeof(MYVERTEX3D));
-	g_draw.d3ddev->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
-	g_draw.d3ddev->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
+	g_draw.d3ddev->SetTextureStageState(0, D3DTSS_ADDRESSU, D3DTADDRESS_CLAMP);
+	g_draw.d3ddev->SetTextureStageState(0, D3DTSS_ADDRESSV, D3DTADDRESS_CLAMP);
 
 	g_draw.EnableZ();
 }

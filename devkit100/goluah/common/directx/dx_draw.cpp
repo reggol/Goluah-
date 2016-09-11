@@ -107,7 +107,7 @@ BOOL CDirectDraw::Initialize(HWND hwnd,BOOL win)
 	}
 
 	//最大テクスチャサイズ取得
-	D3DCAPS9 cap8;
+	D3DCAPS8 cap8;
 	if(dd->GetDeviceCaps(D3DADAPTER_DEFAULT,devtypenow,&cap8)!=D3D_OK){
 		Destroy();
 		return FALSE;
@@ -161,7 +161,7 @@ BOOL CDirectDraw::Initialize(HWND hwnd,BOOL win)
 
 	// 描画用の頂点バッファ
 	if ( FAILED(d3ddev->CreateVertexBuffer(sizeof(MYVERTEX3D) * 4, D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
-											FVF_3DVERTEX, D3DPOOL_DEFAULT, &pMyVertex, NULL)) )
+											FVF_3DVERTEX, D3DPOOL_DEFAULT, &pMyVertex)) )
 	{
 		Destroy();
 		return FALSE;
@@ -224,7 +224,7 @@ void CDirectDraw::InitStates()
 		}
 	}
 
-	d3ddev->SetFVF(FVF_3DVERTEX);//とりあえず設定しとく
+	d3ddev->SetVertexShader(FVF_3DVERTEX);//とりあえず設定しとく
 }
 
 
@@ -240,7 +240,7 @@ void CDirectDraw::InitStates()
 BOOL CDirectDraw::InitDirectDraw(HWND hwnd,BOOL win)
 {
 	// Direct3D オブジェクトを作成
-	dd = Direct3DCreate9(D3D_SDK_VERSION);
+	dd = Direct3DCreate8(D3D_SDK_VERSION);
     if (NULL == dd){
         MessageBox(hwnd,_T("Direct3DCreate9に失敗\nDirectXのバージョンが古いと思われ"),_T("エラー"),MB_OK|MB_ICONSTOP);
         return(FALSE);
@@ -463,7 +463,7 @@ void CDirectDraw::EndDraw()
 */
 LPD3DXFONT CDirectDraw::CreateMyFont(DWORD h)
 {
-	/*	HDC      hTextDC = NULL;
+		HDC      hTextDC = NULL;
 		HFONT    hFont = NULL, hOldFont = NULL;
 		LPD3DXFONT cf;
 
@@ -486,26 +486,7 @@ LPD3DXFONT CDirectDraw::CreateMyFont(DWORD h)
 		DeleteObject(hFont);
 
 		if(ret!=D3D_OK)return(NULL);
-		return(cf);*/
-
-	//エラー吐いたので他所からコードコピペしてきた
-	LPD3DXFONT pFont;
-	if (FAILED(D3DXCreateFont(d3ddev,
-		h,                     //文字高さ
-		0,                      //文字幅
-		FW_NORMAL,                //フォントスタイル
-		NULL,                   //ミップマップモデルの数
-		FALSE,                  //斜体にするかどうか
-		SHIFTJIS_CHARSET,       //文字セット
-		OUT_DEFAULT_PRECIS,
-		PROOF_QUALITY,
-		FIXED_PITCH | FF_MODERN,
-		"ＭＳ Ｐゴシック",               //フォントの種類
-		&pFont)))
-	{
-		return NULL;
-	}
-	return pFont;
+		return(cf);
 }
 
 /*
@@ -625,7 +606,7 @@ LPD3DXFONT CDirectDraw::CreateMyFont(DWORD h)
 			// 描画
 			d3ddev->SetTransform(D3DTS_WORLD, &world);
 			d3ddev->SetStreamSource(0, pVertexBuffer, 0, sizeof(Vtx));
-			d3ddev->SetFVF(D3DFVF_XYZ | D3DFVF_TEX1);
+			d3ddev->SetVertexShader(D3DFVF_XYZ | D3DFVF_TEX1);
 			d3ddev->SetTexture(0, pTex);
 			d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 
@@ -655,7 +636,7 @@ void CDirectDraw::ResetDirectDraw()
 //	if (pSprite)
 //		pSprite->OnResetDevice();
 	d3ddev->CreateVertexBuffer(sizeof(MYVERTEX3D) * 4, D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
-											FVF_3DVERTEX, D3DPOOL_DEFAULT, &pMyVertex, NULL);
+											FVF_3DVERTEX, D3DPOOL_DEFAULT, &pMyVertex);
 
 	for (int i = 0; i < AKIDX_FONTNUM; i++)
 		if (lpFont[i])
@@ -912,9 +893,9 @@ MYSURFACE* CDirectDraw::CreateSurfaceFrom256BMP(TCHAR *filename,TCHAR *palname,B
 
 	//指定サイズのテクスチャを作成
 	LPVOID pointer;
-	pointer = malloc( sizeof(LPDIRECT3DTEXTURE9)*(ms[e].xsufnum*ms[e].ysufnum+1));
-	ZeroMemory(pointer,sizeof(LPDIRECT3DTEXTURE9)*(ms[e].xsufnum*ms[e].ysufnum+1));
-	ms[e].pTex = (LPDIRECT3DTEXTURE9*)pointer;//ポインタを確保する領域を確保
+	pointer = malloc( sizeof(LPDIRECT3DTEXTURE8)*(ms[e].xsufnum*ms[e].ysufnum+1));
+	ZeroMemory(pointer,sizeof(LPDIRECT3DTEXTURE8)*(ms[e].xsufnum*ms[e].ysufnum+1));
+	ms[e].pTex = (LPDIRECT3DTEXTURE8*)pointer;//ポインタを確保する領域を確保
 	for(i=0;i<ms[e].ysufnum;i++){
 		for(j=0;j<ms[e].xsufnum;j++){
 			d3ddev->CreateTexture(
@@ -924,8 +905,7 @@ MYSURFACE* CDirectDraw::CreateSurfaceFrom256BMP(TCHAR *filename,TCHAR *palname,B
 				0,//D3DUSAGE_RENDERTARGET,
 				texformat,//D3DFMT_A8R8G8B8,//D3DFMT_R5G6B5,//D3DFMT_R5G6B5,
 				D3DPOOL_MANAGED,
-				&(ms[e].pTex[i*ms[e].xsufnum + j]),
-				NULL);
+				&(ms[e].pTex[i*ms[e].xsufnum + j]));
 		}
 	}
 
@@ -1078,14 +1058,14 @@ BOOL CDirectDraw::CopyBB2TS(MYPALLET *pbb,
 							DWORD bbpitch,
 							DWORD offset_x,
 							DWORD offset_y,
-							LPDIRECT3DTEXTURE9 ptex,
+							LPDIRECT3DTEXTURE8 ptex,
 							DWORD damex,
 							DWORD damey)
 {
 	if(pbb==NULL)return(FALSE);
 	if(ptex==NULL)return(FALSE);
 
-	IDirect3DSurface9 *psuf = NULL;
+	IDirect3DSurface8 *psuf = NULL;
 	if(D3D_OK != ptex->GetSurfaceLevel(0,&psuf)){
 		ODS(_T("CopyBB2TS / GetSurfaceLevelに失敗\n"));
 		return(FALSE);
@@ -2432,7 +2412,7 @@ void CDirectDraw::CheckBlt2(MYSURFACE *dds,int x,int y,RECT r,
 					vb=dds->ysufsize[j] - (cut_top+cut_bottom);
 					vb=vb*ar2;//-1.0f
 					//(3) 頂点配列に座標値を代入
-					if ( !pMyVertex || FAILED(pMyVertex->Lock(0, 0, (void**)&vrtxarr, D3DLOCK_DISCARD)) )
+					if ( !pMyVertex || FAILED(pMyVertex->Lock(0, 0, (BYTE**)&vrtxarr, D3DLOCK_DISCARD)) )
 						return;
 
 					//左上
@@ -2494,10 +2474,10 @@ void CDirectDraw::CheckBlt2(MYSURFACE *dds,int x,int y,RECT r,
 					d3ddev->SetTransform(D3DTS_WORLD,&matw);//*設定*
 					//(5) 描画
 					d3ddev->SetTexture(0,dds->pTex[j*dds->xsufnum+i]);//テクスチャ設定
-					d3ddev->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
-					d3ddev->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
-					d3ddev->SetStreamSource(0, pMyVertex, 0, sizeof(MYVERTEX3D));
-					d3ddev->SetFVF(FVF_3DVERTEX);//頂点のフォーマットを指定
+					d3ddev->SetTextureStageState(0, D3DTSS_ADDRESSU, D3DTADDRESS_CLAMP);
+					d3ddev->SetTextureStageState(0, D3DTSS_ADDRESSV, D3DTADDRESS_CLAMP);
+					d3ddev->SetStreamSource(0, pMyVertex, sizeof(MYVERTEX3D));
+					d3ddev->SetVertexShader(FVF_3DVERTEX);//頂点のフォーマットを指定
 					d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP,0,2);//描画
 				}
 			}
@@ -2634,7 +2614,7 @@ void CDirectDraw::MyBlt3D(MYSURFACE *dds,RECT src,MYRECT3D dst,DWORD flag,DWORD 
 					vt=0;
 					vb=dds->ysufsize[j] - (cut_top+cut_bottom);
 					//(3) 頂点配列に座標値を代入
-					if ( !pMyVertex || FAILED(pMyVertex->Lock(0, 0, (void**)&vrtxarr, D3DLOCK_DISCARD)) )
+					if ( !pMyVertex || FAILED(pMyVertex->Lock(0, 0, (BYTE**)&vrtxarr, D3DLOCK_DISCARD)) )
 						return;
 
 					//左上
@@ -2698,10 +2678,10 @@ void CDirectDraw::MyBlt3D(MYSURFACE *dds,RECT src,MYRECT3D dst,DWORD flag,DWORD 
 					d3ddev->SetTransform(D3DTS_WORLD,&matw);//*設定*
 					//(5) 描画
 					d3ddev->SetTexture(0,dds->pTex[j*dds->xsufnum+i]);//テクスチャ設定
-					d3ddev->SetStreamSource(0, pMyVertex, 0, sizeof(MYVERTEX3D));
-					d3ddev->SetFVF(FVF_3DVERTEX);//頂点のフォーマットを指定
-					d3ddev->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
-					d3ddev->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
+					d3ddev->SetStreamSource(0, pMyVertex, sizeof(MYVERTEX3D));
+					d3ddev->SetVertexShader(FVF_3DVERTEX);//頂点のフォーマットを指定
+					d3ddev->SetTextureStageState(0, D3DTSS_ADDRESSU, D3DTADDRESS_CLAMP);
+					d3ddev->SetTextureStageState(0, D3DTSS_ADDRESSV, D3DTADDRESS_CLAMP);
 					d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP,0,2);//描画
 				}
 			}
@@ -3590,7 +3570,7 @@ void CDirectDraw::DrawLine(
 
 	d3ddev->SetTexture(0,NULL);
 	d3ddev->SetTransform(D3DTS_WORLD,&matparent);
-	d3ddev->SetFVF(FVF_3DVERTEX);
+	d3ddev->SetVertexShader(FVF_3DVERTEX);
 	d3ddev->DrawPrimitiveUP(
 		D3DPT_LINELIST,2,vb,sizeof(MYVERTEX3D));
 }
@@ -3932,7 +3912,7 @@ void CDirectDraw::DrawCircle(int x,			//!< 円の中心位置x
 	d3ddev->SetRenderState(D3DRS_ZENABLE,FALSE);
 	d3ddev->SetTexture(0,NULL);
 	d3ddev->SetTransform(D3DTS_WORLD,&matw);
-	d3ddev->SetFVF(FVF_3DVERTEX);
+	d3ddev->SetVertexShader(FVF_3DVERTEX);
 	d3ddev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,NUMCIRCLEDIVIDE*2,vb,sizeof(MYVERTEX3D));
 	d3ddev->SetRenderState(D3DRS_ZENABLE,TRUE);
 
@@ -3963,7 +3943,7 @@ void CDirectDraw::DrawBlueText(
 		r.bottom/=2;
 	}
 
-	lpFont[size]->DrawText(NULL, text, len, &r
+	lpFont[size]->DrawText(text, len, &r
                     ,method
                     ,0xFF5522FF
                     );
@@ -3982,7 +3962,7 @@ void CDirectDraw::DrawRedText(RECT& r,TCHAR *text,int len,DWORD method,DWORD siz
 		r.top/=2;
 		r.bottom/=2;
 	}
-	lpFont[size]->DrawText(NULL, text, len, &r
+	lpFont[size]->DrawText(text, len, &r
                     ,method
                     ,0xFFFF2255
                     );
@@ -4001,7 +3981,7 @@ void CDirectDraw::ReduceColor(DWORD alpha, bool isShadow /* = false */)
 	d3ddev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_SRCALPHA);
 
 	// スクリーン全体を覆うポリゴン
-	if ( !pMyVertex || FAILED(pMyVertex->Lock(0, 0, (void**)&vb, D3DLOCK_DISCARD)) )
+	if ( !pMyVertex || FAILED(pMyVertex->Lock(0, 0, (BYTE**)&vb, D3DLOCK_DISCARD)) )
 		return;
 	vb[0].color = alpha << 24;
 	vb[1].color = alpha << 24;
@@ -4031,9 +4011,9 @@ void CDirectDraw::ReduceColor(DWORD alpha, bool isShadow /* = false */)
 
 	if (!isShadow)
 		EnableZ(FALSE,FALSE);
-	d3ddev->SetStreamSource(0, pMyVertex, 0, sizeof(MYVERTEX3D));
+	d3ddev->SetStreamSource(0, pMyVertex, sizeof(MYVERTEX3D));
 	d3ddev->SetTexture(0, NULL);
-	d3ddev->SetFVF(FVF_3DVERTEX);
+	d3ddev->SetVertexShader(FVF_3DVERTEX);
 	d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 
 	// 元に戻す
@@ -4058,14 +4038,14 @@ extern RECT g_rcClient;
 *
 *	@return 失敗したらNULL
 */
-LPDIRECT3DTEXTURE9 CDirectDraw::GetFrontBufferCopy()
+LPDIRECT3DTEXTURE8 CDirectDraw::GetFrontBufferCopy()
 {
 	//生成するテクスチャーサイズを決定
 	UINT tex_width = m_desktop_width;//g_DISPLAYWIDTH;
 	UINT tex_height = m_desktop_height;//g_DISPLAYHEIGHT;
 
 	//コピー用テクスチャ生成
-	LPDIRECT3DTEXTURE9 ret=NULL;
+	LPDIRECT3DTEXTURE8 ret=NULL;
 	if(D3D_OK!=d3ddev->CreateTexture(          
 							tex_width,	//UINT Width,
 							tex_height,	//UINT Height,
@@ -4074,8 +4054,7 @@ LPDIRECT3DTEXTURE9 CDirectDraw::GetFrontBufferCopy()
 							D3DFMT_A8R8G8B8,	//D3DFORMAT Format,コピーするときはこのフォーマットじゃなきゃダメらしい
 //							d3dpp.BackBufferFormat,	//D3DFORMAT Format,ひょっとしたらこっちかもしれないので試しに差し替えてみた
 							D3DPOOL_SYSTEMMEM ,//D3DPOOL Pool,コピーするときはシステムメモリじゃなきゃダメらしい
-							&ret,		//IDirect3DTexture9** ppTexture
-							NULL
+							&ret		//IDirect3DTexture9** ppTexture
 							))
 	{
 		return NULL;
@@ -4084,7 +4063,7 @@ LPDIRECT3DTEXTURE9 CDirectDraw::GetFrontBufferCopy()
 
 	//テクスチャーからサーフェースを取得する
 	//リファレンスカウントが増えるから、Releaseすること
-	IDirect3DSurface9 *surface = NULL;
+	IDirect3DSurface8 *surface = NULL;
 	if(D3D_OK!=ret->GetSurfaceLevel(0,&surface))
 	{
 		ret->Release();
@@ -4098,7 +4077,7 @@ LPDIRECT3DTEXTURE9 CDirectDraw::GetFrontBufferCopy()
 	OutputDebugString(tekito);
 
 	//コピー
-	if(D3D_OK!=d3ddev->GetFrontBufferData(0,surface))
+	if (D3D_OK != d3ddev->GetFrontBuffer(surface))//Data(0,surface))
 	{
 		ret->Release();
 		surface->Release();
@@ -4106,8 +4085,8 @@ LPDIRECT3DTEXTURE9 CDirectDraw::GetFrontBufferCopy()
 	}
 
 	//一旦別テクスチャにコピーしにゃならん。めんどくせー
-	LPDIRECT3DTEXTURE9 ret2=NULL;
-	IDirect3DSurface9 *surface2 = NULL;
+	LPDIRECT3DTEXTURE8 ret2=NULL;
+	IDirect3DSurface8 *surface2 = NULL;
 	do
 	{
 		//ウィンドウモードの場合、デスクトップ全体のコピーが
@@ -4141,8 +4120,7 @@ LPDIRECT3DTEXTURE9 CDirectDraw::GetFrontBufferCopy()
 								0,			//DWORD Usage,
 								D3DFMT_A1R5G5B5,	//D3DFORMAT Format,コピーしたフォーマットと同じの
 								D3DPOOL_MANAGED ,//D3DPOOL Pool,描画するときはシステムメモリじゃダメらしい
-								&ret2,		//IDirect3DTexture9** ppTexture
-								NULL
+								&ret2		//IDirect3DTexture9** ppTexture
 								))
 		{
 			break;
@@ -4234,7 +4212,7 @@ DWORD* CDirectDraw::GetFrontBufferCopyRaw(UINT *wdt,UINT *hgt)
 	UINT tex_height = m_desktop_height;//g_DISPLAYHEIGHT;
 
 	//コピー用テクスチャ生成
-	LPDIRECT3DTEXTURE9 ret=NULL;
+	LPDIRECT3DTEXTURE8 ret=NULL;
 	if(D3D_OK!=d3ddev->CreateTexture(          
 							tex_width,	//UINT Width,
 							tex_height,	//UINT Height,
@@ -4243,8 +4221,7 @@ DWORD* CDirectDraw::GetFrontBufferCopyRaw(UINT *wdt,UINT *hgt)
 							D3DFMT_A8R8G8B8,	//D3DFORMAT Format,コピーするときはこのフォーマットじゃなきゃダメらしい
 //							d3dpp.BackBufferFormat,	//D3DFORMAT Format,ひょっとしたらこっちかもしれないので試しに差し替えてみた
 							D3DPOOL_SYSTEMMEM ,//D3DPOOL Pool,コピーするときはシステムメモリじゃなきゃダメらしい
-							&ret,		//IDirect3DTexture9** ppTexture
-							NULL
+							&ret		//IDirect3DTexture9** ppTexture
 							))
 	{
 		return NULL;
@@ -4253,7 +4230,7 @@ DWORD* CDirectDraw::GetFrontBufferCopyRaw(UINT *wdt,UINT *hgt)
 
 	//テクスチャーからサーフェースを取得する
 	//リファレンスカウントが増えるから、Releaseすること
-	IDirect3DSurface9 *surface = NULL;
+	IDirect3DSurface8 *surface = NULL;
 	if(D3D_OK!=ret->GetSurfaceLevel(0,&surface))
 	{
 		ret->Release();
@@ -4267,7 +4244,7 @@ DWORD* CDirectDraw::GetFrontBufferCopyRaw(UINT *wdt,UINT *hgt)
 	OutputDebugString(tekito);
 
 	//コピー
-	if(D3D_OK!=d3ddev->GetFrontBufferData(0,surface))
+	if (D3D_OK != d3ddev->GetFrontBuffer(surface))//Data(0,surface))
 	{
 		ret->Release();
 		surface->Release();

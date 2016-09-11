@@ -112,7 +112,7 @@ void CTBattlePause::Draw()
 {
 	g_draw.EnableZ(FALSE,FALSE);
 	g_draw.SetTransform(FALSE);
-	g_draw.d3ddev->SetFVF(FVF_3DVERTEX);
+	g_draw.d3ddev->SetVertexShader(FVF_3DVERTEX);
 
 	float ar = 320.0f/240.0f;
 

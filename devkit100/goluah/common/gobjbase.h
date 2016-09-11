@@ -270,8 +270,8 @@ protected:
 
 
 	//　描画関連の関数の定義
-	static LPDIRECT3D9 GetD3D();							//IDirect3D* の取得
-	static LPDIRECT3DDEVICE9 GetD3DDevice();				//IDirect3DDevice* の取得
+	static LPDIRECT3D8 GetD3D();							//IDirect3D* の取得
+	static LPDIRECT3DDEVICE8 GetD3DDevice();				//IDirect3DDevice* の取得
 	static void   LoadCellData(char* pathname,GCD_CELL2_070* pCells,GCD_RECT* pRects,GCD_HANTEI* pHanteis);//セルデータ読み込み関数。ver0.90以降では非推奨
 	static MYSURFACE* LoadBitmap(char* PathName,char* PalletFileName = NULL);			//ビットマップ読み込み関数
 	static void   UnloadBitMap(MYSURFACE* Bitmap);			//ビットマップ後始末関数

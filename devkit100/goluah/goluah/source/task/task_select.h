@@ -244,7 +244,7 @@ protected:
 	BOOL  m_state;			//!<TRUE:キャラセレ色 / FALSE:ステージセレクト色
 	DWORD m_counter;		//!<カウンタ
 	MYVERTEX3D vbg[4];		//!<頂点
-	LPDIRECT3DTEXTURE9 ptex_cs1;//!<背景用テクスチャ
+	LPDIRECT3DTEXTURE8 ptex_cs1;//!<背景用テクスチャ
 };
 
 /*---------------------------------------------------

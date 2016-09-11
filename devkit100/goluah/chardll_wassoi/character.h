@@ -20,8 +20,8 @@ You should have received a copy of the GNU General Public License along with thi
 #include <windows.h>
 #include <stdio.h>
 
-#include <d3d9.h>
-#include <d3dx9.h>
+#include <d3d8.h>
+#include <d3dx8.h>
 
 #include "gobjbase.h"
 #include "cell.h"// 通常、are_editerで生成したヘッダーファイルをここにincludeします
@@ -286,7 +286,7 @@ protected:
 
 		void Start(float tgt_x,float tgt_y);
 		void Update();
-		void Draw(LPDIRECT3DDEVICE9 dev);
+		void Draw(LPDIRECT3DDEVICE8 dev);
 	};
 
 	CWassoiLightInfo info[WLIGHT_NUM];
