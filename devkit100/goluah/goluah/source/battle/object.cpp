@@ -186,21 +186,11 @@ DWORD CGObject::Message(DWORD type,DWORD prm)
 		case GOBJMSG_CLIPX:
 			if(data.objtype & GOBJFLG_CLIPX2){
 				data.x += *((int*)prm);
-				if(data.aid&ACTID_KURAI || data.aid&ACTID_GUARD){//敵を押し戻す
-					if (!(data.aid&ACTID_KUCYU)){
-						if (data.atk2.flags&ATKINFO2_ATTACKERBACK){
-							pobj = battleTask->GetGObject(data.atk2.oid);
-							if (pobj != NULL){
-								pobj->Message(GOBJMSG_KNOCKBACK, prm);
-							}
-						}
-					}
-					else if (data.aid != ACTID_DOWN && data.aid != ACTID_BOUND && data.counter < 6){//空中だけどDOWNとかBOUNDではないときは少しだけ戻す
-						if (data.atk2.flags&ATKINFO2_ATTACKERBACK){
-							pobj = battleTask->GetGObject(data.atk2.oid);
-							if (pobj != NULL){
-								pobj->Message(GOBJMSG_KNOCKBACK, prm);
-							}
+				if((data.aid&ACTID_KURAI || data.aid&ACTID_GUARD) && !(data.aid&ACTID_KUCYU)){//敵を押し戻す
+					if(data.atk2.flags&ATKINFO2_ATTACKERBACK){
+						pobj = battleTask->GetGObject( data.atk2.oid );
+						if(pobj!=NULL){
+							pobj->Message(GOBJMSG_KNOCKBACK,prm);
 						}
 					}
 				}
@@ -747,7 +737,7 @@ void CGObject::dact_damagej1(GOBJECT* pdat)//空中喰らい(弱)
 {
 	if(pdat->counter==0){
 		pdat->vx=-4;
-		pdat->vy=-7;
+		pdat->vy=-9;
 	}
 	DmgMovex(pdat,pdat->vx);
 	pdat->y+=pdat->vy;
@@ -764,7 +754,7 @@ void CGObject::dact_damagej2(GOBJECT* pdat)//空中喰らい(中)
 {
 	if(pdat->counter==0){
 		pdat->vx=-6;
-		pdat->vy=-7;
+		pdat->vy=-9;
 	}
 	DmgMovex(pdat,pdat->vx);
 	pdat->y+=pdat->vy;
@@ -783,7 +773,7 @@ void CGObject::dact_damagej3(GOBJECT* pdat)//空中喰らい(強)
 {
 	if(pdat->counter==0){
 		pdat->vx=-7;
-		pdat->vy=-7;
+		pdat->vy=-9;
 	}
 	DmgMovex(pdat,pdat->vx);
 	pdat->y+=pdat->vy;
