@@ -132,6 +132,8 @@ protected:
 	//! リプレイ保存ファイルデータ
 	CFile RepFile;
 
+	//! 前回プレイ時の勝利チーム。
+	static BYTE game_winner;
 	/*■試合進行管理■ ------------------------------------------------------*/
 protected:
 	//T_UpdateStatusをさらに分割
