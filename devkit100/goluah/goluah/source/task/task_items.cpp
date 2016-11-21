@@ -101,10 +101,7 @@ void CTIconRingBase::Exec_Ready()
 	if(m_keyindex>=0 && m_sleepCount==0){
 		DWORD keystate = g_input.GetKey(m_keyindex,0);
 		//ボタン押された
-		if(keystate & KEYSTA_BA2){OnButtonDown(KEYSTA_BA2);}
-		else if(keystate & KEYSTA_BD2){OnButtonDown(KEYSTA_BD2);}
-		else if(keystate & KEYSTA_BB2){OnButtonDown(KEYSTA_BB2);}
-		else if(keystate & KEYSTA_BC2){OnButtonDown(KEYSTA_BC2);}
+		if(keystate & KEYSTA_BUTTONS){OnButtonDown(keystate);}
 		//←・→
 		else if(keystate & KEYSTA_ARIGHT && g_input.SeekKey(m_keyindex, 1, 30, KEYSTA_ARIGHT2) < 0 &&
 				this->m_counter >= 5){

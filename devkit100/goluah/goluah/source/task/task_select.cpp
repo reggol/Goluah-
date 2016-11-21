@@ -443,7 +443,22 @@ void CCharacterSelect::OnChangeColor(CTCharacterRing *pring)
 	if(team>1)return;
 
 	selected_color[team][num_selected[team]]++;
-	if(selected_color[team][num_selected[team]]>3)selected_color[team][num_selected[team]]=1;
+	if(selected_color[team][num_selected[team]]>MAXNUM_CHARACTERCOLOR)selected_color[team][num_selected[team]]=1;
+}
+
+/*-----------------------------------------------------------
+色変更時処理(拡張版)
+-------------------------------------------------------------*/
+void CCharacterSelect::OnChangeColorEx(CTCharacterRing *pring)
+{
+	//どのリングから？
+	DWORD team = 3;
+	if (pring == m_ring[0])	team = 0;
+	if (pring == m_ring[1])	team = 1;
+	if (team>1)return;
+
+	selected_color[team][num_selected[team]]++;
+	if (selected_color[team][num_selected[team]]>14)selected_color[team][num_selected[team]] = 1;
 }
 
 
@@ -777,7 +792,11 @@ void CTCharacterRing::OnButtonDown(DWORD key)
 			ccselect->OnSelect(this,GetSelected());
 		}
 	}
-	else if(key & KEYSTA_BD2){//ランダム決定
+	else if ((key & KEYSTA_BC) && (key & KEYSTA_BD2))
+	{//change color
+		ccselect->OnChangeColorEx(this);
+	}
+	else if(0){//ランダム決定
 		ccselect->OnSelect(this,-1);
 	}
 	else if(key & KEYSTA_BB2){//× on/off instruction

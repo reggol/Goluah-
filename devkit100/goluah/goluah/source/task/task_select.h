@@ -35,6 +35,7 @@ public:
 	virtual ~CCharacterSelectBase(){}
 	virtual void OnSelect(CTCharacterRing *pring,int cindex)=0;	//!< キャラクタ選択時処理。マイナスはランダム扱い
 	virtual void OnChangeColor(CTCharacterRing *pring)=0;		//!< 色変更時処理
+	virtual void OnChangeColorEx(CTCharacterRing *pring)=0;		//!< 色変更時処理(拡張版)
 	virtual void OnInstOnOff(CTCharacterRing *pring)=0;			//!< インストON/OFF時処理
 	virtual void OnOptionSelect(CTOptionSelecter *pselecter,DWORD option)=0;	//!< オプション選択時処理
 	virtual void OnStageSelect(CTStageSelecter *spelecter,int sindex)=0;		//!< ステージ選択時処理
@@ -61,6 +62,7 @@ public:
 	//キャラクターリングからの処理
 	void OnSelect(CTCharacterRing *pring,int cindex);	//!< キャラクタ選択時処理
 	void OnChangeColor(CTCharacterRing *pring);			//!< 色変更時処理
+	void OnChangeColorEx(CTCharacterRing *pring);		//!< 色変更時処理(拡張版)
 	void OnInstOnOff(CTCharacterRing *pring);			//!< インストON/OFF時処理
 	void OnOptionSelect(CTOptionSelecter *pselecter,DWORD option);	//!< オプション選択時処理
 	void OnStageSelect(CTStageSelecter *spelecter,int sindex);		//!< ステージ選択時処理
