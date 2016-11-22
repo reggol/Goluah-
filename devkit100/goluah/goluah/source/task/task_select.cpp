@@ -796,7 +796,7 @@ void CTCharacterRing::OnButtonDown(DWORD key)
 	{//change color
 		ccselect->OnChangeColorEx(this);
 	}
-	else if(0){//ランダム決定
+	else if(key & KEYSTA_BD2){//ランダム決定
 		ccselect->OnSelect(this,-1);
 	}
 	else if(key & KEYSTA_BB2){//× on/off instruction
