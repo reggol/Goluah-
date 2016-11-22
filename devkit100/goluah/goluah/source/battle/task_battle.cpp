@@ -78,7 +78,7 @@ void CBattleTask::Initialize()
 
 	//コンピュータ制御フラグ付加
 	double hp_ratio=1.0;
-	for(i=0;i<3;i++){
+	for(i=0;i<MAXNUM_TEAM;i++){
 		for(j=0;j<2;j++){
 			if((charobjid[j][i]&0x0000FFFF)<(int)p_objects.size() && charobjid[j][i]!=0){
 				if(GetGObject( charobjid[j][i] )!=NULL)
@@ -1483,7 +1483,7 @@ void CBattleTask::DeleteGObject(DWORD oid)
 
 	//キャラクター・ステージは消えられません
 	for(int j=0;j<2;j++){
-		for(int i=0;i<3;i++)
+		for(int i=0;i<MAXNUM_TEAM;i++)
 		{
 			if(charobjid[j][i]==oid){
 				g_system.LogWarning(_T("%s キャラクターオブジェクト削除未遂(%d,%d)"),__FUNCTION__,j,i);

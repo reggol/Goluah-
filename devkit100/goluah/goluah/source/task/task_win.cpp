@@ -158,7 +158,7 @@ BOOL CYouWin::Execute(DWORD time)
 void CYouWin::CleanUp()
 {
 	int j;
-	for(j=0;j<3;j++){
+	for(j=0;j<MAXNUM_TEAM;j++){
 		RELSURFACE(dds_face[j]);
 	}
 

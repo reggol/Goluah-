@@ -400,7 +400,7 @@ CStoryElement_VS::CStoryElement_VS(CStoryElement_Settings* sets)
 
 	//キャラクタ関連リセット
 	num[0] = num[1] = 0;
-	for(int i=0;i<2;i++)for(int j=0;j<3;j++)
+	for(int i=0;i<2;i++)for(int j=0;j<MAXNUM_TEAM;j++)
 	{
 		characters[i][j] = -5;//none
 		color[i][j] = 0;

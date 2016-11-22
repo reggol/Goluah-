@@ -40,14 +40,14 @@ protected:
 	BOOL  m_end_flag;			//!< 終了フラグ
 	UINT  m_textlen;			//!< 表示テキスト長
 	DWORD wt;					//!< 勝った方のチーム
-	MYSURFACE *dds_face[3];		//!< 表示顔
+	MYSURFACE *dds_face[MAXNUM_TEAM];		//!< 表示顔
 
 	LPDIRECT3DTEXTURE8 tex_fb;	//!< 試合終了時のフロントバッファのコピー
 
-	int f_x[3];					//!< face2の表示位置
-	float f_z[3];				//!< face2の表示位置
+	int f_x[MAXNUM_TEAM];					//!< face2の表示位置
+	float f_z[MAXNUM_TEAM];				//!< face2の表示位置
 	BOOL show_text;				//!< テキスト表示するかどうか
-	DWORD jun[3];				//!< 表示の順番
+	DWORD jun[MAXNUM_TEAM];				//!< 表示の順番
 
 	TCHAR *m_text_from_story;	//!< ストーリー側から指定されたテキスト
 	TCHAR *m_text;				//!< m_text_from_storyまたはg_battleresultから取得したテキストのうち、実際に表示するほう。

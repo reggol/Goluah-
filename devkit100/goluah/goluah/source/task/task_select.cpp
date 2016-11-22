@@ -869,7 +869,7 @@ void CTCharacterBigFace::Initialize()
 	m_counter  = 0;
 	m_counter2 = 0;
 	m_selected_num = 0;
-	for(j=0;j<3;j++){
+	for(j=0;j<MAXNUM_TEAM;j++){
 		m_cindex[j]=0;
 		m_color[j]=0;
 	}
