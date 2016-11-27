@@ -350,10 +350,10 @@ void CTStorySelecterRing::OnButtonDown(DWORD key)
 	CTStorySelect* csselect = dynamic_cast<CTStorySelect*>(g_system.GetCurrentMainTask());
 	if(!csselect)return;
 
-	if(key==KEYSTA_BA2){
+	if(key & KEYSTA_BA2){
 		csselect->OnSelect(this);
 	}
-	if(key==KEYSTA_BB2){
+	if(key & KEYSTA_BB2){
 //		csselect->OnCancel();
 		g_system.ReturnTitle();
 	}
