@@ -74,8 +74,8 @@ void CYouWin::Initialize()
 	}
 	//zオーダー
 	f_z[jun[0]]=0;
-	f_z[jun[1]]=0.01f;
-	f_z[jun[2]]=0.02f;
+	f_z[jun[1]]=0;
+	f_z[jun[2]]=0;
 
 	counter=0;
 	show_text = FALSE;
@@ -224,12 +224,12 @@ void CYouWin::Draw()
 	RECT r;
 	r.left=r.top=0;
 
-	for(int i=0;i<3;i++){
-		if(dds_face[i]!=NULL){
-			r.right = (long)dds_face[i]->wg;
-			r.bottom = (long)dds_face[i]->hg;
-			g_draw.CheckBlt(dds_face[i],f_x[i],(int)(360-dds_face[i]->hg),r,
-				FALSE,FALSE,0,f_z[i]);
+	for(std::size_t i=MAXNUM_TEAM;i>0;i--){
+		if(dds_face[(i-1)]!=NULL){
+			r.right = (long)dds_face[(i-1)]->wg;
+			r.bottom = (long)dds_face[(i-1)]->hg;
+			g_draw.CheckBlt(dds_face[(i-1)],f_x[(i-1)],(int)(360-dds_face[(i-1)]->hg),r,
+				FALSE,FALSE,0,f_z[(i-1)]);
 		}
 	}
 
