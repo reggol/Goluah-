@@ -242,7 +242,7 @@ BOOL CDirectDraw::InitDirectDraw(HWND hwnd,BOOL win)
 	// Direct3D オブジェクトを作成
 	dd = Direct3DCreate8(D3D_SDK_VERSION);
     if (NULL == dd){
-        MessageBox(hwnd,_T("Direct3DCreate9に失敗\nDirectXのバージョンが古いと思われ"),_T("エラー"),MB_OK|MB_ICONSTOP);
+        MessageBox(hwnd,_T("Direct3DCreate8に失敗\nDirectXのバージョンが古いと思われ"),_T("エラー"),MB_OK|MB_ICONSTOP);
         return(FALSE);
     }
 
@@ -488,137 +488,6 @@ LPD3DXFONT CDirectDraw::CreateMyFont(DWORD h)
 		if(ret!=D3D_OK)return(NULL);
 		return(cf);
 }
-
-/*
-元ソース：改・高速フォント文字
-（http://marupeke296.com/DXG_No67_NewFont.html）
-問題点：文字が上下反転する　そもそも何やってるのか分からない
-目標：DrawBlueTextを抹殺できるくらい便利にする
-*/
-/*int CDirectDraw::CreateMyFont2(DWORD h, TCHAR *text)
-{
-	// フォントの生成
-	int fontSize = 260;
-	int fontWeight = 500;
-	LOGFONT lf = { fontSize, 0, 0, 0, fontWeight, 0, 0, 0, SHIFTJIS_CHARSET, OUT_TT_ONLY_PRECIS, CLIP_DEFAULT_PRECIS, PROOF_QUALITY, DEFAULT_PITCH | FF_MODERN, _T("ＭＳ Ｐ明朝") };
-	HFONT hFont = CreateFontIndirect(&lf);
-	if (hFont == NULL) {
-		d3ddev->Release(); dd->Release();
-		return 0;
-	}
-
-	// デバイスにフォントを持たせないとGetGlyphOutline関数はエラーとなる
-	HDC hdc = GetDC(NULL);
-	HFONT oldFont = (HFONT)SelectObject(hdc, hFont);
-
-	// フォントビットマップ取得
-	const TCHAR*   d = text;
-	size_t     length = strlen(d);
-	wchar_t*   wc = new wchar_t[length + 1];
-	length = mbstowcs(wc, d, length + 1); // wc にワイド文字列が入る
-	UINT code = (UINT)wc[0];
-	const int gradFlag = GGO_GRAY4_BITMAP; // GGO_GRAY2_BITMAP or GGO_GRAY4_BITMAP or GGO_GRAY8_BITMAP
-	int grad = 0; // 階調の最大値
-	switch (gradFlag) {
-	case GGO_GRAY2_BITMAP: grad = 4; break;
-	case GGO_GRAY4_BITMAP: grad = 16; break;
-	case GGO_GRAY8_BITMAP: grad = 64; break;
-	}
-	if (grad == 0) {
-		d3ddev->Release(); dd->Release();
-		return 0;
-	}
-
-	TEXTMETRIC tm;
-	GetTextMetrics(hdc, &tm);
-	GLYPHMETRICS gm;
-	CONST MAT2 mat = { { 0, 1 }, { 0, 0 }, { 0, 0 }, { 0, 1 } };
-	DWORD size = GetGlyphOutlineW(hdc, code, gradFlag, &gm, 0, NULL, &mat);
-	BYTE *pMono = new BYTE[size];
-	GetGlyphOutlineW(hdc, code, gradFlag, &gm, size, pMono, &mat);
-
-	// デバイスコンテキストとフォントハンドルはもういらないので解放
-	SelectObject(hdc, oldFont);
-	ReleaseDC(NULL, hdc);
-
-	// テクスチャ作成
-	IDirect3DTexture9 *pTex = 0;
-	int fontWidth = (gm.gmBlackBoxX + 3) / 4 * 4;
-	int fontHeight = gm.gmBlackBoxY;
-	d3ddev->CreateTexture(fontWidth, fontHeight, 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &pTex, NULL);
-
-	// テクスチャにフォントビットマップ情報を書き込み
-	D3DLOCKED_RECT lockedRect;
-	pTex->LockRect(0, &lockedRect, NULL, 0);  // ロック
-	DWORD *pTexBuf = (DWORD*)lockedRect.pBits;   // テクスチャメモリへのポインタ
-
-	for (int y = 0; y < fontHeight; y++) {
-		for (int x = 0; x < fontWidth; x++) {
-			DWORD alpha = pMono[y * fontWidth + x] * 255 / grad;
-			pTexBuf[y * fontWidth + x] = (alpha << 24) | 0x00ffffff;
-		}
-	}
-
-	pTex->UnlockRect(0);  // アンロック
-	delete[] pMono;
-
-
-	// 単位フォントポリゴン作成
-	Vtx vtx[4] = {
-			{ 0.0f, -1.0f, 1.0f, 0.0f, 1.0f },
-			{ 0.0f, 0.0f, 1.0f, 0.0f, 0.0f },
-			{ 1.0f, -1.0f, 1.0f, 1.0f, 1.0f },
-			{ 1.0f, 0.0f, 1.0f, 1.0f, 0.0f },
-	};
-	Vtx *p = 0;
-	IDirect3DVertexBuffer9 *pVertexBuffer = 0;
-	d3ddev->CreateVertexBuffer(sizeof(vtx), 0, 0, D3DPOOL_MANAGED, &pVertexBuffer, 0);
-	pVertexBuffer->Lock(0, 0, (void**)&p, 0);
-	memcpy(p, vtx, sizeof(vtx));
-	pVertexBuffer->Unlock();
-
-	// 各種行列
-	D3DXMATRIX localScale;
-	D3DXMatrixScaling(&localScale, (float)fontWidth, (float)fontHeight, 1.0f);
-	D3DXMATRIX localOffset;
-	D3DXMatrixTranslation(&localOffset, (float)gm.gmptGlyphOrigin.x, (float)gm.gmptGlyphOrigin.y, 0.0f);
-	D3DXMATRIX localMat = localScale * localOffset;
-
-//	int ox = -230, oy = -100;
-	D3DXMATRIX world;
-	D3DXMATRIX worldOffset;
-//	D3DXMatrixTranslation(&worldOffset, (float)ox - 0.5f, (float)oy + 0.5f, 0.0f);
-	D3DXMatrixTranslation(&worldOffset, 0.0f, 0.0f, -1.0f);
-	world = localMat * worldOffset;
-
-	D3DXMATRIX ortho;
-//	D3DXMatrixOrthoLH(&ortho, (float)screenW, (float)screenH, 0.0f, 1000.0f);
-	D3DXMatrixOrthoLH(&ortho, 640.0f, 480.0f, -1000.0f, 1000.0f);
-	d3ddev->SetTransform(D3DTS_PROJECTION, &ortho);
-
-	// メッセージ ループ
-	
-			// αブレンド設定
-//			d3ddev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-//			d3ddev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-//			d3ddev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
-			// 描画
-			d3ddev->SetTransform(D3DTS_WORLD, &world);
-			d3ddev->SetStreamSource(0, pVertexBuffer, 0, sizeof(Vtx));
-			d3ddev->SetVertexShader(D3DFVF_XYZ | D3DFVF_TEX1);
-			d3ddev->SetTexture(0, pTex);
-			d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
-
-//			d3ddev->EndScene();
-//			d3ddev->Present(NULL, NULL, NULL, NULL);
-	
-
-	pTex->Release();
-	pVertexBuffer->Release();
-
-//	return 1;
-}*/
 
 void CDirectDraw::ResetDirectDraw()
 {
@@ -1065,7 +934,7 @@ BOOL CDirectDraw::CopyBB2TS(MYPALLET *pbb,
 	if(pbb==NULL)return(FALSE);
 	if(ptex==NULL)return(FALSE);
 
-	IDirect3DSurface8 *psuf = NULL;
+	LPDIRECT3DSURFACE8 psuf=NULL;
 	if(D3D_OK != ptex->GetSurfaceLevel(0,&psuf)){
 		ODS(_T("CopyBB2TS / GetSurfaceLevelに失敗\n"));
 		return(FALSE);
@@ -4063,7 +3932,7 @@ LPDIRECT3DTEXTURE8 CDirectDraw::GetFrontBufferCopy()
 
 	//テクスチャーからサーフェースを取得する
 	//リファレンスカウントが増えるから、Releaseすること
-	IDirect3DSurface8 *surface = NULL;
+	LPDIRECT3DSURFACE8 surface = NULL;
 	if(D3D_OK!=ret->GetSurfaceLevel(0,&surface))
 	{
 		ret->Release();
@@ -4086,7 +3955,7 @@ LPDIRECT3DTEXTURE8 CDirectDraw::GetFrontBufferCopy()
 
 	//一旦別テクスチャにコピーしにゃならん。めんどくせー
 	LPDIRECT3DTEXTURE8 ret2=NULL;
-	IDirect3DSurface8 *surface2 = NULL;
+	LPDIRECT3DSURFACE8 surface2 = NULL;
 	do
 	{
 		//ウィンドウモードの場合、デスクトップ全体のコピーが
@@ -4230,7 +4099,7 @@ DWORD* CDirectDraw::GetFrontBufferCopyRaw(UINT *wdt,UINT *hgt)
 
 	//テクスチャーからサーフェースを取得する
 	//リファレンスカウントが増えるから、Releaseすること
-	IDirect3DSurface8 *surface = NULL;
+	LPDIRECT3DSURFACE8 surface = NULL;
 	if(D3D_OK!=ret->GetSurfaceLevel(0,&surface))
 	{
 		ret->Release();

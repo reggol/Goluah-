@@ -33,10 +33,6 @@ struct MYPALLET
 	BYTE red;
 	BYTE alpha;
 };
-struct Vtx {
-	float x, y, z;
-	float u, v;
-};
 //!CDirectDrawクラスの状態？
 enum CDIRECTDRAW_STATE
 {
@@ -204,8 +200,6 @@ private:
 	BOOL InitDirectDraw(HWND hwnd,BOOL win);
 	//テキスト描画用のフォントを生成する
 	LPD3DXFONT CreateMyFont(DWORD h);
-	//高速軽量文字作成・・・したかった
-//	int CreateMyFont2(DWORD h, TCHAR *text); // color,x,y,z,…
 	//Direct3D後始末関数
 	void CleanDirectDraw();
 	//レンダリングステート設定
