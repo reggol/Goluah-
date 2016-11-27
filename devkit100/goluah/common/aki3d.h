@@ -118,7 +118,7 @@ typedef void (*WarningReportFunctionPtr)(const TCHAR* war_str);
 *
 *	取得した各クラスのインスタンスはこのクラスの破棄時に自動的にdeleteされるので、
 *	取得側でdeleteしないこと。(生成したインスタンスをリストで持ってるので)
-*	インスタンスの生成と破棄が頻繁に行われる場合(goluah本体)は、Destroy〜系の関数で破棄を行う。
+*	インスタンスの生成と破棄が頻繁に行われる場合(goluah本体)は、Destroy～系の関数で破棄を行う。
 *	そのときテクスチャーも参照カウントにかかわらず全て破棄される。
 */
 class Aki3d
@@ -158,8 +158,8 @@ public:
 	D3DXMATRIX& CreateMatrix( V3d* scale, V3d* rotation, V3d* trans );
 
 public:
-	static float RandomOne();		//!< 0〜1実数ランダム
-	static float RandomOne2();		//!< -1〜1実数ランダム
+	static float RandomOne();		//!< 0～1実数ランダム
+	static float RandomOne2();		//!< -1～1実数ランダム
 	float zo_tri(float t,float mid=0.5f);
 
 	//レンダーステート設定

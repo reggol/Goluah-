@@ -233,7 +233,7 @@ public:
 	float camera_zurax,camera_zuray;	//!<カメラずらし？よく分からん
 	DWORD clearbgcolor;					//!<バックバッファクリア時に使用する塗りつぶし色
 	LPD3DXFONT lpFont[AKIDX_FONTNUM];	//!<テキスト描画に使用するフォント
-	//LPD3DXSPRITE pSprite;				//!<スプライト(゜д゜)ウマー
+	//LPD3DXSPRITE pSprite;				//!<スプライト(ﾟдﾟ)ｳﾏｰ
 	LPDIRECT3DVERTEXBUFFER8 pMyVertex;	//!<頂点バッファ、一応作ってみた。
 private:
 	D3DXPLANE d3dxplane_x,d3dxplane_y;	//!<マトリクス回転に使用する X,Y 平面

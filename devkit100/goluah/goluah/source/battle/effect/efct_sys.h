@@ -37,7 +37,7 @@ public:
 
 protected:
 	TCHAR round_number;
-	//t : 0〜1
+	//t : 0～1
 	void DrawOneCharacter(float x,float y,TCHAR c,float t,float t2);
 };
 

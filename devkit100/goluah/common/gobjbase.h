@@ -547,7 +547,7 @@ inline int CCharacterBase::SeekKey(int offset, int delay, DWORD keystate) {
 #define ACTID_KOUTAIIN	(ACTID_CHARACTERBASE | ACTID_INOUT | 0x0013)//交代。画面内に飛んでくる
 #define ACTID_TAIKI		(ACTID_CHARACTERBASE | ACTID_INOUT | 0x0014)//画面外に飛んでって待機
 #define ACTID_KOUTAI	(ACTID_CHARACTERBASE | ACTID_INOUT | 0x0015)//画面外から飛んでくる
-#define ACTID_TAIKICYU	(ACTID_CHARACTERBASE | ACTID_INOUT | 0x0016)//待機ちゅ—
+#define ACTID_TAIKICYU	(ACTID_CHARACTERBASE | ACTID_INOUT | 0x0016)//待機ちゅ―
 #define ACTID_KOUTAI2	(ACTID_CHARACTERBASE | ACTID_INOUT | 0x0017)//交代後、ポーズキメ
 
 #define ACTID_TIMEOVERLOSE	(ACTID_CHARACTERBASE | 0x0018)
@@ -647,8 +647,8 @@ protected:
 
 struct MYATTACKINFO//旧攻撃力情報構造体
 {
-	DWORD hit;		//ヒット情報。下のフラグ(HITINFO_〜)の論理和を指定
-	DWORD guard;	//ガード情報。下のフラグ(GUARDINFO_〜)の論理和を指艇
+	DWORD hit;		//ヒット情報。下のフラグ(HITINFO_～)の論理和を指定
+	DWORD guard;	//ガード情報。下のフラグ(GUARDINFO_～)の論理和を指艇
 	DWORD damage;	//ダメージ
 	DWORD kezuri;	//削り
 
@@ -790,7 +790,7 @@ public:
 		要素ごと専用のクラスが無く、CBulletListをそのまま連結させているのは私の手抜きです（笑）。
 
 		主に、リストを順に走査しながらSetPosやSetSpeedを適用するために使います。
-		途中のクラスを勝手に解放したりすると（・Ａ・）イクナイ!!
+		途中のクラスを勝手に解放したりすると（・Ａ・）ｲｸﾅｲ!!
 	*/
 	CBulletList* GetNext()		{ return pNext; }
 	/*!
@@ -875,10 +875,10 @@ protected:
 
 	/*!
 	*	@brief 更新処理
-	*	@param time 0〜1の値
+	*	@param time 0～1の値
 	*
 	*	継承クラスではこの関数をオーバーライドして処理を実装します。
-	*	timeはSetDurationで与えた持続時間の間で0.0f〜1.0fの値が渡されます。
+	*	timeはSetDurationで与えた持続時間の間で0.0f～1.0fの値が渡されます。
 	*	継承クラスでAction処理を書き換えた場合はこの関数の動作は不定です。
 	*	"状態"を複数持ちたい場合はこの関数を使用せず、自前でAction周りの処理を書いてください。
 	*/

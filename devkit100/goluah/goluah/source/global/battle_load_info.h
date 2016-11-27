@@ -23,7 +23,7 @@ public:
 	void ResolveRandom();	//!<指定無し項目をランダム指定とみなし、有効な値を割り当てる
 
 	//Set系
-	void SetBattleType(BYTE type);								//!<対戦形式を指定（TAISENKEISIKI_〜）
+	void SetBattleType(BYTE type);								//!<対戦形式を指定（TAISENKEISIKI_～）
 	void SetLimitTime(int val);									//!<制限時間設定
 	void AddCharacter(  										//!<キャラクタ追加
 						DWORD team,

@@ -126,7 +126,7 @@ public:
 	//!ブランクアイコン取得
 	MYSURFACE* GetBlankIcon();
 
-	//!実数ランダム(0〜1)
+	//!実数ランダム(0～1)
 	float RandomOne();
 
 	//!指定ディレクトリ下からランダムなBGM再生

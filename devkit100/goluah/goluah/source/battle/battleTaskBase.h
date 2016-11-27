@@ -147,7 +147,7 @@ protected:
 	HINSTANCE hlib_s;					//!< ステージのDLL インスタンスハンドル
 
 	//サウンド
-	LPDIRECTSOUNDBUFFER dsb_round;		//!< サウンド 「ラウンド〜」
+	LPDIRECTSOUNDBUFFER dsb_round;		//!< サウンド 「ラウンド～」
 	LPDIRECTSOUNDBUFFER dsb_fight;		//!< サウンド 「ファイト」
 	LPDIRECTSOUNDBUFFER dsb_ko;			//!< サウンド 「ＫＯ」
 	LPDIRECTSOUNDBUFFER dsb_timeover;	//!< サウンド 「タイムオーバー」

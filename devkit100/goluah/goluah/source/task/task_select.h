@@ -418,7 +418,7 @@ protected:
 	DWORD m_counter;
 	int   m_selected;
 
-	static BYTE m_type;						//gobject.h , TAISENKEISIKI_〜参照 BYTEで足りる
+	static BYTE m_type;						//gobject.h , TAISENKEISIKI_～参照 BYTEで足りる
 	static BYTE m_assign[2][MAXNUM_TEAM];	//割り当て
 	static int m_limit_time_index;			//↓のインデックス
 	static int m_limit_time[5];				//45,60,99,120,∞  ,  const

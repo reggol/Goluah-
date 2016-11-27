@@ -20,8 +20,8 @@ void UnloadMyBitmaps(GOBJECT *pdat);
 /*
 struct MYATTACKINFO
 {
-	DWORD hit;		//ヒット情報。下のフラグ(HITINFO_〜)の論理和を指定
-	DWORD guard;	//ガード情報。下のフラグ(GUARDINFO_〜)の論理和を指艇
+	DWORD hit;		//ヒット情報。下のフラグ(HITINFO_～)の論理和を指定
+	DWORD guard;	//ガード情報。下のフラグ(GUARDINFO_～)の論理和を指艇
 	DWORD objid;	//攻撃を行ったオブジェクトのID
 	DWORD id;		//キャラクタ側で勝手に定義して
 	double pg_hit;	//攻撃ヒット時のゲージ増加量
