@@ -22,7 +22,7 @@
 #include "task_loading.h"
 #include "gcdhandler.h"
 
-BYTE CBattleTask::game_winner = 1;
+BYTE CBattleTask::game_winner = TEAM_PLAYER2;
 
 /*----------------------------------------------------------------------------
 	構築
@@ -130,6 +130,7 @@ void CBattleTask::Initialize()
 
 	//bgm
 	BOOL story_bgm_on = FALSE;
+	BOOL char_bgm_on = FALSE;
 	if(g_battleinfo.GetStoryBGM()){//ストーリーで指定された場合
 		if(!g_sound.BGMPlay(g_battleinfo.GetStoryBGM()))
 		{
@@ -145,10 +146,10 @@ void CBattleTask::Initialize()
 		}
 		else story_bgm_on = TRUE;
 	}
-	if(!story_bgm_on)
+
+	if (!story_bgm_on)	//ストーリー指定再生失敗
 	{
-		BOOL char_bgm_on = FALSE;
-		BYTE game_loser = (0 == game_winner) ? 0 : 1;
+		BYTE game_loser = (TEAM_PLAYER1 == game_winner) ? TEAM_PLAYER2 : TEAM_PLAYER1;
 
 		//char/〇〇/sound/bgm(.mp3など) の再生を試みる
 		//前回敗北側優先
@@ -156,39 +157,37 @@ void CBattleTask::Initialize()
 		{
 			_stprintf(filename, _T("%s\\sound\\bgm"),
 				g_charlist.GetCharacterDir(g_battleinfo.GetCharacter(game_loser, i)));
-			if (!g_sound.BGMSearch(filename) && !char_bgm_on)
+			if (g_sound.BGMSearch(filename) && !char_bgm_on)//ファイル見つからず&&再生未成功
 			{
-				g_sound.BGMPlay(filename);
-				char_bgm_on = TRUE;
+				char_bgm_on = g_sound.BGMPlay(filename);
 			}
 		}
 
-		if (!char_bgm_on)
+		if (!char_bgm_on)	//敗北側で鳴らせなかったら勝利側
 		{
 			for (i = 0; i < (int)g_battleinfo.GetNumTeam(game_winner); i++)
 			{
 				_stprintf(filename, _T("%s\\sound\\bgm"),
 					g_charlist.GetCharacterDir(g_battleinfo.GetCharacter(game_winner, i)));
-				if (!g_sound.BGMSearch(filename) && !char_bgm_on)
+				if (g_sound.BGMSearch(filename) && !char_bgm_on)
 				{
-					g_sound.BGMPlay(filename);
-					char_bgm_on = TRUE;
+					char_bgm_on = g_sound.BGMPlay(filename);
 				}
 			}
 		}
+	}
 
-		if (!char_bgm_on)
+	if (!story_bgm_on && !char_bgm_on)	//storyもcharも再生失敗
+	{
+		//ステージディレクトリのbgmの再生を試みる
+		_stprintf(filename, _T("%s\\bgm"),
+			g_stagelist.GetStageDir(g_battleinfo.GetStage()));
+		if (!g_sound.BGMPlay(filename))
 		{
-			//ステージディレクトリのbgmの再生を試みる
-			_stprintf(filename, _T("%s\\bgm"),
-				g_stagelist.GetStageDir(g_battleinfo.GetStage()));
-			if (!g_sound.BGMPlay(filename))
-			{
-				//ステージ名と同一のbgm再生を試みる
-				_stprintf(filename, _T("stage\\bgm\\%s"), g_stagelist.GetStageDir(g_battleinfo.GetStage()));
-				if (!g_sound.BGMPlay(filename)){
-					gbl.PlayRandomBGM(_T("stage\\bgm"));
-				}
+			//ステージ名と同一のbgm再生を試みる
+			_stprintf(filename, _T("stage\\bgm\\%s"), g_stagelist.GetStageDir(g_battleinfo.GetStage()));
+			if (!g_sound.BGMPlay(filename)){
+				gbl.PlayRandomBGM(_T("stage\\bgm"));
 			}
 		}
 	}
@@ -306,7 +305,7 @@ void CBattleTask::StartRound()
 		limittime=-1;
 		if(round!=1)
 		{
-			game_winner = m_all_dead[1] ? 0 : 1;
+			game_winner = m_all_dead[TEAM_PLAYER2] ? TEAM_PLAYER1 : TEAM_PLAYER2;
 			g_battleresult.Initialize(game_winner);
 			battle_end = TRUE;
 			return;
