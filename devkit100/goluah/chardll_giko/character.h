@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License along with thi
 ================================================================*/
 #pragma once
 
-#include <d3d9.h>
-#include <d3dx9.h>
+#include <d3d8.h>
+#include <d3dx8.h>
 #include <windows.h>
 #include <stdio.h>
 #include <vector>

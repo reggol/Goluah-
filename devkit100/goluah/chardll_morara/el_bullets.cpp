@@ -743,7 +743,7 @@ DWORD CJudge::Draw()
 		//描画の必要なし
 		return TRUE;
 	}
-	LPDIRECT3DDEVICE9 d3ddev = aki3d.GetD3DDev();
+	LPDIRECT3DDEVICE8 d3ddev = aki3d.GetD3DDev();
 	if(!d3ddev)return TRUE;//描画できない
 
 	aki3d.EnableZ(TRUE,FALSE);

@@ -35,6 +35,7 @@ public:
 	virtual ~CCharacterSelectBase(){}
 	virtual void OnSelect(CTCharacterRing *pring,int cindex)=0;	//!< キャラクタ選択時処理。マイナスはランダム扱い
 	virtual void OnChangeColor(CTCharacterRing *pring)=0;		//!< 色変更時処理
+	virtual void OnChangeColorEx(CTCharacterRing *pring)=0;		//!< 色変更時処理(拡張版)
 	virtual void OnInstOnOff(CTCharacterRing *pring)=0;			//!< インストON/OFF時処理
 	virtual void OnOptionSelect(CTOptionSelecter *pselecter,DWORD option)=0;	//!< オプション選択時処理
 	virtual void OnStageSelect(CTStageSelecter *spelecter,int sindex)=0;		//!< ステージ選択時処理
@@ -61,6 +62,7 @@ public:
 	//キャラクターリングからの処理
 	void OnSelect(CTCharacterRing *pring,int cindex);	//!< キャラクタ選択時処理
 	void OnChangeColor(CTCharacterRing *pring);			//!< 色変更時処理
+	void OnChangeColorEx(CTCharacterRing *pring);		//!< 色変更時処理(拡張版)
 	void OnInstOnOff(CTCharacterRing *pring);			//!< インストON/OFF時処理
 	void OnOptionSelect(CTOptionSelecter *pselecter,DWORD option);	//!< オプション選択時処理
 	void OnStageSelect(CTStageSelecter *spelecter,int sindex);		//!< ステージ選択時処理
@@ -244,7 +246,7 @@ protected:
 	BOOL  m_state;			//!<TRUE:キャラセレ色 / FALSE:ステージセレクト色
 	DWORD m_counter;		//!<カウンタ
 	MYVERTEX3D vbg[4];		//!<頂点
-	LPDIRECT3DTEXTURE9 ptex_cs1;//!<背景用テクスチャ
+	LPDIRECT3DTEXTURE8 ptex_cs1;//!<背景用テクスチャ
 };
 
 /*---------------------------------------------------
@@ -416,7 +418,7 @@ protected:
 	DWORD m_counter;
 	int   m_selected;
 
-	static BYTE m_type;						//gobject.h , TAISENKEISIKI_〜参照 BYTEで足りる
+	static BYTE m_type;						//gobject.h , TAISENKEISIKI_～参照 BYTEで足りる
 	static BYTE m_assign[2][MAXNUM_TEAM];	//割り当て
 	static int m_limit_time_index;			//↓のインデックス
 	static int m_limit_time[5];				//45,60,99,120,∞  ,  const

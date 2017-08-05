@@ -74,8 +74,8 @@ void CYouWin::Initialize()
 	}
 	//zオーダー
 	f_z[jun[0]]=0;
-	f_z[jun[1]]=0.01f;
-	f_z[jun[2]]=0.02f;
+	f_z[jun[1]]=0;
+	f_z[jun[2]]=0;
 
 	counter=0;
 	show_text = FALSE;
@@ -158,7 +158,7 @@ BOOL CYouWin::Execute(DWORD time)
 void CYouWin::CleanUp()
 {
 	int j;
-	for(j=0;j<3;j++){
+	for(j=0;j<MAXNUM_TEAM;j++){
 		RELSURFACE(dds_face[j]);
 	}
 
@@ -178,7 +178,7 @@ void CYouWin::Draw()
 	{
 		MYVERTEX3D* vb;
 
-		if ( !g_draw.pMyVertex || FAILED(g_draw.pMyVertex->Lock(0, 0, (void**)&vb, D3DLOCK_DISCARD)) )
+		if ( !g_draw.pMyVertex || FAILED(g_draw.pMyVertex->Lock(0, 0, (BYTE**)&vb, D3DLOCK_DISCARD)) )
 			return;
 
 		vb[0].z = 0.0f;
@@ -214,8 +214,8 @@ void CYouWin::Draw()
 		if (g_draw.pMyVertex) g_draw.pMyVertex->Unlock();
 
 		g_draw.EnableZ(FALSE,FALSE);
-		g_draw.d3ddev->SetStreamSource(0, g_draw.pMyVertex, 0, sizeof(MYVERTEX3D));
-		g_draw.d3ddev->SetFVF(FVF_3DVERTEX);
+		g_draw.d3ddev->SetStreamSource(0, g_draw.pMyVertex, sizeof(MYVERTEX3D));
+		g_draw.d3ddev->SetVertexShader(FVF_3DVERTEX);
 		g_draw.d3ddev->SetTexture(0,tex_fb);
 		g_draw.d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP,0,2);
 	}
@@ -224,12 +224,12 @@ void CYouWin::Draw()
 	RECT r;
 	r.left=r.top=0;
 
-	for(int i=0;i<3;i++){
-		if(dds_face[i]!=NULL){
-			r.right = (long)dds_face[i]->wg;
-			r.bottom = (long)dds_face[i]->hg;
-			g_draw.CheckBlt(dds_face[i],f_x[i],(int)(360-dds_face[i]->hg),r,
-				FALSE,FALSE,0,f_z[i]);
+	for(std::size_t i=MAXNUM_TEAM;i>0;i--){
+		if(dds_face[(i-1)]!=NULL){
+			r.right = (long)dds_face[(i-1)]->wg;
+			r.bottom = (long)dds_face[(i-1)]->hg;
+			g_draw.CheckBlt(dds_face[(i-1)],f_x[(i-1)],(int)(360-dds_face[(i-1)]->hg),r,
+				FALSE,FALSE,0,f_z[(i-1)]);
 		}
 	}
 

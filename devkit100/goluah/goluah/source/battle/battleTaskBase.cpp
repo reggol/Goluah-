@@ -1,8 +1,4 @@
-﻿/*
-2011/10/29	timeoverのボイスに対応
-			数字の描写に使うcellを時間制限・Hit・Damage等で分けた
-*/
-/*=========================================================================
+﻿/*=========================================================================
 	
 	戦闘タスク基礎
 
@@ -27,7 +23,7 @@ CBattleTaskBase::CBattleTaskBase()
 {
 	int i,j;
 	for(j=0;j<2;j++){
-		for(i=0;i<3;i++){
+		for(i=0;i<MAXNUM_TEAM;i++){
 			hlib_c[j][i]=NULL;
 		}
 	}
@@ -266,10 +262,10 @@ void CBattleTaskBase::TerminateUnloadDLLs()
 
 	int i,j/*,k,l*/;
 	for(j=0;j<2;j++){
-		for(i=0;i<3;i++){
+		for(i=0;i<MAXNUM_TEAM;i++){
 			//dllの開放（重複注意）
 			/*for(k=0;k<2;k++){
-				for(l=0;l<3;l++){
+				for(l=0;l<MAXNUM_TEAM;l++){
 					if(hlib_c[j][i]!=hlib_c[k][l]){*/	// 重複は参照カウントでどうにかしてるみたい
 						RELEASEDLL(hlib_c[j][i]);
 					/*}
@@ -282,7 +278,7 @@ void CBattleTaskBase::TerminateUnloadDLLs()
 	RELEASEDLL(hlib_s);
 
 	for(j=0;j<2;j++){
-		for(i=0;i<3;i++){//idを0にしておく。0=オブジェクト無し
+		for(i=0;i<MAXNUM_TEAM;i++){//idを0にしておく。0=オブジェクト無し
 			charobjid[j][i]=0;
 		}
 	}
@@ -473,7 +469,7 @@ DWORD CBattleTaskBase::GetMaai(DWORD oid,DWORD eoid,BOOL h)
 	int hm2=99999,vm2=99999;
 
 	if(!h){//水平間合い
-		for(i=0;i<3;i++){
+		for(i=0;i<MAXNUM_TEAM;i++){
 			if(min_p1 > pdat->phdat[ pdat->cnow ].kas[i].left)
 				min_p1 = pdat->phdat[ pdat->cnow ].kas[i].left;
 			if(max_p1 < pdat->phdat[ pdat->cnow ].kas[i].right)
@@ -496,7 +492,7 @@ DWORD CBattleTaskBase::GetMaai(DWORD oid,DWORD eoid,BOOL h)
 		return(hm2);
 	}
 	else {//垂直間合い
-		for(i=0;i<3;i++){
+		for(i=0;i<MAXNUM_TEAM;i++){
 			if(min_p1 > pdat->phdat[ pdat->cnow ].kas[i].top)
 				min_p1 = pdat->phdat[ pdat->cnow ].kas[i].top;
 			if(max_p1 < pdat->phdat[ pdat->cnow ].kas[i].bottom)

@@ -1491,7 +1491,7 @@ void CBattleTaskNet::DeleteGObject(DWORD oid)
 
 	//キャラクター・ステージは消えられません
 	for(int j=0;j<2;j++){
-		for(int i=0;i<3;i++)
+		for(int i=0;i<MAXNUM_TEAM;i++)
 		{
 			if(charobjid[j][i]==oid){
 				g_system.LogWarning(_T("%s キャラクターオブジェクト削除未遂(%d,%d)"),__FUNCTION__,j,i);

@@ -443,7 +443,22 @@ void CCharacterSelect::OnChangeColor(CTCharacterRing *pring)
 	if(team>1)return;
 
 	selected_color[team][num_selected[team]]++;
-	if(selected_color[team][num_selected[team]]>3)selected_color[team][num_selected[team]]=1;
+	if(selected_color[team][num_selected[team]]>MAXNUM_CHARACTERCOLOR)selected_color[team][num_selected[team]]=1;
+}
+
+/*-----------------------------------------------------------
+色変更時処理(拡張版)
+-------------------------------------------------------------*/
+void CCharacterSelect::OnChangeColorEx(CTCharacterRing *pring)
+{
+	//どのリングから？
+	DWORD team = 3;
+	if (pring == m_ring[0])	team = 0;
+	if (pring == m_ring[1])	team = 1;
+	if (team>1)return;
+
+	selected_color[team][num_selected[team]]++;
+	if (selected_color[team][num_selected[team]]>14)selected_color[team][num_selected[team]] = 1;
 }
 
 
@@ -777,6 +792,10 @@ void CTCharacterRing::OnButtonDown(DWORD key)
 			ccselect->OnSelect(this,GetSelected());
 		}
 	}
+	else if ((key & KEYSTA_BC) && (key & KEYSTA_BD2))
+	{//change color
+		ccselect->OnChangeColorEx(this);
+	}
 	else if(key & KEYSTA_BD2){//ランダム決定
 		ccselect->OnSelect(this,-1);
 	}
@@ -850,7 +869,7 @@ void CTCharacterBigFace::Initialize()
 	m_counter  = 0;
 	m_counter2 = 0;
 	m_selected_num = 0;
-	for(j=0;j<3;j++){
+	for(j=0;j<MAXNUM_TEAM;j++){
 		m_cindex[j]=0;
 		m_color[j]=0;
 	}
@@ -1159,13 +1178,13 @@ void CTCharacterSelectBG::Draw()
 	g_draw.EnableZ(FALSE,FALSE);
 	
 	g_draw.d3ddev->SetTexture(0,ptex_cs1);
-	g_draw.d3ddev->SetFVF(FVF_3DVERTEX);
-	g_draw.d3ddev->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
-	g_draw.d3ddev->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
+	g_draw.d3ddev->SetVertexShader(FVF_3DVERTEX);
+	g_draw.d3ddev->SetTextureStageState(0, D3DTSS_ADDRESSU, D3DTADDRESS_WRAP);
+	g_draw.d3ddev->SetTextureStageState(0, D3DTSS_ADDRESSV, D3DTADDRESS_WRAP);
 	g_draw.d3ddev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,
 		2,vbg,sizeof(MYVERTEX3D));
-	g_draw.d3ddev->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
-	g_draw.d3ddev->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
+	g_draw.d3ddev->SetTextureStageState(0, D3DTSS_ADDRESSU, D3DTADDRESS_CLAMP);
+	g_draw.d3ddev->SetTextureStageState(0, D3DTSS_ADDRESSV, D3DTADDRESS_CLAMP);
 
 	g_draw.EnableZ();
 }

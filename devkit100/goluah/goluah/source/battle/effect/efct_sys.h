@@ -37,7 +37,7 @@ public:
 
 protected:
 	TCHAR round_number;
-	//t : 0〜1
+	//t : 0～1
 	void DrawOneCharacter(float x,float y,TCHAR c,float t,float t2);
 };
 
@@ -114,7 +114,7 @@ public:
 protected:
 	float m_t;
 	void DrawOne(float cx,float cy,float t,
-					LPDIRECT3DTEXTURE9 tex);
+					LPDIRECT3DTEXTURE8 tex);	//未実装？
 };
 
 /*!

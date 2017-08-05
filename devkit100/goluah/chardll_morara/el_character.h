@@ -21,8 +21,8 @@ You should have received a copy of the GNU General Public License along with thi
 #include <windows.h>
 #include <stdio.h>
 
-#include <d3d9.h>
-#include <d3dx9.h>
+#include <d3d8.h>
+#include <d3dx8.h>
 
 #include "gobjbase.h"
 #include "el_cell.h"
@@ -425,7 +425,7 @@ protected:
 	void UpdateToge();
 
 	CParticle* m_tubu;			//パーティクルクラス
-	LPDIRECT3DTEXTURE9 m_tex;	//テクスチャ
+	LPDIRECT3DTEXTURE8 m_tex;	//テクスチャ
 
 	//パラメータ
 	float m_width;

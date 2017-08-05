@@ -1,9 +1,6 @@
-﻿/*
-2011/10/29	空中でストライカーを呼んだ時に浮遊しないようにしたが、落下速度に影響アリ
-*/
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 
-#define LPDIRECT3DTEXTURE9 LPVOID
+#define LPDIRECT3DTEXTURE8 LPVOID
 
 #include "define_gcd.h"
 #include "gobject.h"

@@ -10,7 +10,7 @@
 #define _aki3d_h_
 
 #include <vector>
-#include "d3dx9.h"
+#include "d3dx8.h"
 #include <tchar.h>
 
 #define FAR_CLIP	(50.0f)
@@ -118,7 +118,7 @@ typedef void (*WarningReportFunctionPtr)(const TCHAR* war_str);
 *
 *	取得した各クラスのインスタンスはこのクラスの破棄時に自動的にdeleteされるので、
 *	取得側でdeleteしないこと。(生成したインスタンスをリストで持ってるので)
-*	インスタンスの生成と破棄が頻繁に行われる場合(goluah本体)は、Destroy〜系の関数で破棄を行う。
+*	インスタンスの生成と破棄が頻繁に行われる場合(goluah本体)は、Destroy～系の関数で破棄を行う。
 *	そのときテクスチャーも参照カウントにかかわらず全て破棄される。
 */
 class Aki3d
@@ -128,7 +128,7 @@ public:
 
 	//!初期化。全ての操作の前に行うこと
 	void Initialize(
-		LPDIRECT3DDEVICE9 d3d_device,		//!< D3Dデバイスオブジェクト
+		LPDIRECT3DDEVICE8 d3d_device,		//!< D3Dデバイスオブジェクト
 		const TCHAR*	tex_path,				//!< テクスチャロード用のベースディレクトリ
 		WarningReportFunctionPtr pwf=NULL	//!< エラーリポート用の関数ポインタ
 		);
@@ -158,8 +158,8 @@ public:
 	D3DXMATRIX& CreateMatrix( V3d* scale, V3d* rotation, V3d* trans );
 
 public:
-	static float RandomOne();		//!< 0〜1実数ランダム
-	static float RandomOne2();		//!< -1〜1実数ランダム
+	static float RandomOne();		//!< 0～1実数ランダム
+	static float RandomOne2();		//!< -1～1実数ランダム
 	float zo_tri(float t,float mid=0.5f);
 
 	//レンダーステート設定
@@ -169,17 +169,17 @@ public:
 	void SetBlend_Nega();
 
 	//テクスチャー
-	LPDIRECT3DTEXTURE9 LoadTexture(const TCHAR *filename);
-	void UnloadTexture(LPDIRECT3DTEXTURE9 ptex);
+	LPDIRECT3DTEXTURE8 LoadTexture(const TCHAR *filename);
+	void UnloadTexture(LPDIRECT3DTEXTURE8 ptex);
 
-	LPDIRECT3DDEVICE9 GetD3DDev(){ return d3ddev; }
+	LPDIRECT3DDEVICE8 GetD3DDev(){ return d3ddev; }
 
 	void LogWarning(const TCHAR* fmt,...);
 
 protected:
 	void Destroy();
 
-	LPDIRECT3DDEVICE9 d3ddev;		//D3Dデバイス
+	LPDIRECT3DDEVICE8 d3ddev;		//D3Dデバイス
 	WarningReportFunctionPtr warning_report;
 };
 

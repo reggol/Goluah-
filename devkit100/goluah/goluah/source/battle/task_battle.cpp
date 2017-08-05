@@ -22,6 +22,8 @@
 #include "task_loading.h"
 #include "gcdhandler.h"
 
+BYTE CBattleTask::game_winner = TEAM_PLAYER2;
+
 /*----------------------------------------------------------------------------
 	構築
 ------------------------------------------------------------------------------*/
@@ -64,7 +66,6 @@ void CBattleTask::Initialize()
 
 	TCHAR filename[256];
 	int i,j;
-	BOOL playflag = FALSE;
 
 	if (!g_config.IsFullScreen())
 		AfxGetApp()->DoWaitCursor(1);
@@ -77,7 +78,7 @@ void CBattleTask::Initialize()
 
 	//コンピュータ制御フラグ付加
 	double hp_ratio=1.0;
-	for(i=0;i<3;i++){
+	for(i=0;i<MAXNUM_TEAM;i++){
 		for(j=0;j<2;j++){
 			if((charobjid[j][i]&0x0000FFFF)<(int)p_objects.size() && charobjid[j][i]!=0){
 				if(GetGObject( charobjid[j][i] )!=NULL)
@@ -129,6 +130,7 @@ void CBattleTask::Initialize()
 
 	//bgm
 	BOOL story_bgm_on = FALSE;
+	BOOL char_bgm_on = FALSE;
 	if(g_battleinfo.GetStoryBGM()){//ストーリーで指定された場合
 		if(!g_sound.BGMPlay(g_battleinfo.GetStoryBGM()))
 		{
@@ -144,36 +146,48 @@ void CBattleTask::Initialize()
 		}
 		else story_bgm_on = TRUE;
 	}
-	if(!story_bgm_on)
-	{
 
+	if (!story_bgm_on)	//ストーリー指定再生失敗
+	{
+		BYTE game_loser = (TEAM_PLAYER1 == game_winner) ? TEAM_PLAYER2 : TEAM_PLAYER1;
 
 		//char/〇〇/sound/bgm(.mp3など) の再生を試みる
-		for (i = 0; i < 2; i++)
+		//前回敗北側優先
+		for (i = 0; i < (int)g_battleinfo.GetNumTeam(game_loser); i++)
 		{
-			for (j = 0; j < (int)g_battleinfo.GetNumTeam(i); j++)
+			_stprintf(filename, _T("%s\\sound\\bgm"),
+				g_charlist.GetCharacterDir(g_battleinfo.GetCharacter(game_loser, i)));
+			if (g_sound.BGMSearch(filename) && !char_bgm_on)//ファイル見つからず&&再生未成功
+			{
+				char_bgm_on = g_sound.BGMPlay(filename);
+			}
+		}
+
+		if (!char_bgm_on)	//敗北側で鳴らせなかったら勝利側
+		{
+			for (i = 0; i < (int)g_battleinfo.GetNumTeam(game_winner); i++)
 			{
 				_stprintf(filename, _T("%s\\sound\\bgm"),
-					g_charlist.GetCharacterDir(g_battleinfo.GetCharacter(i, j)));
-				if (g_sound.BGMSearch(filename) && playflag == FALSE)
+					g_charlist.GetCharacterDir(g_battleinfo.GetCharacter(game_winner, i)));
+				if (g_sound.BGMSearch(filename) && !char_bgm_on)
 				{
-					g_sound.BGMPlay(filename);
-					playflag = TRUE;
+					char_bgm_on = g_sound.BGMPlay(filename);
 				}
 			}
 		}
-		if (playflag == FALSE)
+	}
+
+	if (!story_bgm_on && !char_bgm_on)	//storyもcharも再生失敗
+	{
+		//ステージディレクトリのbgmの再生を試みる
+		_stprintf(filename, _T("%s\\bgm"),
+			g_stagelist.GetStageDir(g_battleinfo.GetStage()));
+		if (!g_sound.BGMPlay(filename))
 		{
-			//ステージディレクトリのbgmの再生を試みる
-			_stprintf(filename, _T("%s\\bgm"),
-				g_stagelist.GetStageDir(g_battleinfo.GetStage()));
-			if (!g_sound.BGMPlay(filename))
-			{
-				//ステージ名と同一のbgm再生を試みる
-				_stprintf(filename, _T("stage\\bgm\\%s"), g_stagelist.GetStageDir(g_battleinfo.GetStage()));
-				if (!g_sound.BGMPlay(filename)){
-					gbl.PlayRandomBGM(_T("stage\\bgm"));
-				}
+			//ステージ名と同一のbgm再生を試みる
+			_stprintf(filename, _T("stage\\bgm\\%s"), g_stagelist.GetStageDir(g_battleinfo.GetStage()));
+			if (!g_sound.BGMPlay(filename)){
+				gbl.PlayRandomBGM(_T("stage\\bgm"));
 			}
 		}
 	}
@@ -267,12 +281,14 @@ void CBattleTask::StartRound()
 		limittime=g_battleinfo.GetLimitTime();
 		//勝ちが先取ポイント数以上ならば勝利画面へ
 		if(wincount[0]>=g_config.GetMaxPoint()){
-			g_battleresult.Initialize(0);
+			game_winner = 0;
+			g_battleresult.Initialize(game_winner);
 			battle_end = TRUE;
 			return;
 		}
 		else if(wincount[1]>=g_config.GetMaxPoint()){			
-			g_battleresult.Initialize(1);
+			game_winner = 1;
+			g_battleresult.Initialize(game_winner);
 			battle_end = TRUE;
 			return;
 		}
@@ -289,40 +305,12 @@ void CBattleTask::StartRound()
 		limittime=-1;
 		if(round!=1)
 		{
-			g_battleresult.Initialize( m_all_dead[1] ? 0 : 1 );
+			game_winner = m_all_dead[TEAM_PLAYER2] ? TEAM_PLAYER1 : TEAM_PLAYER2;
+			g_battleresult.Initialize(game_winner);
 			battle_end = TRUE;
 			return;
 		}
 		break;
-	}
-
-	//負けたチームのキャラBGMの再生を試みる
-	if (round > 1)
-	{
-		if (m_round_winner == 0)
-		{
-			for (i = 0; i < (int)g_battleinfo.GetNumTeam(1); i++){
-				_stprintf(filename, _T("%s\\sound\\bgm"),
-					g_charlist.GetCharacterDir(g_battleinfo.GetCharacter(1, i)));
-				if (g_sound.BGMSearch(filename) && playflag == FALSE)
-				{
-					g_sound.BGMPlay(filename);
-					playflag = TRUE;
-				}
-			}
-		}
-		else if (m_round_winner == 1)
-		{
-			for (i = 0; i < (int)g_battleinfo.GetNumTeam(0); i++){
-				_stprintf(filename, _T("%s\\sound\\bgm"),
-					g_charlist.GetCharacterDir(g_battleinfo.GetCharacter(0, i)));
-				if (g_sound.BGMSearch(filename) && playflag == FALSE)
-				{
-					g_sound.BGMPlay(filename);
-					playflag = TRUE;
-				}
-			}
-		}
 	}
 
 	//「ラウンドX」サウンドロード
@@ -536,16 +524,6 @@ BOOL CBattleTask::Execute(DWORD time)
 	if(rand()%(50*60*3000) - bf_counter % 30==0)
 		if(rand()%(50*60*3000)==0)
 			AddEffect(EFCTID_HATTEN,640, 5);//Hatten
-
-	//ストライカーカウント回復
-/*	if (g_config.GetStrikerCount() != 0){
-		for (int i = 0; i < 2; i++){
-			if (strikercount[i] == 0){	//残り0なら
-				if (bf_counter == striker_lastcall[i] + g_config.GetGameSpeed2() * 10)	//10秒で回復
-					strikercount[i]++;
-			}
-		}
-	}*/
 
 	g_system.PopSysTag();
 	
@@ -1504,7 +1482,7 @@ void CBattleTask::DeleteGObject(DWORD oid)
 
 	//キャラクター・ステージは消えられません
 	for(int j=0;j<2;j++){
-		for(int i=0;i<3;i++)
+		for(int i=0;i<MAXNUM_TEAM;i++)
 		{
 			if(charobjid[j][i]==oid){
 				g_system.LogWarning(_T("%s キャラクターオブジェクト削除未遂(%d,%d)"),__FUNCTION__,j,i);
@@ -1677,7 +1655,6 @@ DWORD CBattleTask::MessageFromObject(DWORD oid,DWORD msg,DWORD prm)
 			{
 				//OK
 				strikercount[team]--;
-//				striker_lastcall[team] = bf_counter;
 				g_system.PopSysTag();
 				return(TRUE);
 			}

@@ -12,8 +12,8 @@
 #pragma once
 
 #ifdef GCD_EDITER
-#include <d3d9.h>
-#include <d3dx9.h>
+#include <d3d8.h>
+#include <d3dx8.h>
 #endif
 #include "define_gcd.h"	//GCDフォーマットが必要
 
@@ -32,10 +32,6 @@ struct MYPALLET
 	BYTE green;
 	BYTE red;
 	BYTE alpha;
-};
-struct Vtx {
-	float x, y, z;
-	float u, v;
 };
 //!CDirectDrawクラスの状態？
 enum CDIRECTDRAW_STATE
@@ -97,7 +93,7 @@ public:
 	//現在のフロントバッファの内容をコピーしたテクスチャーを生成して返す。
 	//D3Dのヘルプによると、処理コストはデカイらしい
 	#ifndef GCD_EDITER
-	LPDIRECT3DTEXTURE9 GetFrontBufferCopy();
+	LPDIRECT3DTEXTURE8 GetFrontBufferCopy();
 	DWORD* GetFrontBufferCopyRaw(UINT *wdt,UINT *hgt);
 	#endif
 
@@ -146,7 +142,7 @@ public:
 	// 独自描画軽量化版
 //	void MyBlt3DLite(MYSURFACE* dds, RECT& r, int x, int y, BOOL noAlpha);
 	// サーフェスに直接書き込み
-//	void Kakikomi(LPDIRECT3DTEXTURE9 SouShin, RECT& r2, LPDIRECT3DTEXTURE9 BackBuffer, POINT& point, BOOL revx);
+//	void Kakikomi(LPDIRECT3DTEXTURE8 SouShin, RECT& r2, LPDIRECT3DTEXTURE8 BackBuffer, POINT& point, BOOL revx);
 
 	//■便利関数？
 	void SetAlphaMode(DWORD alphamode);//αブレンドのモードを設定
@@ -197,15 +193,13 @@ private:
 	//バックバッファからテクスチャへの転送
 	//・・・そんな関数作ってたっけ?
 	//…違うと思われ、ビットマップをビットごとにテクスチャに貼り付けてるみたいです。
-	BOOL CopyBB2TS(MYPALLET *pbb,DWORD bbpitch,DWORD offset_x,DWORD offset_y,LPDIRECT3DTEXTURE9 ptex,DWORD damex=0,DWORD damey=0);
+	BOOL CopyBB2TS(MYPALLET *pbb,DWORD bbpitch,DWORD offset_x,DWORD offset_y,LPDIRECT3DTEXTURE8 ptex,DWORD damex=0,DWORD damey=0);
 
 	//■生成破棄時内部関数
 	//Direct3Dを初期化する。関数名は昔の名残っぽい
 	BOOL InitDirectDraw(HWND hwnd,BOOL win);
 	//テキスト描画用のフォントを生成する
 	LPD3DXFONT CreateMyFont(DWORD h);
-	//高速軽量文字作成・・・したかった
-//	int CreateMyFont2(DWORD h, TCHAR *text); // color,x,y,z,…
 	//Direct3D後始末関数
 	void CleanDirectDraw();
 	//レンダリングステート設定
@@ -216,8 +210,8 @@ private:
 	//■データメンバ
 public:
 	CDIRECTDRAW_STATE state;			//!<クラスの状態
-	LPDIRECT3D9 dd;						//!<[重要]Direct3Dオブジェクト
-	LPDIRECT3DDEVICE9 d3ddev;			//!<[重要]Direct3Dデバイスオブジェクト
+	LPDIRECT3D8 dd;						//!<[重要]Direct3Dオブジェクト
+	LPDIRECT3DDEVICE8 d3ddev;			//!<[重要]Direct3Dデバイスオブジェクト
 	D3DPRESENT_PARAMETERS d3dpp;		//!<なんだっけ？これ。
 	D3DDEVTYPE devtypenow;				//!<現在のデバイスタイプ。HALとかSWとか、そういうの
 	DWORD maxtexturewidth,
@@ -233,8 +227,8 @@ public:
 	float camera_zurax,camera_zuray;	//!<カメラずらし？よく分からん
 	DWORD clearbgcolor;					//!<バックバッファクリア時に使用する塗りつぶし色
 	LPD3DXFONT lpFont[AKIDX_FONTNUM];	//!<テキスト描画に使用するフォント
-	//LPD3DXSPRITE pSprite;				//!<スプライト(゜д゜)ウマー
-	LPDIRECT3DVERTEXBUFFER9 pMyVertex;	//!<頂点バッファ、一応作ってみた。
+	//LPD3DXSPRITE pSprite;				//!<スプライト(ﾟдﾟ)ｳﾏｰ
+	LPDIRECT3DVERTEXBUFFER8 pMyVertex;	//!<頂点バッファ、一応作ってみた。
 private:
 	D3DXPLANE d3dxplane_x,d3dxplane_y;	//!<マトリクス回転に使用する X,Y 平面
 	BOOL m_is_win;						//!<ウィンドウモードでの起動かどうか

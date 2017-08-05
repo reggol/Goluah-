@@ -39,7 +39,7 @@
 CGauge::CGauge()
 {
 	for(int i=0;i<2;i++){
-		for(int j=0;j<3;j++){
+		for(int j=0;j<MAXNUM_TEAM;j++){
 			dds_face[i][j]=NULL;
 		}
 	}
@@ -48,7 +48,7 @@ CGauge::CGauge()
 void CGauge::CleanUp()//開放する必要のあるものを 開放する
 {
 	for(int i=0;i<2;i++){
-		for(int j=0;j<3;j++){
+		for(int j=0;j<MAXNUM_TEAM;j++){
 			RELSURFACE(dds_face[i][j]);
 		}
 	}

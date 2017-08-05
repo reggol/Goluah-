@@ -76,8 +76,8 @@ You should have received a copy of the GNU General Public License along with thi
 #pragma warning( disable : 4005 )
 #define DIRECTINPUT_VERSION 0x0800//warning消し
 
-#include <d3d9.h>
-#include <d3dx9.h>
+#include <d3d8.h>
+#include <d3dx8.h>
 #include <dsound.h>
 #include <dshow.h>
 #include <dinput.h>

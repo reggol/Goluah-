@@ -27,7 +27,7 @@ You should have received a copy of the GNU General Public License along with thi
 #include <stdio.h>
 
 #ifdef USE_DIRECT3D_DIRECT
-#include "d3dx9.h"
+#include "d3dx8.h"
 #endif
 
 #include "gobjbase.h"
@@ -1319,8 +1319,8 @@ DWORD CGoluahObject::GetSexyDamage(DWORD oid) {
 
 	IDirect3D*を取得します。取得しても使い道ないかもしれないけど...
 */
-LPDIRECT3D9 CGoluahObject::GetD3D() {
-	return (LPDIRECT3D9)funcd->getd3d();
+LPDIRECT3D8 CGoluahObject::GetD3D() {
+	return (LPDIRECT3D8)funcd->getd3d();
 }
 /*!
 	@brief IDirect3DDevice* の取得
@@ -1329,8 +1329,8 @@ LPDIRECT3D9 CGoluahObject::GetD3D() {
 	IDirect3DDevice* を取得します。
 	IDirect3DDevice*によって可能な操作はDirectXのSDKを参照してください。
 */
-LPDIRECT3DDEVICE9 CGoluahObject::GetD3DDevice() {
-	return (LPDIRECT3DDEVICE9)funcd->getd3dd();
+LPDIRECT3DDEVICE8 CGoluahObject::GetD3DDevice() {
+	return (LPDIRECT3DDEVICE8)funcd->getd3dd();
 }
 /*!
 	@brief ver0.70形式セルデータ読み込み(非推奨)

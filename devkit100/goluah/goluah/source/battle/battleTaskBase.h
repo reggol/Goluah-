@@ -1,8 +1,4 @@
-﻿/*
-2011/10/29	timeoverのボイスに対応
-			数字の描写に使うcellを時間制限・Hit・Damage等で分けた
-*/
-/*=========================================================================
+﻿/*=========================================================================
 	
 	戦闘タスク基礎
 
@@ -151,7 +147,7 @@ protected:
 	HINSTANCE hlib_s;					//!< ステージのDLL インスタンスハンドル
 
 	//サウンド
-	LPDIRECTSOUNDBUFFER dsb_round;		//!< サウンド 「ラウンド〜」
+	LPDIRECTSOUNDBUFFER dsb_round;		//!< サウンド 「ラウンド～」
 	LPDIRECTSOUNDBUFFER dsb_fight;		//!< サウンド 「ファイト」
 	LPDIRECTSOUNDBUFFER dsb_ko;			//!< サウンド 「ＫＯ」
 	LPDIRECTSOUNDBUFFER dsb_timeover;	//!< サウンド 「タイムオーバー」

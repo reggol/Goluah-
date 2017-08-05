@@ -181,7 +181,7 @@ public:
 	void SetOffset(int val){offset_x=val;}
 	void SetZ(float val){z=val;}
 
-	TCHAR* GetCurrentSetName();						//!< 0:"Free" , 0〜:favorite設定名
+	TCHAR* GetCurrentSetName();						//!< 0:"Free" , 0～:favorite設定名
 	void ApplyToPreviousSelect();					//!< 前回選択フラグに設定する
 
 protected:
@@ -201,7 +201,7 @@ protected:
 	float z;						//!< 描画Z値
 
 	CCL_CHARACTERINFO *m_ref_cinfo;	//!< キャラクタ情報(参照)
-	DWORD m_current_favorite;		//!< 現在の設定、0:Free , 1〜:favolite0〜
+	DWORD m_current_favorite;		//!< 現在の設定、0:Free , 1～:favolite0～
 };
 
 /*!

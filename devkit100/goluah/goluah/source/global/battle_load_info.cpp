@@ -27,7 +27,7 @@ void CBattleLoadInfo::Initialize()
 	m_num_team[0] = m_num_team[1] = 0;			//1チーム何人か : 0
 
 	for(int i=0;i<2;i++){
-		for(int j=0;j<3;j++){
+		for(int j=0;j<MAXNUM_TEAM;j++){
 			m_char[i][j] = BLI_NOT_SELECTED;	//選択されたキャラクター : 未選択
 			m_options[i][j] = 0;				//選択されたオプション設定 : 0(なし)
 			m_color[i][j] = 0;					//選択されたキャラクター色 : 0

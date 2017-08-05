@@ -950,7 +950,7 @@ BOOL CFxFight::DrawF()
 {
 	g_draw.SetTransform(FALSE);
 	g_draw.d3ddev->SetTexture(0,NULL);				//テクスチャ無し
-	g_draw.d3ddev->SetFVF(FVF_3DVERTEX);	//頂点のフォーマットを指定
+	g_draw.d3ddev->SetVertexShader(FVF_3DVERTEX);	//頂点のフォーマットを指定
 
 	DWORD color = 0;
 	color |= m_alpha << 24;

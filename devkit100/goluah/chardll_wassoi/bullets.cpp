@@ -202,7 +202,7 @@ void CWassoiLight::act_bomb()
 
 DWORD CWassoiLight::Draw()
 {
-	LPDIRECT3DDEVICE9 dev = GetD3DDevice();
+	LPDIRECT3DDEVICE8 dev = GetD3DDevice();
 	UINT i;
 
 	if(pdat->aid==CBB_STATE_RUN && dev)
@@ -232,7 +232,7 @@ void CWassoiLight::CWassoiLightInfo::Update()
 	counter++;
 }
 
-void CWassoiLight::CWassoiLightInfo::Draw(LPDIRECT3DDEVICE9 dev)
+void CWassoiLight::CWassoiLightInfo::Draw(LPDIRECT3DDEVICE8 dev)
 {
 	if(!isCreated)return;
 

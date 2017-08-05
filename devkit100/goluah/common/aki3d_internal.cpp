@@ -21,13 +21,13 @@ You should have received a copy of the GNU General Public License along with thi
 CTexManager *tex_man = NULL;
 
 //テクスチャ読み込み
-LPDIRECT3DTEXTURE9 CTexManager::LoadTexture(const TCHAR* filename)
+LPDIRECT3DTEXTURE8 CTexManager::LoadTexture(const TCHAR* filename)
 {
 	if(!filename)return NULL;
-	LPDIRECT3DDEVICE9 d3ddev = aki3d.GetD3DDev();
+	LPDIRECT3DDEVICE8 d3ddev = aki3d.GetD3DDev();
 	if(!d3ddev)return NULL;
 
-	LPDIRECT3DTEXTURE9 ret=NULL;
+	LPDIRECT3DTEXTURE8 ret=NULL;
 
 	//既存のものから探す
 	for(UINT i=0;i<m_texList.size();i++){
@@ -68,7 +68,7 @@ LPDIRECT3DTEXTURE9 CTexManager::LoadTexture(const TCHAR* filename)
 }
 
 //テクスチャの開放
-void CTexManager::UnloadTexture(LPDIRECT3DTEXTURE9 ptex)
+void CTexManager::UnloadTexture(LPDIRECT3DTEXTURE8 ptex)
 {
 	if(!ptex)return;
 
@@ -95,7 +95,7 @@ void CTexManager::Destroy()
 {
 	//テクスチャリストの破棄
 	while(m_texList.size()!=0){
-		std::vector<LPDIRECT3DTEXTURE9>::iterator itex = m_texList.begin();
+		std::vector<LPDIRECT3DTEXTURE8>::iterator itex = m_texList.begin();
 		RELEASE((*itex));
 		m_texList.erase(itex);
 	}
@@ -194,7 +194,7 @@ void CTristripBody::Render(D3DMATRIX *l2w)
 {
 	UINT i,j;
 
-	LPDIRECT3DDEVICE9 d3ddev = aki3d.GetD3DDev();
+	LPDIRECT3DDEVICE8 d3ddev = aki3d.GetD3DDev();
 	if(d3ddev==NULL)return;
 
 	//ローカル→ワールドマトリクスを指定されなかった場合は単位行列で代用する
@@ -246,7 +246,7 @@ void CTristripBody::Render(D3DMATRIX *l2w)
 		//描画前設定
 		d3ddev->SetTexture(0,tex);						//テクスチャー設定
 		d3ddev->SetTransform(D3DTS_WORLD,l2w);			//座標変換マトリクス指定
-		d3ddev->SetFVF(FVF_3DVERTEX);		//頂点のフォーマットを指定
+		d3ddev->SetVertexShader(FVF_3DVERTEX);		//頂点のフォーマットを指定
 
 		//描画
 		if(D3D_OK != d3ddev->DrawPrimitiveUP(
@@ -440,7 +440,7 @@ void CParticleBody::Render(D3DMATRIX *l2w)
 		//描画前設定
 		d3ddev->SetTexture(0,tex);						//テクスチャー設定
 		d3ddev->SetTransform(D3DTS_WORLD,l2w);			//座標変換マトリクス指定
-		d3ddev->SetFVF( FVF_3DVERTEX );		//頂点のフォーマットを指定
+		d3ddev->SetVertexShader( FVF_3DVERTEX );		//頂点のフォーマットを指定
 
 		//描画
 		d3ddev->DrawIndexedPrimitiveUP(
@@ -466,7 +466,7 @@ void CParticleBody::Render(D3DMATRIX *l2w)
 	D3DXMATRIX dmat;	// ローカル座標系→ディスプレイ座標系変換マトリクス
 	D3DXMATRIX idmat;	// ローカル座標系←ディスプレイ座標系変換マトリクス
 
-	LPDIRECT3DDEVICE9 d3ddev = aki3d.GetD3DDev();
+	LPDIRECT3DDEVICE8 d3ddev = aki3d.GetD3DDev();
 	if(d3ddev==NULL)return;
 
 	D3DXMatrixIdentity(&mati);
@@ -541,7 +541,7 @@ void CParticleBody::Render(D3DMATRIX *l2w)
 		d3ddev->SetTransform(D3DTS_WORLD,	&mati);		//座標変換マトリクス指定(すでに変換済みなのでやらない)
 		d3ddev->SetTransform(D3DTS_VIEW,	&mati);		//座標変換マトリクス指定(すでに変換済みなのでやらない)
 		d3ddev->SetTransform(D3DTS_PROJECTION,&mati);	//座標変換マトリクス指定(すでに変換済みなのでやらない)
-		d3ddev->SetFVF(FVF_3DVERTEX);		//頂点のフォーマットを指定
+		d3ddev->SetVertexShader(FVF_3DVERTEX);		//頂点のフォーマットを指定
 
 		//描画
 		try{
@@ -721,7 +721,7 @@ void CFlatBoardsBody::Render(D3DMATRIX *l2w)
 		vb[i*5+4].color = col[i].dwcol;
 	}
 
-	LPDIRECT3DDEVICE9 d3ddev = aki3d.GetD3DDev();
+	LPDIRECT3DDEVICE8 d3ddev = aki3d.GetD3DDev();
 	
 	D3DXMATRIX mat;
 	if(!l2w)
@@ -731,7 +731,7 @@ void CFlatBoardsBody::Render(D3DMATRIX *l2w)
 
 	d3ddev->SetTexture(0,tex);						//テクスチャー設定
 	d3ddev->SetTransform(D3DTS_WORLD,l2w);			//座標変換マトリクス指定
-	d3ddev->SetFVF(FVF_3DVERTEX);		//頂点のフォーマットを指定
+	d3ddev->SetVertexShader(FVF_3DVERTEX);		//頂点のフォーマットを指定
 
 	//描画
 	try{
@@ -793,7 +793,7 @@ CMeshBody::CMeshBody()
 void CMeshBody::Create(const TCHAR* x_filename)
 {
 	if(!x_filename)return;
-	LPDIRECT3DDEVICE9 d3ddev = aki3d.GetD3DDev();
+	LPDIRECT3DDEVICE8 d3ddev = aki3d.GetD3DDev();
 	if(!d3ddev)return;
 
 	Destroy();
@@ -806,7 +806,6 @@ void CMeshBody::Create(const TCHAR* x_filename)
 		d3ddev,
 		NULL,
 		&mtrbuf,
-		NULL,
 		&node_num,
 		&x_mesh);
 
@@ -815,10 +814,10 @@ void CMeshBody::Create(const TCHAR* x_filename)
 
 	// マテリアル設定
 	LPD3DXMATERIAL mater = (LPD3DXMATERIAL)mtrbuf->GetBufferPointer();
-	mat = new D3DMATERIAL9[node_num];
+	mat = new D3DMATERIAL8[node_num];
 
 	// テクスチャを
-	tex = new LPDIRECT3DTEXTURE9[node_num];
+	tex = new LPDIRECT3DTEXTURE8[node_num];
 
 	for (int i = 0; i < (int)node_num; i++)
 	{
@@ -851,7 +850,7 @@ void CMeshBody::Render(D3DMATRIX *l2w)
 	if(zenka)return;
 	UINT i;
 
-	LPDIRECT3DDEVICE9 d3ddev = aki3d.GetD3DDev();
+	LPDIRECT3DDEVICE8 d3ddev = aki3d.GetD3DDev();
 	if(d3ddev==NULL)return;
 	if (x_mesh == NULL) return;
 
@@ -859,7 +858,7 @@ void CMeshBody::Render(D3DMATRIX *l2w)
 	D3DXMATRIX mati = aki3d.CreateMatrix(&V3d(rad, rad * -1.0f, rad), &rot, &pos);	// Y軸を反転する
 	if(l2w)mati *= *l2w;
 
-	D3DLIGHT9 light;
+	D3DLIGHT8 light;
 
 	ZeroMemory(&light, sizeof(light));
 	light.Type = D3DLIGHT_DIRECTIONAL;
@@ -873,11 +872,11 @@ void CMeshBody::Render(D3DMATRIX *l2w)
 	//描画
 	try
 	{
-		D3DMATERIAL9 old;
+		D3DMATERIAL8 old;
 		
 		//描画前設定
 		d3ddev->SetTransform(D3DTS_WORLD,&mati);			//座標変換マトリクス指定
-		d3ddev->SetFVF(x_mesh->GetFVF());
+		d3ddev->SetVertexShader(x_mesh->GetFVF());
 		d3ddev->GetMaterial(&old);
 		d3ddev->SetLight(0, &light);
 		d3ddev->LightEnable(0, TRUE);
@@ -902,7 +901,7 @@ void CMeshBody::Render(D3DMATRIX *l2w)
 		d3ddev->SetRenderState(D3DRS_LIGHTING, FALSE);
 		d3ddev->SetMaterial(&old);
 		d3ddev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-		d3ddev->SetFVF(FVF_3DVERTEX);
+		d3ddev->SetVertexShader(FVF_3DVERTEX);
 	}
 	catch(...)
 	{

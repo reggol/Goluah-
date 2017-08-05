@@ -106,7 +106,6 @@ protected:
 	//状態
 	DWORD hprecratio[2][MAXNUM_TEAM];	//!<自由交代制のときの体力回復率
 	BOOL  battle_end;		//!<タスクをヌけるのに使用
-//	DWORD striker_lastcall[2];	//ストライカーを最後に呼んだのはいつか
 
 	//!デバッグテキスト表示用バッファ
 	TCHAR *debugmsgbuff;
@@ -128,11 +127,13 @@ protected:
 	//!支援攻撃要請用カウンタ
 	UINT strikercall_counter[2];
 
-	LPDIRECT3DTEXTURE9 tex_fb;
+	LPDIRECT3DTEXTURE8 tex_fb;
 
 	//! リプレイ保存ファイルデータ
 	CFile RepFile;
 
+	//! 前回プレイ時の勝利チーム。
+	static BYTE game_winner;
 	/*■試合進行管理■ ------------------------------------------------------*/
 protected:
 	//T_UpdateStatusをさらに分割

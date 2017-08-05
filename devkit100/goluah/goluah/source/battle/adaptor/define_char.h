@@ -222,8 +222,8 @@ typedef void (*PF_ACTUSERKURAI)(LPVOID pedat);//ユーザー定義喰らい処�
 
 struct MYATTACKINFO
 {
-	DWORD hit;		//ヒット情報。下のフラグ(HITINFO_〜)の論理和を指定
-	DWORD guard;	//ガード情報。下のフラグ(GUARDINFO_〜)の論理和を指定
+	DWORD hit;		//ヒット情報。下のフラグ(HITINFO_～)の論理和を指定
+	DWORD guard;	//ガード情報。下のフラグ(GUARDINFO_～)の論理和を指定
 	DWORD id;		//キャラクタ側で勝手に定義して
 	double pg_hit;	//攻撃ヒット時のゲージ増加量
 	double pg_guard;//攻撃ガードされたときのゲージ増加量
