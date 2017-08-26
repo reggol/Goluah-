@@ -54,10 +54,10 @@ struct GCD_CELL
 	float magy;				//!< Y拡大率
 	int rot;				//!< 回転各
 
-	float red_ratio;		//!< 赤描画率(0〜1、通常1)
-	float green_ratio;		//!< 緑描画率(0〜1、通常1)
-	float blue_ratio;		//!< 青描画率(0〜1、通常1)
-	float alpha_ratio;		//!< α描画率(0〜1、通常1)
+	float red_ratio;		//!< 赤描画率(0～1、通常1)
+	float green_ratio;		//!< 緑描画率(0～1、通常1)
+	float blue_ratio;		//!< 青描画率(0～1、通常1)
+	float alpha_ratio;		//!< α描画率(0～1、通常1)
 };
 
 #define GCDCELL_REVERSE_X		0x00000001//!< GCD描画時にX反転を行う

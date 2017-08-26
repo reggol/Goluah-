@@ -182,7 +182,7 @@ public:
 	BOOL		IsLimiterCut()			{return limiter_cut ? TRUE : FALSE;}
 	Config2_GameSpeed GetGameSpeed()	{return (Config2_GameSpeed)game_speed;}
 	Config2_CameraMode GetCameraMode()	{ return (Config2_CameraMode)camera_mode; }
-	int GetGameSpeed2();	//fpsを返します
+	UINT GetGameSpeed2();	//fpsを返します
 	Config2_GaugeMode GetGaugeMode()	{ return (Config2_GaugeMode)gauge_mode; }
 
 	//□システム設定

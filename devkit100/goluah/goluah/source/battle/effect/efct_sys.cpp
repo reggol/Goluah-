@@ -1037,13 +1037,13 @@ BOOL CFxTimeOver::DrawF()
 	const float interval = 3;
 	const float duration = 6;
 	const float y		 = 200;
-	const float left	 = 20;
-	const float space    = (640-left*2)/9;
+	const float left	 = 52;
+	const float space    = 15;
 	float t;
 	float x = left;
 	for(UINT i=0;i<9;i++){
 		t = (pdat->counter-interval*i) / duration;
-		DrawOneCharacter(x,y,str[i],t,t2);
+		x = DrawOneCharacter(x,y,str[i],t,t2);
 		x += space;
 	}
 
@@ -1052,14 +1052,15 @@ BOOL CFxTimeOver::DrawF()
 	return FALSE;
 }
 
-void CFxTimeOver::DrawOneCharacter(float x,float y,TCHAR c,float t,float t2)
+double CFxTimeOver::DrawOneCharacter(float x,float y,TCHAR c,float t,float t2)
 {
-	if(t<0.0f)return;
+	if(t<0.0f)return x;
 	if(t>1.0f)t=1.0f;
 
 	DWORD col;
 	TCHAR str[2] = {c,'\0'};
 	float tx,ty,scaX,scaY;
+	double rtn_x;
 
 	//大体
 	const float font_size = 60;
@@ -1075,10 +1076,10 @@ void CFxTimeOver::DrawOneCharacter(float x,float y,TCHAR c,float t,float t2)
 
 	g_draw.SetAlphaMode(GBLEND_HANTOUMEI);
 //	g_system.DrawBMPTextEx(tx  ,ty  ,0.0f,str,col,scaX,scaY,0);
-	g_system.DrawBMPTextEx(tx+t,ty+t,0.0f,str,col,scaX,scaY,0);
-	g_system.DrawBMPTextEx(tx+t,ty-t,0.0f,str,col,scaX,scaY,0);
-	g_system.DrawBMPTextEx(tx-t,ty+t,0.0f,str,col,scaX,scaY,0);
-	g_system.DrawBMPTextEx(tx-t,ty-t,0.0f,str,col,scaX,scaY,0);
+	g_system.DrawBMPTextEx(tx+t,ty+t,0.0f,str,col,scaX,scaY, SYSBMPTXT_PROP);
+	g_system.DrawBMPTextEx(tx+t,ty-t,0.0f,str,col,scaX,scaY, SYSBMPTXT_PROP);
+	g_system.DrawBMPTextEx(tx-t,ty+t,0.0f,str,col,scaX,scaY, SYSBMPTXT_PROP);
+	g_system.DrawBMPTextEx(tx-t,ty-t,0.0f,str,col,scaX,scaY, SYSBMPTXT_PROP);
 
 	g_draw.EnableZ(FALSE,FALSE);
 
@@ -1087,8 +1088,10 @@ void CFxTimeOver::DrawOneCharacter(float x,float y,TCHAR c,float t,float t2)
 	col |= 0x004411FF;
 
 	g_draw.SetAlphaMode(GBLEND_KASAN);
-	g_system.DrawBMPTextEx(tx,ty,0.0f,str,col,scaX,scaY,0);
+	rtn_x = g_system.DrawBMPTextEx(tx,ty,0.0f,str,col,scaX,scaY, SYSBMPTXT_PROP);
 
 	g_draw.EnableZ(TRUE,TRUE);
 	g_draw.SetAlphaMode(0);
+
+	return rtn_x;
 }

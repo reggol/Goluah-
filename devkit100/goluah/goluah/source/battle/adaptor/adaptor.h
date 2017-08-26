@@ -137,7 +137,7 @@ extern DWORD extwin;
 #define ACTID_KOUTAIIN	(ACTID_INOUT | 0x0002)//交代。画面内に飛んでくる
 #define ACTID_TAIKI		(ACTID_INOUT | 0x0003)//画面外に飛んでって待機
 #define ACTID_KOUTAI	(ACTID_INOUT | 0x0004)//画面外から飛んでくる
-#define ACTID_TAIKICYU	(ACTID_INOUT | 0x0009)//待機ちゅ—
+#define ACTID_TAIKICYU	(ACTID_INOUT | 0x0009)//待機ちゅ―
 #define ACTID_KOUTAI2	(ACTID_INOUT | 0x000A)//交代後、ポーズキメ
 
 #define MYGOBJMSG_NAGE	(GOBJMSG_USERDEFINE | 1)

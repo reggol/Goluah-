@@ -184,5 +184,5 @@ public:
 	BOOL DrawF();
 
 protected:
-	void DrawOneCharacter(float x,float y,TCHAR c,float t,float t2);
+	double DrawOneCharacter(float x,float y,TCHAR c,float t,float t2);
 };

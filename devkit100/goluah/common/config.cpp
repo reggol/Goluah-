@@ -61,7 +61,7 @@ TCHAR* CConfig::GetSShotFileTypeStr()
 	}
 }
 
-int CConfig::GetGameSpeed2()
+UINT CConfig::GetGameSpeed2()
 {
 	switch (g_config.GetGameSpeed()){
 	case GSPEED_SLOW:return 40;

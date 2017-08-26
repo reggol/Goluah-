@@ -124,9 +124,9 @@ enum GUARDINFO_FLAGS
 };
 
 //ユーザー定義フラグ設定用マクロ
-#define HITINFO_USER(id)		(((id)<<4) | HITINFO_USERDEFINE)		//!< IDは0〜255で与えること
-#define HITINFO_USER2(id)		(((id)<<4) | HITINFO_USERDEFINE2)		//!< IDは0〜255で与えること
-#define GUARDINFO_USER(id)		(((id)<<4) | GUARDINFO_USERDEFINE)		//!< IDは0〜255で与えること
+#define HITINFO_USER(id)		(((id)<<4) | HITINFO_USERDEFINE)		//!< IDは0～255で与えること
+#define HITINFO_USER2(id)		(((id)<<4) | HITINFO_USERDEFINE2)		//!< IDは0～255で与えること
+#define GUARDINFO_USER(id)		(((id)<<4) | GUARDINFO_USERDEFINE)		//!< IDは0～255で与えること
 
 /*!
 *	@brief 攻撃力情報構造体（喰らい側）
@@ -332,7 +332,7 @@ enum DEFAULT_CELL_IDs
 *	@sa GOBJECT
 *	@sa GOBJECT_MESSAGE
 *
-*	引数1:メッセージID（GOBJMSG_〜）
+*	引数1:メッセージID（GOBJMSG_～）
 *	引数2:オブジェクトのデータ(GOBJECTのポインタ)
 *	引数3:各メッセージにより意味が異なる（ほとんど使ってない）
 *	戻り値：各メッセージにより意味が異なる。0だとデフォルト処理を行う。
@@ -377,7 +377,7 @@ struct GOBJECT
 	float magx,magy;	//!< 拡大率
 	float z;			//!< z座標
 	DWORD color;		//!< 色（自前描画の場合もこの色で描画してください）
-	DWORD alphamode;	//!< 合成方法（GBLEND_〜）フラグ ※非推奨項目
+	DWORD alphamode;	//!< 合成方法（GBLEND_～）フラグ ※非推奨項目
 
 	BOOL kougeki;		//!< 攻撃力on/off
 	BOOL kasanari;		//!< 重なり判定on/off
@@ -438,7 +438,7 @@ enum GOBJECT_PROPERTIES
 	GOBJFLG_DISPZAHYO		= 0x00000020,//!< 座標指定はディスプレイ上の座標であり、ステージ上の表示位置に左右されない
 	GOBJFLG_DONOTSTOP		= 0x00000040,//!< 超必等でstopエフェクトがかかっていてもGOBJMSG_ACTIONが通知される
 	GOBJFLG_HANSAYOU		= 0x00000080,//!< 攻撃したオブジェクトが画面端まで到達すると押し戻される（メッセージを受け取ることができる）
-	GOBJFLG_CLIPX			= 0x00000100,//!< オブジェクトはx方向に関してステージ(-640〜640)外に行くことはできない
+	GOBJFLG_CLIPX			= 0x00000100,//!< オブジェクトはx方向に関してステージ(-640～640)外に行くことはできない
 	GOBJFLG_CLIPX2			= 0x00000200,//!< オブジェクトはx方向に関して画面外に出ることはしない
 	GOBJFLG_DISPLAYME		= 0x00000400,//!< ステージ上でディスプレイ中心を算出するときにこのキャラクターの座標を参照する
 	GOBJFLG_TAIKI			= 0x00000800,//!< キャラクターは待機中である
@@ -493,7 +493,7 @@ enum GBLENDMODES
 	GBLEND_INV					= (3),//!< α合成・Dest色反転
 };
 
-//  〜メッセージ〜  ======================================================================
+//  ～メッセージ～  ======================================================================
 /*!
 *	@brief オブジェクトメッセージID
 *	@ingroup GObject
@@ -771,7 +771,7 @@ enum SYSTEM_EFFECT_IDs
 
 //つぶつぶパラメータ入力用マクロ
 #define TUBUTUBUPRM(a,b,c,d,e,f,g,h)	((DWORD)(a*256*256*256)*16+(b*256*256*256)+(c*256*256*16)+(d*256*256)+(e*256*16)+(f*256)+(g*16)+h)
-//a:粒の数(0〜15)
+//a:粒の数(0～15)
 //b;粒の速度
 //c:粒の速度のばらつき
 //d:最低速度

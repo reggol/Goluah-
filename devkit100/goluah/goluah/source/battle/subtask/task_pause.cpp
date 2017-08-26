@@ -281,7 +281,7 @@ void CTBattlePause::Draw()
 			r_face.bottom = (int)ms_inst[t]->hg;
 
 			DWORD alpha ;
-			
+
 			x = t==0 ? 20 : 620-(int)ms_inst[t]->wg;
 			y = 450-(DWORD)ms_inst[t]->hg+m_shiftY;
 
