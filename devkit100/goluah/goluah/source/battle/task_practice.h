@@ -25,6 +25,6 @@ protected:
 	virtual void T_UpdateStatus_Fighting();
 	virtual void StartRound();
 
-	UINT m_reset_counter;
+	UINT m_reset_counter[MAXNUM_TEAM];
 	double m_hpratio;
 };
