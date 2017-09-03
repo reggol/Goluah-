@@ -34,8 +34,9 @@ CHARACTER_LOAD_OPTION option[] = {
 	// 記入内容：
 	// 　{ フラグ, 競合するｵﾌﾟｼｮﾝ,依存するｵﾌﾟｼｮﾝ, オプション名, 消費ポイント }
 	{ OPTIONS_EXTRA_ATTACK	, 0, 0,						"Extra Attack"	, 5 },//追加入力技
-	{ OPTIONS_AERIAL_ATTACK	, 0, 0,						"Aerial Attack", 5 },//エリアル・アタック
+	{ OPTIONS_AERIAL_ATTACK	, 0, 0,						"Aerial Attack"	, 5 },//エリアル・アタック
 	{ OPTIONS_AUTO_GUARD	, 0, 0,						"Auto Guard"	, /*10*/5 },//オートガード
+	{ OPTIONS_HADOUKEN, 0, 0, "Hadou-Ken", 5 },//波動拳
 };
 
 
@@ -48,7 +49,7 @@ CCharacterInfo CharInfo("モナー",		// キャラクターの名前（最大31�
 						CDI_VERSION,		// キャラクターDLLインターフェイスのバージョン
 						option,				// オプション構造体へのポインタ
 						sizeof(option) / sizeof(CHARACTER_LOAD_OPTION), // オプションの数
-						5,					// オプション最大ポイント数
+						10,					// オプション最大ポイント数
 						FALSE);				// ネット対戦対応かどうか 将来の拡張のために用意されている。
 
 char* CharDirectory = NULL;
@@ -95,7 +96,7 @@ void CCharacter::InitAnalyzeOptions()
 	chainComboEnabled = TRUE;
 
 	m_opt_exAttack	= (option_flags&OPTIONS_EXTRA_ATTACK) ? TRUE : FALSE;
-	m_opt_hadou		= TRUE;
+	m_opt_hadou		= (option_flags&OPTIONS_HADOUKEN) ? TRUE : FALSE;
 	m_opt_hpp30		= FALSE;
 
 	m_opt_AAttack	= (option_flags&OPTIONS_AERIAL_ATTACK) ? TRUE : FALSE;
