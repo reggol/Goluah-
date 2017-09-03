@@ -157,6 +157,8 @@ void CEffectList::AddEffect(DWORD type,int prm1,int prm2,int prm3)
 	case EFCTID_SUPERARMER:	fx=new CFxSuperArmer;	break;
 	case EFCTID_HATTEN:		fx=new CFxHatten;		break;
 	case EFCTID_TIMEOVER:	fx=new CFxTimeOver;		break;
+	case EFCTID_TIMEOVER1:	fx=new CFxTimeOver1;	break;
+	case EFCTID_TIMEOVER2:	fx=new CFxTimeOver2;	break;
 	case EFCTID_DOUBLEKO:
 	default:
 		gbl.ods(_T("CEffectList::AddEffect / エフェクト未実装"));

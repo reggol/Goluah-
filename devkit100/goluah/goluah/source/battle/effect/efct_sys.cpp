@@ -1016,12 +1016,12 @@ void CFxFight::Destroy()
 	TIMEOVER
 ******************************************************************/
 
-void CFxTimeOver::Update()
+void CFxTimeOverBase::Update()
 {
 	if (pdat->counter > (150 + 24)*g_config.GetGameSpeed2() / 50 - 1)End();
 }
 
-BOOL CFxTimeOver::DrawF()
+BOOL CFxTimeOverBase::DrawF()
 {
 	g_draw.SetTransform(FALSE);
 
@@ -1033,12 +1033,10 @@ BOOL CFxTimeOver::DrawF()
 		t2 = 1.0f - (pdat->counter - (150 * g_config.GetGameSpeed2() / 50)) / (24.0f * g_config.GetGameSpeed2() / 50);
 	}
 
-	TCHAR str[] = _T("TIME OVER");
 	const float interval = 3;
 	const float duration = 6;
 	const float y		 = 200;
-	const float left	 = 52;
-	const float space    = 15;
+	const float space	 = 10;
 	float t;
 	float x = left;
 	for(UINT i=0;i<9;i++){
@@ -1052,7 +1050,7 @@ BOOL CFxTimeOver::DrawF()
 	return FALSE;
 }
 
-double CFxTimeOver::DrawOneCharacter(float x,float y,TCHAR c,float t,float t2)
+double CFxTimeOverBase::DrawOneCharacter(float x,float y,TCHAR c,float t,float t2)
 {
 	if(t<0.0f)return x;
 	if(t>1.0f)t=1.0f;

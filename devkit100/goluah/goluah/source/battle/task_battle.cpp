@@ -1432,7 +1432,7 @@ DWORD CBattleTask::CreateGObject()
 {
 	g_system.PushSysTag(__FUNCTION__);
 
-	for(DWORD i=0;i<(int)p_objects.size() + 1;i++){
+	for(DWORD i=0;i<(DWORD)p_objects.size() + 1;i++){
 		if(p_objects[i]==NULL){
 			p_objects[i] = new CGObject( i | ((object_regno[i]<<16) & 0xFFFF0000) );
 
@@ -2145,6 +2145,7 @@ void CBattleTask::DrawState()
 	case BFSTATE_FINISHED:		_stprintf(&debugmsgbuff[strlen(debugmsgbuff)],_T("BFSTATE_FINISHED,%d"),bf_counter);break;
 	case BFSTATE_WAITFORENDWIN:	_stprintf(&debugmsgbuff[strlen(debugmsgbuff)],_T("BFSTATE_WAITFORENDWIN,%d"),bf_counter);break;
 	case BFSTATE_DOUBLEKO:		_stprintf(&debugmsgbuff[strlen(debugmsgbuff)],_T("BFSTATE_DOUBLEKO,%d"),bf_counter);break;
+	case BFSTATE_TIMEOVER:		_stprintf(&debugmsgbuff[strlen(debugmsgbuff)],_T("BFSTATE_TIMEOVER,%d"), bf_counter);break;
 	default:_stprintf(&debugmsgbuff[strlen(debugmsgbuff)],_T("不明？,%d"),bf_counter);break;
 	}
 	_stprintf(&debugmsgbuff[strlen(debugmsgbuff)],_T("\n"));
@@ -2911,38 +2912,14 @@ void CBattleTask::T_UpdateStatus_TimeOver()
 
 	int i,j;
 
-	double hpwariai[2][MAXNUM_TEAM];
-
 	bf_counter++;
-	CGObject *pobj;
-	float tmp_num;
 
 	//勝ったのはどっちか？（体力の減り具合で決定）
 	DWORD winner;
 	DWORD loser;
-	for(j=0;j<2;j++)
-	{
-		tmp_num = 0.001f;
-		for(i=0;i<MAXNUM_TEAM;i++)
-		{
-			if(charobjid[j][i]!=0)
-			{
-				pobj=GetGObject(charobjid[j][i]);
-				if(pobj!=NULL){
-					hpwariai[j][i] = (double)pobj->data.hp / (double)pobj->data.hpmax;
-					tmp_num += 1.0f;
-				}
-				else hpwariai[j][i] = 0;
-			}
-			else hpwariai[j][i] = 0;
-		}
-		hpwariai[j][0]=(hpwariai[j][0]+hpwariai[j][1]+hpwariai[j][2])/tmp_num;//平均する
-	}
-	if(hpwariai[0][0] < hpwariai[1][0])j=1;//1p側の負け
-	else j=0;//2p側の負け
-	winner = j;
-	loser  = j==0 ? 1 : 0;
 
+	winner = GetTimeOverWinner();
+	loser  = winner == 0 ? 1 : 0;
 
 	//次に進む？
 	BOOL do_timeover = FALSE;
@@ -2951,7 +2928,7 @@ void CBattleTask::T_UpdateStatus_TimeOver()
 		//強制的に進む
 		do_timeover = TRUE;
 	}
-	else if(bf_counter>310)
+	else if(bf_counter>620)
 	{
 		//空中に浮いている奴が居たらやらない
 
@@ -2975,6 +2952,17 @@ void CBattleTask::T_UpdateStatus_TimeOver()
 	//勝利ポーズ待ちに進む
 	if(do_timeover)
 	{
+		if (0 == winner)
+		{
+			if (dsb_timeover1 != NULL)dsb_timeover1->Play(0, 0, 0);
+			AddEffect(EFCTID_TIMEOVER1, 0, 0, 0);
+		}
+		else
+		{
+			if (dsb_timeover2 != NULL)dsb_timeover2->Play(0, 0, 0);
+			AddEffect(EFCTID_TIMEOVER2, 0, 0, 0);
+		}
+
 		if(g_battleinfo.GetBattleType()==TAISENKEISIKI_GOCYAMAZE)
 		{
 			wincount[winner]++;
@@ -3062,6 +3050,42 @@ void CBattleTask::Update_DeadFlag()
 		}
 		else m_active_dead[j]=TRUE;
 	}
+}
+
+BYTE CBattleTask::GetTimeOverWinner()
+{
+	int i, j;
+
+	double hpwariai[2][MAXNUM_TEAM];
+
+	bf_counter++;
+	CGObject *pobj;
+	float tmp_num;
+
+	//勝ったのはどっちか？（体力の減り具合で決定）
+	for (j = 0; j<2; j++)
+	{
+		tmp_num = 0.001f;
+		for (i = 0; i<MAXNUM_TEAM; i++)
+		{
+			if (charobjid[j][i] != 0)
+			{
+				pobj = GetGObject(charobjid[j][i]);
+				if (pobj != NULL)
+				{
+					hpwariai[j][i] = (double)pobj->data.hp / (double)pobj->data.hpmax;
+					tmp_num += 1.0f;
+				}
+				else hpwariai[j][i] = 0;
+			}
+			else hpwariai[j][i] = 0;
+		}
+		hpwariai[j][0] = (hpwariai[j][0] + hpwariai[j][1] + hpwariai[j][2]) / tmp_num;//平均する
+	}
+	if (hpwariai[0][0] < hpwariai[1][0])j = 1;//1p側の負け
+	else j = 0;//2p側の負け
+
+	return j;
 }
 
 /*-------------------------------------------------------------------------

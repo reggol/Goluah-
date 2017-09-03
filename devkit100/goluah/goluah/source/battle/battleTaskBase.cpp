@@ -49,6 +49,8 @@ void CBattleTaskBase::Initialize()
 	dsb_fight = g_sound.CreateDSB(_T(".\\system\\sound\\fight.wav"));
 	dsb_ko = g_sound.CreateDSB(_T(".\\system\\sound\\ko.wav"));
 	dsb_timeover = g_sound.CreateDSB(_T(".\\system\\sound\\timeover.wav"));
+	dsb_timeover1 = g_sound.CreateDSB(_T(".\\system\\sound\\timeover1.wav"));
+	dsb_timeover2 = g_sound.CreateDSB(_T(".\\system\\sound\\timeover2.wav"));
 
 	InitializeParameters();
 	InitializeObjectList();

@@ -172,17 +172,60 @@ protected:
 };
 
 /*!
-*	@brief 描画オブジェクト・TIMEOVER
+*	@brief 描画オブジェクト・TIMEOVER表示ベース
 *	@ingroup Battle
 */
-class CFxTimeOver : public CFxFrontDispBase
+class CFxTimeOverBase : public CFxFrontDispBase
 {
 public:
-	virtual ~CFxTimeOver(){}
+	virtual ~CFxTimeOverBase(){}
 
 	void Update();
 	BOOL DrawF();
 
 protected:
+	TCHAR str[16];
+	float left;
 	double DrawOneCharacter(float x,float y,TCHAR c,float t,float t2);
+};
+
+/*!
+*	@brief 描画オブジェクト・TIMEOVER
+*	@ingroup Battle
+*/
+class  CFxTimeOver : public CFxTimeOverBase
+{
+public:
+	CFxTimeOver() {
+		_tcscpy(str,_T("TIME OVER"));
+		left = 72;
+	}
+};
+
+/*!
+*	@brief 描画オブジェクト・TEAM1 WIN
+*	@ingroup Battle
+*/
+class  CFxTimeOver1 : public CFxTimeOverBase
+{
+public:
+	CFxTimeOver1()
+	{
+		_tcscpy(str, _T("TEAM1 WIN"));
+		left = 57;
+	}
+};
+
+/*!
+*	@brief 描画オブジェクト・TEAM2 WIN
+*	@ingroup Battle
+*/
+class  CFxTimeOver2 : public CFxTimeOverBase
+{
+public:
+	CFxTimeOver2()
+	{
+		_tcscpy(str, _T("TEAM2 WIN"));
+		left = 54;
+	}
 };

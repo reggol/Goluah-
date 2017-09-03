@@ -147,6 +147,8 @@ protected:
 
 	virtual void Update_DeadFlag();					//!< 死亡フラグ更新
 
+	virtual BYTE GetTimeOverWinner();				//!< タイムオーバー勝利チーム取得
+
 	//試合進行管理フラグ
 	DWORD winner_oid;								//!< 勝利ポーズ終了待ち対象
 	BOOL m_winpose_end;								//!< 勝利ポーズ終了・↑一人分しか見てない

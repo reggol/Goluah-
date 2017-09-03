@@ -151,6 +151,8 @@ protected:
 	LPDIRECTSOUNDBUFFER dsb_fight;		//!< サウンド 「ファイト」
 	LPDIRECTSOUNDBUFFER dsb_ko;			//!< サウンド 「ＫＯ」
 	LPDIRECTSOUNDBUFFER dsb_timeover;	//!< サウンド 「タイムオーバー」
+	LPDIRECTSOUNDBUFFER dsb_timeover1;	//!< サウンド 「TEAM1 WIN」
+	LPDIRECTSOUNDBUFFER dsb_timeover2;	//!< サウンド 「TEAM2 WIN」
 
 	//ラウンド通して変化しないパラメータ
 	CDI_CHARACTERINFO2 m_cinfo[2][MAXNUM_TEAM];	//!< DLLとやり取りするキャラクター情報
