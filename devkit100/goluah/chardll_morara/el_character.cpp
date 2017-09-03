@@ -727,11 +727,18 @@ void CCharacterEL::PreAction()
 	if(m_opt_regene && pdat->hp>5)
 	{
 		if(
+			(pdat->aid & ACTID_KURAI) ||
+			(pdat->aid == ACTID_OKIAGARI) ||
+			(pdat->aid == ACTID_TOJYO) ||
+			(pdat->aid == ACTID_SYORI)
+		)
+		{
+			//何もしない
+		}
+		else if(
 				!(pdat->aid & ACTID_ATTACK) && 
 				!(pdat->aid & ACTID_SYSTEM) && 
-				!(pdat->aid & ACTID_KUCYU)  && 
-				(pdat->aid != ACTID_TOJYO) && 
-				(pdat->aid != ACTID_SYORI) 
+				!(pdat->aid & ACTID_KUCYU)
 		)
 		{
 			if((pdat->counter%m_regene_rate)==0)pdat->hp += 1;
