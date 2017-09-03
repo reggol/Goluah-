@@ -119,7 +119,7 @@ void CCharacter::act_att_ja()//飛弱
 	else if(pdat->counter < 20)pdat->cnow = CELL_JA2;
 	else pdat->aid = ACTID_RAKKA2;
 
-	JiyuuRakka(ACTID_NEUTRAL,TRUE);
+	JiyuuRakka(1,TRUE);
 }
 
 void CCharacter::act_att_jb()//飛中
@@ -138,7 +138,7 @@ void CCharacter::act_att_jb()//飛中
 	else{
 		pdat->aid = ACTID_RAKKA2;
 	}
-	JiyuuRakka(ACTID_NEUTRAL,TRUE);
+	JiyuuRakka(1,TRUE);
 }
 
 void CCharacter::act_att_jc()//飛強
@@ -148,7 +148,7 @@ void CCharacter::act_att_jc()//飛強
 	if(pdat->counter < 9)pdat->cnow=CELL_DASHF1;
 	else if(pdat->counter < 18)pdat->cnow = CELL_JC1+pdat->counter%8;
 	else pdat->cnow = CELL_JAMP;
-	JiyuuRakka(ACTID_NEUTRAL,TRUE);
+	JiyuuRakka(1,TRUE);
 }
 
 
