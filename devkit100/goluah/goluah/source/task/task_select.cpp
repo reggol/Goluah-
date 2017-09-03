@@ -940,7 +940,7 @@ void CTCharacterBigFace::Draw()
 			if(m_left){//player1
 				g_draw.CheckBlt(
 					pddstmp,
-					face2_maxx-(DWORD)pddstmp->wg - (m_max_num-1)*50 +l,
+					face2_maxx-(DWORD)pddstmp->wg + l,
 					240-(DWORD)pddstmp->hg/2,
 					r_face,
 					FALSE,
@@ -952,7 +952,7 @@ void CTCharacterBigFace::Draw()
 			else{//player2
 				g_draw.CheckBlt(
 					pddstmp,
-					640-face2_maxx + (m_max_num-1)*50 - l,
+					640-face2_maxx - l,
 					240-(DWORD)pddstmp->hg/2,
 					r_face,
 					TRUE,
