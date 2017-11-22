@@ -2433,6 +2433,15 @@ void CBattleTask::T_UpdateStatus_WaitForEndPose()
 	}
 	if(bf_counter>600){//救済措置
 		next=TRUE;
+        for (int i = 0; i<2; i++){
+            for (int j = 0; j<MAXNUM_TEAM; j++){
+                if (!m_tojyo_end[i][j]){
+                    GetGObject(charobjid[j][i])->data.aid = ACTID_NEUTRAL;
+                    GetGObject(charobjid[j][i])->data.y = 0;
+                    GetGObject(charobjid[j][i])->data.x = (150 + 50 * i) *(j == 0 ? -1 : 1);
+                }
+            }
+        }
 	}
 
 	if(next){

@@ -520,6 +520,9 @@ DWORD CCharacter::TouchB(ATTACKINFO *info,BOOL hit)
 		case ACTID_ATT_SC:
 		case ACTID_ATT_SMC:
 			{
+				if(ComLevelCk(3)){
+					SetComAct(ACTID_ATT_CC,5);
+				}
 				if(ComLevelCk(5) && pdat->gauge >= 1.0){
 					SetComAct(ACTID_FESTIVAL,5);
 				}
@@ -529,15 +532,18 @@ DWORD CCharacter::TouchB(ATTACKINFO *info,BOOL hit)
 				if(ComLevelCk(3)){
 					SetComAct(ACTID_HADOU2,5);
 				}
-				if(ComLevelCk(3)){
-					SetComAct(ACTID_ATT_CC,5);
-				}
 			}
 			break;
 
 		case ACTID_ATT_CA:
 			{
-				if(ComLevelCk(3)){
+				if (ComLevelCk(3)){
+					SetComAct(ACTID_ATT_CB, 3);
+				}
+				if (ComLevelCk(3)){
+					SetComAct(ACTID_ATT_SA, 3);
+				}
+				if (ComLevelCk(3)){
 					SetComAct(ACTID_ATT_CC,3);
 				}
 			}
@@ -545,7 +551,10 @@ DWORD CCharacter::TouchB(ATTACKINFO *info,BOOL hit)
 
 		case ACTID_ATT_CB:
 			{
-				if(ComLevelCk(3)){
+				if (ComLevelCk(3)){
+					SetComAct(ACTID_ATT_SA, 3);
+				}
+				if (ComLevelCk(3)){
 					SetComAct(ACTID_ATT_CC,3);
 				}
 			}

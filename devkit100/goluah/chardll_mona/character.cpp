@@ -623,24 +623,42 @@ DWORD CCharacter::TouchB(ATTACKINFO *info,BOOL hit)
 			break;
 		case ACTID_ATT_CC:
 			{
-				if (ComLevelCk(3)){
-					if (m_opt_AAttack && rand()%GetComLevel() != 0)
-						SetComAct(ACTID_AJAMP, 0);
+				if (m_opt_AAttack && ComLevelCk(3)){
+					SetComAct(ACTID_AJAMP, 3);
 				}
+				else if (ComLevelCk(3))
+					SetComAct(ACTID_REIKU1C,5);
 			}
 			break;
 		case ACTID_ATT_JA:
-			{
-				if (m_aerial)	//SetComActだとダメなんだけど、なんで？
-					ChangeAction(ACTID_ATT_JB);
+		{
+			if (m_opt_AAttack && ComLevelCk(2)){
+				SetComAct(ACTID_ATT_JB, 3);
 			}
-			break;
-		case ACTID_ATT_JB:
-			{
-				if (m_aerial)
-					ChangeAction(ACTID_ATT_JC);
+			if (m_opt_AAttack && ComLevelCk(2)){
+				SetComAct(ACTID_ATT_JC, 3);
 			}
-			break;
+		}
+		break;
+		case ACTID_ATT_JB:{
+			if (m_opt_AAttack && ComLevelCk(2)){
+				SetComAct(ACTID_ATT_JC, 3);
+			}
+			if (m_opt_AAttack && ComLevelCk(2)){
+				SetComAct(ACTID_ATT_JA, 3);
+			}
+		}
+		break;
+		case ACTID_ATT_JC:{
+			if (m_opt_AAttack && ComLevelCk(2)){
+				SetComAct(ACTID_ATT_JA, 3);
+			}
+			if (m_opt_AAttack && ComLevelCk(2)){
+				SetComAct(ACTID_ATT_JB, 3);
+			}
+		}
+		break;
+
 			//レイク
 		case ACTID_REIKU1A:
 			{
@@ -783,11 +801,6 @@ void CCharacter::PreAction()
 		m_2nd_step_flag = m_opt_AStep;//2段ジャンプフラグクリア
 		m_aerial = FALSE;			//エリアルフラグクリア
 	}
-
-	//無理やりエリアルさせる
-	if (IsLocalCom() && pdat->aid == ACTID_AJAMP)
-		if (pdat->counter == rand()%10)
-			ChangeAction(ACTID_ATT_JA);
 
 	CCharacterBase::PreAction();
 }
@@ -1128,9 +1141,10 @@ void CCharacter::InitWazInfo()//コンピュータ用技情報の設定
 	waz.att_long[3]   = ACTID_REIKU3A;
 	waz.att_long[4]   = ACTID_GOODBYE1;
 
-	waz.att_tai[0] = ACTID_TATUMAKI1;
-	waz.att_tai[1] = ACTID_TATUMAKI2;
-	waz.att_tai[2] = ACTID_TATUMAKI3;
+	waz.att_tai[0] = ACTID_ATT_CC;
+	waz.att_tai[1] = ACTID_TATUMAKI1;
+	waz.att_tai[2] = ACTID_TATUMAKI2;
+	waz.att_tai[3] = ACTID_TATUMAKI3;
 
 	waz.att_bullet[0] = ACTID_HADOU1B;
 	waz.att_bullet[0] = ACTID_HADOU2B;
