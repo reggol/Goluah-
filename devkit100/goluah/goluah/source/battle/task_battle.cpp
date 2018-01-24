@@ -2827,11 +2827,11 @@ void CBattleTask::T_UpdateStatus_WaitForEndWin()
 	BOOL next=FALSE;
 	TCHAR filename[256];
 
-	if(m_winpose_end && bf_counter>150)next=TRUE;
-	if(g_battleinfo.GetBattleType()==TAISENKEISIKI_GOCYAMAZE && (g_battleinfo.GetAllKey()&0xFFFF0000) ){//ボタン入力でスキップ
-		next=TRUE;
+	//ポーズ完了 or スキップ or タイムアウト
+	if ((m_winpose_end && bf_counter > 150) || (g_input.GetAllKey() & 0xFFFF0000) || (bf_counter > 600))
+	{
+		next = TRUE;
 	}
-	if(bf_counter>600)next=TRUE;//救済措置
 
 	//次へ
 	if(next)//終了判定
