@@ -1135,6 +1135,8 @@ void CCharacter::InitWazInfo()//コンピュータ用技情報の設定
 	waz.att_middle[2] = ACTID_ATT_SD;
 	waz.att_middle[3] = ACTID_ATT_SE;
 	waz.att_middle[4] = ACTID_REIKU1A;
+	if (m_opt_hadou)
+		waz.att_middle[5] = ACTID_HADOU1B;
 	waz.att_long[0] = ACTID_ATT_SD;//長リーチ攻撃 
 	waz.att_long[1]   = ACTID_ATT_SE;
 	waz.att_long[2]   = ACTID_REIKU2A;
@@ -1146,9 +1148,8 @@ void CCharacter::InitWazInfo()//コンピュータ用技情報の設定
 	waz.att_tai[2] = ACTID_TATUMAKI2;
 	waz.att_tai[3] = ACTID_TATUMAKI3;
 
-	waz.att_bullet[0] = ACTID_HADOU1B;
-	waz.att_bullet[0] = ACTID_HADOU2B;
-	waz.att_bullet[0] = ACTID_HADOU3B;
+	if (!m_opt_hadou)
+		waz.att_bullet[0] = ACTID_HADOU1A;
 
 	waz.nageid[0] = ACTID_NAGE1;
 
