@@ -274,11 +274,12 @@ void CBattleTask::StartRound()
 	BOOL call_round = TRUE;
 	BOOL playflag = FALSE;
 
+	disp_center_x=0;
+	limittime=g_battleinfo.GetLimitTime();
+
 	//試合終了判定
 	switch( g_battleinfo.GetBattleType() ){
 	case TAISENKEISIKI_GOCYAMAZE:	
-		disp_center_x=0;
-		limittime=g_battleinfo.GetLimitTime();
 		//勝ちが先取ポイント数以上ならば勝利画面へ
 		if(wincount[0]>=g_config.GetMaxPoint()){
 			game_winner = 0;
@@ -300,12 +301,18 @@ void CBattleTask::StartRound()
 		}
 		break;
 	case TAISENKEISIKI_JYUNBAN://ラウンド終了 = 試合終了
+		if (round != 1)
+		{
+			game_winner = (wincount[0] >= g_battleinfo.GetNumTeam(1)) ? TEAM_PLAYER1 : TEAM_PLAYER2;
+			g_battleresult.Initialize(game_winner);
+			battle_end = TRUE;
+			return;
+		}
+		break;
 	case TAISENKEISIKI_KOUTAI:
-		disp_center_x=0;
-		limittime=-1;
 		if(round!=1)
 		{
-			game_winner = m_all_dead[TEAM_PLAYER2] ? TEAM_PLAYER1 : TEAM_PLAYER2;
+			game_winner = (wincount[0] > 0) ? TEAM_PLAYER1 : TEAM_PLAYER2;
 			g_battleresult.Initialize(game_winner);
 			battle_end = TRUE;
 			return;
@@ -2824,8 +2831,10 @@ void CBattleTask::T_UpdateStatus_WaitForEndWin()
 	g_system.PushSysTag(__FUNCTION__);
 
 	BYTE  lteam;
+	DWORD lteam_num;
 	BOOL next=FALSE;
 	TCHAR filename[256];
+	DWORD battle_type;
 
 	//ポーズ完了 or スキップ or タイムアウト
 	if ((m_winpose_end && bf_counter > 150) || (g_input.GetAllKey() & 0xFFFF0000) || (bf_counter > 600))
@@ -2836,40 +2845,37 @@ void CBattleTask::T_UpdateStatus_WaitForEndWin()
 	//次へ
 	if(next)//終了判定
 	{
-		//同時対戦の場合
-		if(g_battleinfo.GetBattleType()==TAISENKEISIKI_GOCYAMAZE)
+		battle_type = g_battleinfo.GetBattleType();
+
+		//勝ちチーム→負けチーム変換
+		if (m_round_winner == 0)
+			lteam = 1;
+		else if (m_round_winner == 1)
+			lteam = 0;
+
+		lteam_num = g_battleinfo.GetNumTeam(lteam);
+
+		//試合終了？
+		if(!((battle_type == TAISENKEISIKI_JYUNBAN) && (wincount[m_round_winner] < lteam_num)))
 		{
 			gbl.ods(_T("WAITFORENDWIN → StartRound"));
 			StartRound();
 			g_system.PopSysTag();
 			return;
 		}
+		//以降はTAISENKEISIKI_JYUNBAN専用
 
-		//勝ちチーム→負けチーム変換　※ダブルKO実装時に事故りそうなので対策
-		if (m_round_winner == 0)
-			lteam = 1;
-		else if (m_round_winner == 1)
-			lteam = 0;
-
-		//試合終了？
-		// TAISENKEISIKI_KOUTAI → 必ずTRUE
-		// TAISENKEISIKI_JYUNBAN→ FALSEの場合もあり
-		if(m_all_dead[lteam])
+		//タイムオーバー敗北者退出
+		CGObject *pobj = GetGObject(charobjid[lteam][active_character[lteam]]);
+		if (pobj && pobj->data.hp > 0)
 		{
-			wincount[m_round_winner]++;
-			StartRound();
-			g_system.PopSysTag();
-			return;
-		}
-		
-		if(g_battleinfo.GetBattleType()==TAISENKEISIKI_KOUTAI){
-			g_system.Log(_T("★CBattleTask::T_UpdateStatus_WaitForEndWin - おかしい"),SYSLOG_ERROR);
-			g_system.ReturnTitle();
+			pobj->data.hp = 0;
+			pobj->Message(GOBJMSG_TAIKI, 0);
 		}
 
-		//次のキャラクターを出す(TAISENKEISIKI_JYUNBANのみ)
+		//次のキャラクターを出す
 		active_character[lteam]++;
-		CGObject *pobj = GetGObject( charobjid[lteam][active_character[lteam]] );
+		pobj = GetGObject( charobjid[lteam][active_character[lteam]] );
 		if(pobj){
 			pobj->Message(GOBJMSG_KOUTAI2,0);
 			_stprintf(filename, _T("%s\\sound\\bgm"),
@@ -2883,6 +2889,7 @@ void CBattleTask::T_UpdateStatus_WaitForEndWin()
 		}
 		m_tojyo_end[lteam][active_character[lteam]]=FALSE;
 		round++;
+		limittime = g_battleinfo.GetLimitTime();
 		{//ラウンド開始wav更新
 			TCHAR *filename = new TCHAR[MAX_PATH];
 			_stprintf(filename,_T(".\\system\\sound\\round%d.wav"),round);
@@ -2928,7 +2935,8 @@ void CBattleTask::T_UpdateStatus_TimeOver()
 	DWORD loser;
 
 	winner = GetTimeOverWinner();
-	loser  = winner == 0 ? 1 : 0;
+	loser  = (winner == 0) ? 1 : 0;
+	m_round_winner = winner;
 
 	//次に進む？
 	BOOL do_timeover = FALSE;
@@ -2972,9 +2980,9 @@ void CBattleTask::T_UpdateStatus_TimeOver()
 			AddEffect(EFCTID_TIMEOVER2, 0, 0, 0);
 		}
 
+		wincount[winner]++;
 		if(g_battleinfo.GetBattleType()==TAISENKEISIKI_GOCYAMAZE)
 		{
-			wincount[winner]++;
 
 			j= winner;
 			for(i=0;i<(int)g_battleinfo.GetNumTeam(j);i++)
@@ -2994,10 +3002,9 @@ void CBattleTask::T_UpdateStatus_TimeOver()
 		}
 		else
 		{
-			g_system.Log(_T("battle 2417"),SYSLOG_ERROR);
-			g_system.ReturnTitle();
-			g_system.PopSysTag();
-			return;
+			winner_oid = charobjid[winner][active_character[winner]];//このキャラクターの勝利ポーズ終了を待つ
+			GetGObject(winner_oid)->Message(GOBJMSG_DOYOUWIN);
+			GetGObject(charobjid[loser][active_character[loser]])->Message(GOBJMSG_DOTIMEOVERLOSE);
 		}
 		bf_state=BFSTATE_WAITFORENDWIN;
 		m_winpose_end = FALSE;
@@ -3072,25 +3079,41 @@ BYTE CBattleTask::GetTimeOverWinner()
 	float tmp_num;
 
 	//勝ったのはどっちか？（体力の減り具合で決定）
-	for (j = 0; j<2; j++)
+	switch (g_battleinfo.GetBattleType())
 	{
-		tmp_num = 0.001f;
-		for (i = 0; i<MAXNUM_TEAM; i++)
+		case TAISENKEISIKI_GOCYAMAZE:
+		case TAISENKEISIKI_KOUTAI:
 		{
-			if (charobjid[j][i] != 0)
+			for (j = 0; j < 2; j++)
 			{
-				pobj = GetGObject(charobjid[j][i]);
-				if (pobj != NULL)
+				tmp_num = 0.001f;
+				for (i = 0; i < MAXNUM_TEAM; i++)
 				{
-					hpwariai[j][i] = (double)pobj->data.hp / (double)pobj->data.hpmax;
-					tmp_num += 1.0f;
+					if (charobjid[j][i] != 0)
+					{
+						pobj = GetGObject(charobjid[j][i]);
+						if (pobj != NULL)
+						{
+							hpwariai[j][i] = (double)pobj->data.hp / (double)pobj->data.hpmax;
+							tmp_num += 1.0f;
+						}
+						else hpwariai[j][i] = 0;
+					}
+					else hpwariai[j][i] = 0;
 				}
-				else hpwariai[j][i] = 0;
+				hpwariai[j][0] = (hpwariai[j][0] + hpwariai[j][1] + hpwariai[j][2]) / tmp_num;//平均する
 			}
-			else hpwariai[j][i] = 0;
 		}
-		hpwariai[j][0] = (hpwariai[j][0] + hpwariai[j][1] + hpwariai[j][2]) / tmp_num;//平均する
+		case TAISENKEISIKI_JYUNBAN:
+		{
+			for (j = 0; j < 2; j++)
+			{
+				pobj = GetGObject(charobjid[j][active_character[j]]);
+				hpwariai[j][0] = (double)pobj->data.hp / (double)pobj->data.hpmax;
+			}
+		}
 	}
+
 	if (hpwariai[0][0] < hpwariai[1][0])j = 1;//1p側の負け
 	else j = 0;//2p側の負け
 

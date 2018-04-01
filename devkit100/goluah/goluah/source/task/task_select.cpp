@@ -1975,7 +1975,7 @@ void CTConditionSelecter::Change(BOOL key)
 		return;
 	}
 	//制限時間変更
-	else if(m_selected==1 && m_type==TAISENKEISIKI_GOCYAMAZE)
+	else if(m_selected==1)
 	{
 		m_limit_time_index += key ? 1 : -1;
 		m_limit_time_index = (m_limit_time_index+5)%5 ;
@@ -2048,14 +2048,11 @@ void CTConditionSelecter::Draw()
 				TxtCol(0),txt_xr,txt_yr,SYSBMPTXT_PROP);
 
 	//制限時間
-	if(m_type==TAISENKEISIKI_GOCYAMAZE){
-		if(m_limit_time[m_limit_time_index]>0)
-			_stprintf(tstr,_T("Time: %d"),m_limit_time[m_limit_time_index]);
-		else
-			_stprintf(tstr,_T("Time: -infinity-"));
-	}
+	if(m_limit_time[m_limit_time_index]>0)
+		_stprintf(tstr,_T("Time: %d"),m_limit_time[m_limit_time_index]);
 	else
-		_stprintf(tstr,_T("Time: -no use-"));
+		_stprintf(tstr,_T("Time: -infinity-"));
+
 	g_system.DrawBMPTextEx(x+341.0f,y,0.0f,
 				tstr,
 				TxtCol(1),txt_xr,txt_yr,SYSBMPTXT_PROP);
