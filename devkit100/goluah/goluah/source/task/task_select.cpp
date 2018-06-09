@@ -461,6 +461,22 @@ void CCharacterSelect::OnChangeColorEx(CTCharacterRing *pring)
 	if (selected_color[team][num_selected[team]]>14)selected_color[team][num_selected[team]] = 1;
 }
 
+/*-----------------------------------------------------------
+	readme表示時処理
+-------------------------------------------------------------*/
+void CCharacterSelect::OnOpenReadme(CTCharacterRing *pring)
+{
+	//どのリングから？
+	DWORD team = 3;
+	if (pring == m_ring[0])	team = 0;
+	if (pring == m_ring[1])	team = 1;
+	if (team>1)return;
+
+	TCHAR filename[MAX_PATH];
+	_stprintf(filename, _T("%s\\readme.txt"), g_charlist.GetCharacterDir(pring->GetSelected()));
+	ShellExecute(NULL, "open", filename, NULL, NULL, SW_SHOWNORMAL);
+}
+
 
 /*-----------------------------------------------------------
 	インストON/OFF時処理
