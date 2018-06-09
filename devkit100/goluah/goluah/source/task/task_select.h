@@ -414,9 +414,32 @@ protected:
 	}
 	virtual void  Change(BOOL key);
 
+	enum CTConditionSelecter_Item
+	{
+		CTCoS_BattleType,
+		CTCoS_Time,
+		CTCoS_Team1_1,
+		CTCoS_Team1_2,
+		CTCoS_Team1_3,
+		CTCoS_Team2_1,
+		CTCoS_Team2_2,
+		CTCoS_Team2_3,
+		CTCoS_OK,
+		CTCoS_Title,
+	};
+
+	struct CTConditionSelecter_Item_Goto
+	{
+		CTConditionSelecter_Item up;
+		CTConditionSelecter_Item down;
+		CTConditionSelecter_Item left;
+		CTConditionSelecter_Item right;
+	};
+
 	CTConditionSelecter_State m_state;
 	DWORD m_counter;
-	int   m_selected;
+	CTConditionSelecter_Item m_selected;
+	static const CTConditionSelecter_Item_Goto m_item_dest_table[10];
 
 	static BYTE m_type;						//gobject.h , TAISENKEISIKI_～参照 BYTEで足りる
 	static BYTE m_assign[2][MAXNUM_TEAM];	//割り当て
@@ -428,5 +451,3 @@ protected:
 
 	void Check();//!< 割り当ての正当性をチェックする
 };
-
-

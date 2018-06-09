@@ -1811,6 +1811,21 @@ BYTE CTConditionSelecter::m_assign[2][MAXNUM_TEAM] =
 int CTConditionSelecter::m_limit_time_index = 1;
 int CTConditionSelecter::m_limit_time[5] = {40,60,99,120,-1};
 
+//キー移動先一覧
+const CTConditionSelecter::CTConditionSelecter_Item_Goto CTConditionSelecter::m_item_dest_table[10] =
+{	 //up			down			left				right
+	{CTCoS_Title,	CTCoS_Team1_1,	CTCoS_Time,			CTCoS_Time		},	//CTCoS_BattleType
+	{CTCoS_Title,	CTCoS_Team2_1,	CTCoS_BattleType,	CTCoS_BattleType},	//CTCoS_Time
+	{CTCoS_Title,	CTCoS_Team1_2,	CTCoS_Team2_1,		CTCoS_Team2_1	},	//CTCoS_Team1_1
+	{CTCoS_Team1_1,	CTCoS_Team1_3,	CTCoS_Team2_2,		CTCoS_Team2_2	},	//CTCoS_Team1_2
+	{CTCoS_Team1_2,	CTCoS_OK,		CTCoS_Team2_3,		CTCoS_Team2_3	},	//CTCoS_Team1_3
+	{CTCoS_Time,	CTCoS_Team2_2,	CTCoS_Team1_1,		CTCoS_Team1_1	},	//CTCoS_Team2_1
+	{CTCoS_Team2_1,	CTCoS_Team2_3,	CTCoS_Team1_2,		CTCoS_Team1_2	},	//CTCoS_Team2_2
+	{CTCoS_Team2_2,	CTCoS_OK,		CTCoS_Team1_3,		CTCoS_Team1_3	},	//CTCoS_Team2_3
+	{CTCoS_Team2_3,	CTCoS_Title,	CTCoS_OK,			CTCoS_OK		},	//CTCoS_OK
+	{CTCoS_OK,		CTCoS_Time,		CTCoS_Title,		CTCoS_Title		}	//CTCoS_Title
+};
+
 /*---------------------------------------------------------------------------------------
 	初期化
 -----------------------------------------------------------------------------------------*/
@@ -1820,7 +1835,7 @@ void CTConditionSelecter::Initialize()
 
 	m_state = CTCoS_Start;
 	m_counter = 0;
-	m_selected = MAXNUM_TEAM*2 + 2;
+	m_selected = CTCoS_OK;
 	m_ratio = 0.0f;
 
 	//オビパラメータ初期化
@@ -1882,51 +1897,34 @@ BOOL CTConditionSelecter::Execute(DWORD time)
 			m_ratio = 1.0f;
 
 			DWORD key = g_input.GetAllKey();
-			if(m_selected==select_max-1 && key&KEYSTA_BUTTONS && m_ok){//ケテーイ
+			if(m_selected==CTCoS_OK && key&KEYSTA_BUTTONS && m_ok){//ケテーイ
 				CCharacterSelect* ccselect = dynamic_cast<CCharacterSelect*>(g_system.GetCurrentMainTask());
 				ccselect->OnConditionDecided(this);
 				m_state = CTCoS_Hide;
 			}
 			else if(key&KEYSTA_BC2){//OKに移動
-				m_selected=select_max-1;
+				m_selected=CTCoS_OK;
 			}
-			else if( m_selected==select_max && key&KEYSTA_BUTTONS ){//タイトルに戻る
+			else if( m_selected==CTCoS_Title && key&KEYSTA_BUTTONS ){//タイトルに戻る
 				g_system.ReturnTitle();
 				return FALSE;
 			}
-			else if (key&(KEYSTA_BA2 | KEYSTA_BB2) && m_selected != select_max - 1)//項目選択
+			else if (key&(KEYSTA_BA2 | KEYSTA_BB2) && m_selected != CTCoS_OK)//項目選択
 			{
 				m_state = CTCoS_Selected;
 			}
 			else if(key&KEYSTA_ALEFT2){//左移動
-				if(1+MAXNUM_TEAM < m_selected && m_selected < select_max-1)
-					m_selected-=MAXNUM_TEAM;
-				else if(m_selected==1)
-					m_selected--;
+					m_selected = m_item_dest_table[m_selected].left;
 			}
 			else if(key&KEYSTA_ARIGHT2){//右移動
-				if(1 < m_selected && m_selected < 2+MAXNUM_TEAM)
-					m_selected+=MAXNUM_TEAM;
-				else if(m_selected==0)
-					m_selected++;
+				m_selected = m_item_dest_table[m_selected].right;
 			}
 			else if(key&KEYSTA_DOWN2){//下移動
-				if(m_selected == 1 || m_selected == 1+MAXNUM_TEAM)
-					m_selected+=MAXNUM_TEAM+1;
-				else if(m_selected==0)
-					m_selected+=2;
-				else
-					m_selected++;
+				m_selected = m_item_dest_table[m_selected].down;
 			}
 			else if(key&KEYSTA_UP2){//上移動
-				if(m_selected == 1 || m_selected == 2)
-					m_selected-=2;
-				else if(m_selected == 2+MAXNUM_TEAM)
-					m_selected-=MAXNUM_TEAM+1;
-				else
-					m_selected--;
+				m_selected = m_item_dest_table[m_selected].up;
 			}
-			m_selected = (m_selected+select_max+1) % (select_max+1);
 		}break;
 	case CTCoS_Selected:	// 項目選択中
 		{
