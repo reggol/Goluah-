@@ -447,7 +447,7 @@ void CCharacterSelect::OnChangeColor(CTCharacterRing *pring)
 }
 
 /*-----------------------------------------------------------
-色変更時処理(拡張版)
+	色変更時処理(拡張版)
 -------------------------------------------------------------*/
 void CCharacterSelect::OnChangeColorEx(CTCharacterRing *pring)
 {
