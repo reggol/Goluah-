@@ -1914,7 +1914,7 @@ BOOL CTConditionSelecter::Execute(DWORD time)
 				m_state = CTCoS_Selected;
 			}
 			else if(key&KEYSTA_ALEFT2){//左移動
-					m_selected = m_item_dest_table[m_selected].left;
+				m_selected = m_item_dest_table[m_selected].left;
 			}
 			else if(key&KEYSTA_ARIGHT2){//右移動
 				m_selected = m_item_dest_table[m_selected].right;
