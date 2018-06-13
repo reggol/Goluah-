@@ -49,10 +49,19 @@ BOOL CTOptionSelecterBase::Execute(DWORD time)
 	{
 	case CTOPTSS_NotReady:
 		{
-			m_tick += anmSpd;
-			if(m_tick>1.0f){
-				m_tick = 1.0f;
-				m_state = CTOPTSS_Ready;
+			if (m_selecter && m_selecter->list->size() == 0)//オプションがない場合は終了
+			{
+				EndSelect();
+				m_state = CTOPTSS_Hide;
+			}
+			else
+			{
+				m_tick += anmSpd;
+				if (m_tick>1.0f)
+				{
+					m_tick = 1.0f;
+					m_state = CTOPTSS_Ready;
+				}
 			}
 		}break;
 	case CTOPTSS_Ready:
