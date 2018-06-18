@@ -465,11 +465,11 @@ CKeyCode2Str::CKeyCode2Str()
 
 	Add("Num Lock");
 	Add("Scroll Lock");
-	Add("OEM1");
-	Add("OEM2");
-	Add("OEM3");
-	Add("OEM4");
-	Add("OEM5");
+	Add("OEM");
+	Add("OEM");
+	Add("OEM");
+	Add("OEM");
+	Add("OEM");
 
 	if(m_list.size()!=0x96+1)OutputDebugString("CKeyCode2Str : チェック失敗 at 0x96\n");
 	while(m_list.size()<0x9F+1)
@@ -505,7 +505,36 @@ CKeyCode2Str::CKeyCode2Str()
 	Add("アプリ起動１");
 	Add("アプリ起動２");
 
-	if(m_list.size()!=0xB7+1)OutputDebugString("CKeyCode2Str : チェック失敗 at 0xA5\n");
+	if(m_list.size()!=0xB7+1)OutputDebugString("CKeyCode2Str : チェック失敗 at 0xB7\n");
+	while(m_list.size()<0xB9+1)
+	{
+		Add("?");
+	}
+
+	Add(":*");
+	Add(";+");
+	Add(",<");
+	Add("-=");
+	Add(".>");
+	Add("/?");
+	Add("@`");
+
+	if(m_list.size()!=0xC0+1)OutputDebugString("CKeyCode2Str : チェック失敗 at 0xC0\n");
+	while(m_list.size()<0xDA+1)
+	{
+		Add("?");
+	}
+
+	Add("[{");
+	Add("\\|");
+	Add("]}");
+	Add("^~");
+	Add("OEM_8");
+	Add("?");
+	Add("OEM_AX");
+	Add("\\_");
+
+	if(m_list.size()!=0xE2+1)OutputDebugString("CKeyCode2Str : チェック失敗 at 0xE2\n");
 }
 
 const char* CKeyCode2Str::GetStr(BYTE code)
