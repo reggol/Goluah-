@@ -104,6 +104,10 @@ BOOL CDlgPadConfig::OnInitDialog()
 		combo->InsertString(9, "ボタン10" );
 		combo->InsertString(10, "ボタン11" );
 		combo->InsertString(11, "ボタン12" );
+		combo->InsertString(12, "ボタン13" );
+		combo->InsertString(13, "ボタン14" );
+		combo->InsertString(14, "ボタン15" );
+		combo->InsertString(15, "ボタン16" );
 		combo->SetCurSel(0);
 	}
 

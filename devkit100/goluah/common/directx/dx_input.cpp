@@ -645,7 +645,7 @@ DWORD CDirectInput::GetPadState(int cid)
 			if( dijs.lY < -500 ) padstate |= PADUP;
 			else if( dijs.lY > 500 ) padstate |= PADDOWN;
 			
-			for(i=0;i<12;i++){
+			for(i=0;i<16;i++){
 				if(dijs.rgbButtons[i] & 0x80){
 					if( i==g_config.padcfg.pad_button[0][cid] ) padstate |= PADA;
 					else if( i==g_config.padcfg.pad_button[1][cid] ) padstate |= PADB;
