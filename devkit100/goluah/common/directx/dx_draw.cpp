@@ -2684,7 +2684,8 @@ void CDirectDraw::CellDraw090(MYSURFACE **pbuf,//!< GCDで利用するビット�
 	else
 	{
 		D3DXMATRIX matp,mat,tmt,matprv,matprv2;
-		float ar2 = 2.0f/480.0f;;
+		D3DXQUATERNION quat;
+		const float ar2 = 2.0f / 480.0f;
 
 		//ZW/ZTフラグ操作
 		if((cdat[cn].flag & GCDCELL2_DISABLE_ZT) || (cdat[cn].flag & GCDCELL2_DISABLE_ZW))
@@ -2695,27 +2696,33 @@ void CDirectDraw::CellDraw090(MYSURFACE **pbuf,//!< GCDで利用するビット�
 		}
 
 		//キャラクターの変換行列
-		D3DXMatrixIdentity(&matp);
+		const auto center = D3DXVECTOR3((float)(cdat[cn].gcx)*ar2, (float)(cdat[cn].gcy)*ar2, 0);//重心
+		D3DXQuaternionRotationAxis(&quat, &D3DXVECTOR3(0, 0, 1), D3DXToRadian(rot));
+
 		if(!(cdat[cn].flag & GCDCELL2_SCA_GCENTER))
 		{	
 			if(cdat[cn].flag & GCDCELL2_ROT_BASEPOINT)
 			{
 				//スケール：足元中心 回転：足元中心
-				D3DXMatrixScaling(&tmt,magx,magy,1.0f);//拡大
-				matp *= tmt;
-				D3DXMatrixRotationZ(&tmt,D3DXToRadian(rot));//回転
-				matp *= tmt;
-				D3DXMatrixTranslation(&tmt,(float)(cdat[cn].gcx)*ar2*(-1.0f),(float)(cdat[cn].gcy)*ar2*(-1.0f),0);//重心に移動
-				matp *= tmt;
+				D3DXMatrixTransformation(&matp,
+					NULL,
+					NULL,
+					&D3DXVECTOR3(magx, magy, 1.0f),//拡大
+					NULL,
+					&quat,//回転
+					&D3DXVECTOR3((float)(cdat[cn].gcx)*ar2, (float)(cdat[cn].gcy)*ar2, 0)//表示位置への移動
+					);
 			}
 			else{
 				//スケール：足元中心 回転：重心中心
-				D3DXMatrixScaling(&tmt,magx,magy,1.0f);//拡大
-				matp *= tmt;
-				D3DXMatrixTranslation(&tmt,(float)(cdat[cn].gcx)*ar2*(-1.0f),(float)(cdat[cn].gcy)*ar2*(-1.0f),0);//重心に移動
-				matp *= tmt;
-				D3DXMatrixRotationZ(&tmt,D3DXToRadian(rot));//回転
-				matp *= tmt;
+				D3DXMatrixTransformation(&matp,
+					NULL,
+					NULL,
+					&D3DXVECTOR3(magx, magy, 1.0f),//拡大
+					&center,
+					&quat,//回転
+					&D3DXVECTOR3((float)(cdat[cn].gcx)*ar2, (float)(cdat[cn].gcy)*ar2, 0)//表示位置への移動
+					);
 			}
 		}
 		else
@@ -2723,30 +2730,36 @@ void CDirectDraw::CellDraw090(MYSURFACE **pbuf,//!< GCDで利用するビット�
 			if(cdat[cn].flag & GCDCELL2_ROT_BASEPOINT)
 			{
 				//スケール：重心中心 回転：足元中心
-				D3DXMatrixRotationZ(&tmt,D3DXToRadian(rot));//回転
-				matp *= tmt;
-				D3DXMatrixTranslation(&tmt,(float)(cdat[cn].gcx)*ar2*(-1.0f),(float)(cdat[cn].gcy)*ar2*(-1.0f),0);//重心に移動
-				matp *= tmt;
-				D3DXMatrixScaling(&tmt,magx,magy,1.0f);//拡大
-				matp *= tmt;
+				D3DXMatrixTransformation(&matp,
+					&center,
+					&quat,	// ←バグorやむを得ない処置だった可能性？とりあえずv1.00の挙動を再現
+					&D3DXVECTOR3(magx, magy, 1.0f),//拡大
+					NULL,
+					&quat,//回転
+					&D3DXVECTOR3((float)(cdat[cn].gcx)*ar2, (float)(cdat[cn].gcy)*ar2, 0)//表示位置への移動
+					);
 			}
 			else{
 				//スケール：重心中心 回転：重心中心
-				D3DXMatrixTranslation(&tmt,(float)(cdat[cn].gcx)*ar2*(-1.0f),(float)(cdat[cn].gcy)*ar2*(-1.0f),0);//重心に移動
-				matp *= tmt;
-				D3DXMatrixScaling(&tmt,magx,magy,1.0f);//拡大
-				matp *= tmt;
-				D3DXMatrixRotationZ(&tmt,D3DXToRadian(rot));//回転
-				matp *= tmt;
+				D3DXMatrixTransformation(&matp,
+					&center,
+					NULL,
+					&D3DXVECTOR3(magx, magy, 1.0f),//拡大
+					&center,
+					&quat,//回転
+					&D3DXVECTOR3((float)(cdat[cn].gcx)*ar2, (float)(cdat[cn].gcy)*ar2, 0)//表示位置への移動
+					);
 			}
 		}
 		if(revy){
-			d3dxplane_y.d=0;
+			D3DXMatrixTranslation(&tmt, (float)(cdat[cn].gcx)*ar2*(-1.0f), (float)(cdat[cn].gcy)*ar2*(-1.0f), 0);//重心に移動
+			matp *= tmt;
+			d3dxplane_y.d = 0;
 			D3DXMatrixReflect(&tmt,&d3dxplane_y);//y反転
 			matp *= tmt;
-		}
 		D3DXMatrixTranslation(&tmt,(float)(cdat[cn].gcx)*ar2,(float)(cdat[cn].gcy)*ar2,0);//重心に戻す
 		matp *= tmt;
+		}
 		if(revx){
 			d3dxplane_x.d=0;
 			D3DXMatrixReflect(&tmt,&d3dxplane_x);//x反転
@@ -2764,17 +2777,16 @@ void CDirectDraw::CellDraw090(MYSURFACE **pbuf,//!< GCDで利用するビット�
 			rn = cdat[cn].cell[i].cdr;
 			if(rn < GCDMAX_RECTANGLES && rn!=0 && rdat[rn].bmpno<GCDMAX_IMAGES){
 				//変換行列を計算
-				D3DXMatrixIdentity(&mat);
-				D3DXMatrixTranslation(&tmt,(float)(rdat[rn].center_x)*ar2*(-1.0f),(float)(rdat[rn].center_y)*ar2*(-1.0f),0);//重心に移動
-				mat *= tmt;
-				D3DXMatrixScaling(&tmt,cdat[cn].cell[i].magx,cdat[cn].cell[i].magy,1.0f);//拡大
-				mat *= tmt;
-				D3DXMatrixRotationZ(&tmt,D3DXToRadian(cdat[cn].cell[i].rot));//回転
-				mat *= tmt;
-				D3DXMatrixTranslation(&tmt,(float)(rdat[rn].center_x)*ar2,(float)(rdat[rn].center_y)*ar2,0);//重心に戻す
-				mat *= tmt;
-				D3DXMatrixTranslation(&tmt,(float)(cdat[cn].cell[i].dx)*ar2,(float)(cdat[cn].cell[i].dy)*ar2,0);//表示位置への移動
-				mat *= tmt;
+				const auto center = D3DXVECTOR3((float)(rdat[rn].center_x)*ar2, (float)(rdat[rn].center_y)*ar2, 0);//重心
+
+				D3DXMatrixTransformation(&mat,
+					&center,
+					NULL,
+					&D3DXVECTOR3(cdat[cn].cell[i].magx, cdat[cn].cell[i].magy, 1.0f),//拡大
+					&center,
+					D3DXQuaternionRotationAxis(&quat, &D3DXVECTOR3(0, 0, 1), D3DXToRadian(cdat[cn].cell[i].rot)),//回転
+					&D3DXVECTOR3((float)(cdat[cn].cell[i].dx)*ar2, (float)(cdat[cn].cell[i].dy)*ar2, 0)//表示位置への移動
+					);
 
 				matprv2 = SetParentMatrix(mat,FALSE,TRUE);
 
@@ -2938,23 +2950,29 @@ void CDirectDraw::CellDraw070(
 	else
 	{
 		D3DXMATRIX matp,mat,tmt,matprv,matprv2;
-		float ar2 = 2.0f/480.0f;
+		D3DXQUATERNION quat;
+		const float ar2 = 2.0f / 480.0f;
 
 		//キャラクターの変換行列
-		D3DXMatrixIdentity(&matp);
-		D3DXMatrixTranslation(&tmt,(float)(cdat[cn].gcx)*ar2*(-1.0f),(float)(cdat[cn].gcy)*ar2*(-1.0f),0);//重心に移動
-		matp *= tmt;
-		D3DXMatrixScaling(&tmt,magx,magy,1.0f);//拡大
-		matp *= tmt;
-		D3DXMatrixRotationZ(&tmt,D3DXToRadian(rot));//回転
-		matp *= tmt;
+		const auto center = D3DXVECTOR3((float)(cdat[cn].gcx)*ar2, (float)(cdat[cn].gcy)*ar2, 0);//重心
+
+		D3DXMatrixTransformation(&matp,
+			&center,
+			NULL,
+			&D3DXVECTOR3(magx, magy, 1.0f),//拡大
+			&center,
+			D3DXQuaternionRotationAxis(&quat, &D3DXVECTOR3(0, 0, 1), D3DXToRadian(rot)),//回転
+			&D3DXVECTOR3((float)(cdat[cn].gcx)*ar2, (float)(cdat[cn].gcy)*ar2, 0)//表示位置への移動
+			);
 		if(revy){
-			d3dxplane_y.d=0;
+			D3DXMatrixTranslation(&tmt, (float)(cdat[cn].gcx)*ar2*(-1.0f), (float)(cdat[cn].gcy)*ar2*(-1.0f), 0);//重心に移動
+		matp *= tmt;
+			d3dxplane_y.d = 0;
 			D3DXMatrixReflect(&tmt,&d3dxplane_y);//y反転
 			matp *= tmt;
-		}
 		D3DXMatrixTranslation(&tmt,(float)(cdat[cn].gcx)*ar2,(float)(cdat[cn].gcy)*ar2,0);//重心に戻す
 		matp *= tmt;
+		}
 		if(revx){
 			d3dxplane_x.d=0;
 			D3DXMatrixReflect(&tmt,&d3dxplane_x);//x反転
@@ -2972,17 +2990,16 @@ void CDirectDraw::CellDraw070(
 			rn = cdat[cn].cell[i].cdr;
 			if(rn < GCDMAX_RECTANGLES && rn!=0 && rdat[rn].bmpno<GCDMAX_IMAGES){
 				//変換行列を計算
-				D3DXMatrixIdentity(&mat);
-				D3DXMatrixTranslation(&tmt,(float)(rdat[rn].center_x)*ar2*(-1.0f),(float)(rdat[rn].center_y)*ar2*(-1.0f),0);//重心に移動
-				mat *= tmt;
-				D3DXMatrixScaling(&tmt,cdat[cn].cell[i].magx,cdat[cn].cell[i].magy,1.0f);//拡大
-				mat *= tmt;
-				D3DXMatrixRotationZ(&tmt,D3DXToRadian(cdat[cn].cell[i].rot));//回転
-				mat *= tmt;
-				D3DXMatrixTranslation(&tmt,(float)(rdat[rn].center_x*cdat[cn].cell[i].magx)*ar2,(float)(rdat[rn].center_y)*ar2,0);//重心に戻す
-				mat *= tmt;
-				D3DXMatrixTranslation(&tmt,(float)(cdat[cn].cell[i].dx)*ar2,(float)(cdat[cn].cell[i].dy)*ar2,0);//表示位置への移動
-				mat *= tmt;
+				const auto center = D3DXVECTOR3((float)(rdat[rn].center_x)*ar2, (float)(rdat[rn].center_y)*ar2, 0);//重心
+
+				D3DXMatrixTransformation(&mat,
+					&center,
+					NULL,
+					&D3DXVECTOR3(cdat[cn].cell[i].magx, cdat[cn].cell[i].magy, 1.0f),//拡大
+					&center,
+					D3DXQuaternionRotationAxis(&quat, &D3DXVECTOR3(0, 0, 1), D3DXToRadian(cdat[cn].cell[i].rot)),//回転
+					&D3DXVECTOR3((float)(cdat[cn].cell[i].dx)*ar2, (float)(cdat[cn].cell[i].dy)*ar2, 0)//表示位置への移動
+					);
 
 				matprv2 = SetParentMatrix(mat,FALSE,TRUE);
 
