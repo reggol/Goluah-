@@ -2710,7 +2710,7 @@ void CDirectDraw::CellDraw090(MYSURFACE **pbuf,//!< GCDで利用するビット�
 					&D3DXVECTOR3(magx, magy, 1.0f),//拡大
 					NULL,
 					&quat,//回転
-					&D3DXVECTOR3((float)(cdat[cn].gcx)*ar2, (float)(cdat[cn].gcy)*ar2, 0)//表示位置への移動
+					NULL
 					);
 			}
 			else{
@@ -2721,7 +2721,7 @@ void CDirectDraw::CellDraw090(MYSURFACE **pbuf,//!< GCDで利用するビット�
 					&D3DXVECTOR3(magx, magy, 1.0f),//拡大
 					&center,
 					&quat,//回転
-					&D3DXVECTOR3((float)(cdat[cn].gcx)*ar2, (float)(cdat[cn].gcy)*ar2, 0)//表示位置への移動
+					NULL
 					);
 			}
 		}
@@ -2736,7 +2736,7 @@ void CDirectDraw::CellDraw090(MYSURFACE **pbuf,//!< GCDで利用するビット�
 					&D3DXVECTOR3(magx, magy, 1.0f),//拡大
 					NULL,
 					&quat,//回転
-					&D3DXVECTOR3((float)(cdat[cn].gcx)*ar2, (float)(cdat[cn].gcy)*ar2, 0)//表示位置への移動
+					NULL
 					);
 			}
 			else{
@@ -2747,7 +2747,7 @@ void CDirectDraw::CellDraw090(MYSURFACE **pbuf,//!< GCDで利用するビット�
 					&D3DXVECTOR3(magx, magy, 1.0f),//拡大
 					&center,
 					&quat,//回転
-					&D3DXVECTOR3((float)(cdat[cn].gcx)*ar2, (float)(cdat[cn].gcy)*ar2, 0)//表示位置への移動
+					NULL
 					);
 			}
 		}
@@ -2765,8 +2765,9 @@ void CDirectDraw::CellDraw090(MYSURFACE **pbuf,//!< GCDで利用するビット�
 			D3DXMatrixReflect(&tmt,&d3dxplane_x);//x反転
 			matp *= tmt;
 		}
-		D3DXMatrixTranslation(&tmt,(float)x*ar2,(float)y*ar2,0);//表示位置への移動
-		matp *= tmt;
+		//表示位置への移動
+		matp._41 += (float)x*ar2;
+		matp._42 += (float)y*ar2;
 
 		matprv = SetParentMatrix(matp,FALSE,TRUE);//「親」の変換行列として設定
 
@@ -2962,7 +2963,7 @@ void CDirectDraw::CellDraw070(
 			&D3DXVECTOR3(magx, magy, 1.0f),//拡大
 			&center,
 			D3DXQuaternionRotationAxis(&quat, &D3DXVECTOR3(0, 0, 1), D3DXToRadian(rot)),//回転
-			&D3DXVECTOR3((float)(cdat[cn].gcx)*ar2, (float)(cdat[cn].gcy)*ar2, 0)//表示位置への移動
+			NULL
 			);
 		if(revy){
 			D3DXMatrixTranslation(&tmt, (float)(cdat[cn].gcx)*ar2*(-1.0f), (float)(cdat[cn].gcy)*ar2*(-1.0f), 0);//重心に移動
@@ -2978,8 +2979,9 @@ void CDirectDraw::CellDraw070(
 			D3DXMatrixReflect(&tmt,&d3dxplane_x);//x反転
 			matp *= tmt;
 		}
-		D3DXMatrixTranslation(&tmt,(float)x*ar2,(float)y*ar2,0);//表示位置への移動
-		matp *= tmt;
+		//表示位置への移動
+		matp._41 += (float)x*ar2;
+		matp._42 += (float)y*ar2;
 
 		matprv = SetParentMatrix(matp,FALSE);//「親」の変換行列として設定
 
