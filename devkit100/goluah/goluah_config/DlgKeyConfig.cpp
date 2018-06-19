@@ -72,6 +72,7 @@ BEGIN_MESSAGE_MAP(CDlgKeyConfig, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_SETKEY_2_2, &CDlgKeyConfig::OnBnClickedButtonSetkey22)
 	ON_BN_CLICKED(IDC_BUTTON_SETKEY_2_3, &CDlgKeyConfig::OnBnClickedButtonSetkey23)
 	ON_BN_CLICKED(IDC_BUTTON_SETKEY_2_4, &CDlgKeyConfig::OnBnClickedButtonSetkey24)
+	ON_BN_CLICKED(IDC_BUTTON_SETKEY_2_5, &CDlgKeyConfig::OnBnClickedButtonSetkey25)
 	ON_BN_CLICKED(IDC_BUTTON_SETKEY_2_6, &CDlgKeyConfig::OnBnClickedButtonSetkey26)
 	ON_BN_CLICKED(IDC_BUTTON_SETKEY_2_7, &CDlgKeyConfig::OnBnClickedButtonSetkey27)
 	ON_BN_CLICKED(IDC_BUTTON_SETKEY_2_8, &CDlgKeyConfig::OnBnClickedButtonSetkey28)
@@ -231,7 +232,7 @@ void CDlgKeyConfig::OnBnClickedButtonSetkey24()
 }
 
 //ボタンA
-void CDlgKeyConfig::OnBnClickedButtonSetkey26()
+void CDlgKeyConfig::OnBnClickedButtonSetkey25()
 {
 	CDlgKBKeyGet dlg(this);
 	int ret = (int)dlg.DoModal();
@@ -242,7 +243,7 @@ void CDlgKeyConfig::OnBnClickedButtonSetkey26()
 }
 
 //ボタンB
-void CDlgKeyConfig::OnBnClickedButtonSetkey27()
+void CDlgKeyConfig::OnBnClickedButtonSetkey26()
 {
 	CDlgKBKeyGet dlg(this);
 	int ret = (int)dlg.DoModal();
@@ -253,7 +254,7 @@ void CDlgKeyConfig::OnBnClickedButtonSetkey27()
 }
 
 //ボタンC
-void CDlgKeyConfig::OnBnClickedButtonSetkey28()
+void CDlgKeyConfig::OnBnClickedButtonSetkey27()
 {
 	CDlgKBKeyGet dlg(this);
 	int ret = (int)dlg.DoModal();
@@ -264,7 +265,7 @@ void CDlgKeyConfig::OnBnClickedButtonSetkey28()
 }
 
 //ボタンD
-void CDlgKeyConfig::OnBnClickedButtonSetkey29()
+void CDlgKeyConfig::OnBnClickedButtonSetkey28()
 {
 	CDlgKBKeyGet dlg(this);
 	int ret = (int)dlg.DoModal();

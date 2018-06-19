@@ -34,6 +34,7 @@ public:
 	afx_msg void OnBnClickedButtonSetkey22();
 	afx_msg void OnBnClickedButtonSetkey23();
 	afx_msg void OnBnClickedButtonSetkey24();
+	afx_msg void OnBnClickedButtonSetkey25();
 	afx_msg void OnBnClickedButtonSetkey26();
 	afx_msg void OnBnClickedButtonSetkey27();
 	afx_msg void OnBnClickedButtonSetkey28();
