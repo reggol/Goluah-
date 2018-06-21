@@ -16,6 +16,11 @@ CDlgPadConfig::CDlgPadConfig(CWnd* pParent /*=NULL*/)
 	, m_buttonB(0)
 	, m_buttonC(0)
 	, m_buttonD(0)
+	, m_buttonSTART(0)
+	, m_buttonA_B(0)
+	, m_buttonB_C(0)
+	, m_buttonC_A(0)
+	, m_buttonA_B_C(0)
 {
 }
 
@@ -31,6 +36,11 @@ void CDlgPadConfig::DoDataExchange(CDataExchange* pDX)
 	DDX_CBIndex(pDX, IDC_COMBO_PADBUTTON_B, m_buttonB);
 	DDX_CBIndex(pDX, IDC_COMBO_PADBUTTON_C, m_buttonC);
 	DDX_CBIndex(pDX, IDC_COMBO_PADBUTTON_D, m_buttonD);
+	DDX_CBIndex(pDX, IDC_COMBO_PADBUTTON_START, m_buttonSTART);
+	DDX_CBIndex(pDX, IDC_COMBO_PADBUTTON_A_B, m_buttonA_B);
+	DDX_CBIndex(pDX, IDC_COMBO_PADBUTTON_B_C, m_buttonB_C);
+	DDX_CBIndex(pDX, IDC_COMBO_PADBUTTON_C_A, m_buttonC_A);
+	DDX_CBIndex(pDX, IDC_COMBO_PADBUTTON_A_B_C, m_buttonA_B_C);
 }
 
 
@@ -80,8 +90,13 @@ BOOL CDlgPadConfig::OnInitDialog()
 		IDC_COMBO_PADBUTTON_B,
 		IDC_COMBO_PADBUTTON_C,
 		IDC_COMBO_PADBUTTON_D,
+		IDC_COMBO_PADBUTTON_START,
+		IDC_COMBO_PADBUTTON_A_B,
+		IDC_COMBO_PADBUTTON_B_C,
+		IDC_COMBO_PADBUTTON_C_A,
+		IDC_COMBO_PADBUTTON_A_B_C,
 	};
-	for(i=0;i<4;i++)
+	for(i=0;i<9;i++)
 	{
 		combo = (CComboBox*)GetDlgItem( comboid[i] );
 		if(!combo){
@@ -116,6 +131,11 @@ BOOL CDlgPadConfig::OnInitDialog()
 	m_buttonB = m_cfg.pad_button[1][m_crnt_pad];
 	m_buttonC = m_cfg.pad_button[2][m_crnt_pad];
 	m_buttonD = m_cfg.pad_button[3][m_crnt_pad];
+	m_buttonSTART = m_cfg.pad_button[7][m_crnt_pad];
+	m_buttonA_B = m_cfg.pad_button[8][m_crnt_pad];
+	m_buttonB_C = m_cfg.pad_button[9][m_crnt_pad];
+	m_buttonC_A = m_cfg.pad_button[10][m_crnt_pad];
+	m_buttonA_B_C = m_cfg.pad_button[11][m_crnt_pad];
 	UpdateData(FALSE);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -134,6 +154,11 @@ void CDlgPadConfig::OnOK()
 	m_cfg.pad_button[1][m_crnt_pad] = m_buttonB;
 	m_cfg.pad_button[2][m_crnt_pad] = m_buttonC;
 	m_cfg.pad_button[3][m_crnt_pad] = m_buttonD;
+	m_cfg.pad_button[7][m_crnt_pad] = m_buttonSTART;
+	m_cfg.pad_button[8][m_crnt_pad] = m_buttonA_B;
+	m_cfg.pad_button[9][m_crnt_pad] = m_buttonB_C;
+	m_cfg.pad_button[10][m_crnt_pad] = m_buttonC_A;
+	m_cfg.pad_button[11][m_crnt_pad] = m_buttonA_B_C;
 	m_crnt_pad = m_padindex;
 
 	g_config.padcfg = m_cfg;
@@ -152,6 +177,11 @@ void CDlgPadConfig::OnCbnSelchangeComboPadindex()
 	m_cfg.pad_button[1][m_crnt_pad] = m_buttonB;
 	m_cfg.pad_button[2][m_crnt_pad] = m_buttonC;
 	m_cfg.pad_button[3][m_crnt_pad] = m_buttonD;
+	m_cfg.pad_button[7][m_crnt_pad] = m_buttonSTART;
+	m_cfg.pad_button[8][m_crnt_pad] = m_buttonA_B;
+	m_cfg.pad_button[9][m_crnt_pad] = m_buttonB_C;
+	m_cfg.pad_button[10][m_crnt_pad] = m_buttonC_A;
+	m_cfg.pad_button[11][m_crnt_pad] = m_buttonA_B_C;
 
 	m_crnt_pad = m_padindex;
 	
@@ -159,6 +189,11 @@ void CDlgPadConfig::OnCbnSelchangeComboPadindex()
 	m_buttonB = m_cfg.pad_button[1][m_crnt_pad];
 	m_buttonC = m_cfg.pad_button[2][m_crnt_pad];
 	m_buttonD = m_cfg.pad_button[3][m_crnt_pad];
+	m_buttonSTART = m_cfg.pad_button[7][m_crnt_pad];
+	m_buttonA_B = m_cfg.pad_button[8][m_crnt_pad];
+	m_buttonB_C = m_cfg.pad_button[9][m_crnt_pad];
+	m_buttonC_A = m_cfg.pad_button[10][m_crnt_pad];
+	m_buttonA_B_C = m_cfg.pad_button[11][m_crnt_pad];
 	UpdateData(FALSE);
 }
 

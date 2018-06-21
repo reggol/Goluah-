@@ -31,6 +31,11 @@ public:
 	int m_buttonB;
 	int m_buttonC;
 	int m_buttonD;
+	int m_buttonSTART;
+	int m_buttonA_B;
+	int m_buttonB_C;
+	int m_buttonC_A;
+	int m_buttonA_B_C;
 	afx_msg void OnCbnSelchangeComboPadindex();
 protected:
 	virtual void OnCancel();

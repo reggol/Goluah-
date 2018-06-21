@@ -1,6 +1,6 @@
 ﻿//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by goluah_config.rc
+// Microsoft Visual C++ で生成されたインクルード ファイル。
+// goluah_config.rc で使用
 //
 #define IDR_MANIFEST                    1
 #define IDD_GOLUAH_CONFIG_DIALOG        102
@@ -60,39 +60,66 @@
 #define IDC_TEXT_2_7                    1047
 #define IDC_TEXT_2_8                    1048
 #define IDC_BUTTON_KEYBORD_SETTEING     1049
+#define IDC_BUTTON_SETKEY_1_9           1049
 #define IDC_BUTTON_PAD_SETTING          1050
+#define IDC_TEXT_1_9                    1050
 #define IDC_COMBO_PADINDEX              1051
 #define IDC_BUTTON_PAD_SETTING2         1051
 #define IDC_BUTTON_INPUTASSIGN          1051
+#define IDC_BUTTON_SETKEY_2_5           1051
 #define IDC_COMBO_PADBUTTON_A           1052
+#define IDC_TEXT_2_9                    1052
 #define IDC_COMBO_PADBUTTON_B           1053
 #define IDC_CHECK_POINTLIMITCUT         1053
+#define IDC_BUTTON_SETKEY_1_10          1053
 #define IDC_COMBO_PADBUTTON_C           1054
 #define IDC_COMBO_KB1                   1054
+#define IDC_BUTTON_SETKEY_1_11          1054
 #define IDC_COMBO_PADBUTTON_D           1055
 #define IDC_COMBO_KB2                   1055
+#define IDC_BUTTON_SETKEY_1_12          1055
 #define IDC_COMBO_PAD1                  1056
+#define IDC_COMBO_PADBUTTON_START       1056
+#define IDC_BUTTON_SETKEY_1_13          1056
 #define IDC_COMBO_PAD2                  1057
+#define IDC_TEXT_1_10                   1057
+#define IDC_COMBO_PADBUTTON_A_B         1057
 #define IDC_COMBO_PAD3                  1058
+#define IDC_COMBO_PADBUTTON_B_C         1058
 #define IDC_COMBO_PAD4                  1059
+#define IDC_TEXT_1_11                   1059
+#define IDC_COMBO_PADBUTTON_C_A         1059
 #define IDC_COMBO_PAD5                  1060
+#define IDC_TEXT_1_12                   1060
+#define IDC_COMBO_PADBUTTON_START5      1060
+#define IDC_COMBO_PADBUTTON_A_B_C       1060
 #define IDC_COMBO_PAD6                  1061
+#define IDC_TEXT_1_13                   1061
+#define IDC_BUTTON_SETKEY_2_10          1062
 #define IDC_BUTTON1                     1063
 #define IDC_BUTTON_RESTORE_ALL          1063
+#define IDC_TEXT_2_10                   1063
 #define IDC_CHECK_USELOG                1064
+#define IDC_BUTTON_SETKEY_2_11          1064
 #define IDC_CHECK_USELOG_INFO           1065
+#define IDC_TEXT_2_11                   1065
 #define IDC_CHECK_USELOG_WARNING        1066
+#define IDC_BUTTON_SETKEY_2_12          1066
 #define IDC_CHECK_USELOG_DEBUG          1067
+#define IDC_TEXT_2_12                   1067
 #define IDC_COMBO1                      1068
 #define IDC_COMBO_IMGFORMAT             1068
 #define DC_COMBO_IMGFORMAT              1068
 #define IDC_COMBO_DEVTYPE               1068
+#define IDC_BUTTON_SETKEY_2_14          1068
+#define IDC_BUTTON_SETKEY_2_13          1068
+#define IDC_TEXT_2_13                   1069
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        136
+#define _APS_NEXT_RESOURCE_VALUE        138
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1069
 #define _APS_NEXT_SYMED_VALUE           101

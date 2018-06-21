@@ -132,15 +132,25 @@ void CConfig::SetDefaultConfigKB()
 	keycfg.key_button[1][0]	= 'X';
 	keycfg.key_button[2][0] = 'C';
 	keycfg.key_button[3][0] = 'V';
+	keycfg.key_button[7][0] = 'B';
+	keycfg.key_button[8][0] = 'A';
+	keycfg.key_button[9][0] = 'S';
+	keycfg.key_button[10][0] = 'D';
+	keycfg.key_button[11][0] = 'G';
 	//player2 key config
-	keycfg.key_up[1]		= 'W';
-	keycfg.key_down[1]		= 'S';
-	keycfg.key_left[1]		= 'A';
-	keycfg.key_right[1]		= 'D';
-	keycfg.key_button[0][1]	= '1';
-	keycfg.key_button[1][1]	= '2';
-	keycfg.key_button[2][1] = '3';
-	keycfg.key_button[3][1] = '4';
+	keycfg.key_up[1]		= VK_NUMPAD8;
+	keycfg.key_down[1]		= VK_NUMPAD5;
+	keycfg.key_left[1]		= VK_NUMPAD4;
+	keycfg.key_right[1]		= VK_NUMPAD6;
+	keycfg.key_button[0][1]	= 'M';
+	keycfg.key_button[1][1]	= VK_OEM_COMMA;
+	keycfg.key_button[2][1] = VK_OEM_PERIOD;
+	keycfg.key_button[3][1] = VK_OEM_2;
+	keycfg.key_button[7][1] = VK_OEM_102;
+	keycfg.key_button[8][1] = 'J';
+	keycfg.key_button[9][1] = 'K';
+	keycfg.key_button[10][1] = 'L';
+	keycfg.key_button[11][1] = VK_OEM_1;
 }
 
 void CConfig::SetDefaultConfigPad()
@@ -151,6 +161,11 @@ void CConfig::SetDefaultConfigPad()
 		padcfg.pad_button[1][i] = 1;
 		padcfg.pad_button[2][i] = 2;
 		padcfg.pad_button[3][i] = 3;
+		padcfg.pad_button[7][i] = 4;
+		padcfg.pad_button[8][i] = 5;
+		padcfg.pad_button[9][i] = 6;
+		padcfg.pad_button[10][i] = 7;
+		padcfg.pad_button[11][i] = 8;
 	}
 }
 

@@ -124,6 +124,7 @@ private:
 #define PADB		0x00000020
 #define PADC		0x00000040
 #define PADD		0x00000080
+#define PADSTART	0x00000800
 
 
 /*@}*/

@@ -181,7 +181,8 @@ DWORD CDirectInput::KeyLog2(DWORD cid,int kb,int pad, PBYTE KeyState /* = NULL *
 	DWORD keystate=0;
 	
 	DWORD padk = GetPadState(pad);
-	BOOL kb_up, kb_down, kb_left, kb_right, kb_b1, kb_b2, kb_b3, kb_b4;
+	BOOL kb_up, kb_down, kb_left, kb_right, kb_b1, kb_b2, kb_b3, kb_b4, 
+		 kb_bstart, kb_b1_2, kb_b2_3, kb_b3_1, kb_b1_2_3;
 
 	if (KeyState)
 	{
@@ -193,6 +194,11 @@ DWORD CDirectInput::KeyLog2(DWORD cid,int kb,int pad, PBYTE KeyState /* = NULL *
 		kb_b2		= kb<0 ? FALSE : KeyState[ (BYTE)DIKeyState.key_button[1][kb] ] & 0x80;
 		kb_b3		= kb<0 ? FALSE : KeyState[ (BYTE)DIKeyState.key_button[2][kb] ] & 0x80;
 		kb_b4		= kb<0 ? FALSE : KeyState[ (BYTE)DIKeyState.key_button[3][kb] ] & 0x80;
+		kb_bstart	= kb<0 ? FALSE : KeyState[ (BYTE)DIKeyState.key_button[7][kb] ] & 0x80;
+		kb_b1_2		= kb<0 ? FALSE : KeyState[ (BYTE)DIKeyState.key_button[8][kb] ] & 0x80;
+		kb_b2_3		= kb<0 ? FALSE : KeyState[ (BYTE)DIKeyState.key_button[9][kb] ] & 0x80;
+		kb_b3_1		= kb<0 ? FALSE : KeyState[ (BYTE)DIKeyState.key_button[10][kb] ] & 0x80;
+		kb_b1_2_3	= kb<0 ? FALSE : KeyState[ (BYTE)DIKeyState.key_button[11][kb] ] & 0x80;
 	}
 	else
 	{
@@ -204,6 +210,11 @@ DWORD CDirectInput::KeyLog2(DWORD cid,int kb,int pad, PBYTE KeyState /* = NULL *
 		kb_b2		= kb<0 ? FALSE : (GetKeyState(g_config.keycfg.key_button[1][kb]) & 0x8000);
 		kb_b3		= kb<0 ? FALSE : (GetKeyState(g_config.keycfg.key_button[2][kb]) & 0x8000);
 		kb_b4		= kb<0 ? FALSE : (GetKeyState(g_config.keycfg.key_button[3][kb]) & 0x8000);
+		kb_bstart	= kb<0 ? FALSE : (GetKeyState(g_config.keycfg.key_button[7][kb]) & 0x8000);
+		kb_b1_2		= kb<0 ? FALSE : (GetKeyState(g_config.keycfg.key_button[8][kb]) & 0x8000);
+		kb_b2_3		= kb<0 ? FALSE : (GetKeyState(g_config.keycfg.key_button[9][kb]) & 0x8000);
+		kb_b3_1		= kb<0 ? FALSE : (GetKeyState(g_config.keycfg.key_button[10][kb]) & 0x8000);
+		kb_b1_2_3	= kb<0 ? FALSE : (GetKeyState(g_config.keycfg.key_button[11][kb]) & 0x8000);
 	}
 
 	if(g_system.IsWindowActive()){
@@ -239,21 +250,26 @@ DWORD CDirectInput::KeyLog2(DWORD cid,int kb,int pad, PBYTE KeyState /* = NULL *
 			if(keystate & KEYSTA_ARIGHT2)keystate |= KEYSTA_RIGHT2;
 		}
 		//button
-		if(kb_b1 || (padk&PADA)){//button-a
+		if(kb_b1 || kb_b1_2 || kb_b3_1 || kb_b1_2_3 || (padk&PADA)){//button-a
 			keystate |= KEYSTA_BA;
 			if(!(keyold & KEYSTA_BA))keystate |= KEYSTA_BA2;
 		}
-		if(kb_b2 || (padk&PADB)){//button-b
+		if(kb_b2 || kb_b1_2 || kb_b2_3 || kb_b1_2_3 || (padk&PADB)){//button-b
 			keystate |= KEYSTA_BB;
 			if(!(keyold & KEYSTA_BB))keystate |= KEYSTA_BB2;
 		}
-		if(kb_b3 || (padk&PADC)){//button-c
+		if(kb_b3 || kb_b2_3 || kb_b3_1 || kb_b1_2_3 || (padk&PADC)){//button-c
 			keystate |= KEYSTA_BC;
 			if(!(keyold & KEYSTA_BC))keystate |= KEYSTA_BC2;
 		}
 		if(kb_b4 || (padk&PADD)){//button-d
 			keystate |= KEYSTA_BD;
 			if(!(keyold & KEYSTA_BD))keystate |= KEYSTA_BD2;
+		}
+		if (kb_bstart || (padk&PADSTART))
+		{//button-start
+			keystate |= KEYSTA_BSTART;
+			if (!(keyold & KEYSTA_BSTART))keystate |= KEYSTA_BSTART2;
 		}
 	}
 	
@@ -528,7 +544,7 @@ BOOL CDirectInput::InitializePad()
 				DIKeyState.key_down[i] = VirtKeyToDInputKey(g_config.keycfg.key_down[i]);
 				DIKeyState.key_left[i] = VirtKeyToDInputKey(g_config.keycfg.key_left[i]);
 				DIKeyState.key_right[i] = VirtKeyToDInputKey(g_config.keycfg.key_right[i]);
-				for (int j = 0; j < 4; j++)
+				for (int j = 0; j < 12; j++)
 					DIKeyState.key_button[j][i] = VirtKeyToDInputKey(g_config.keycfg.key_button[j][i]);
 			}
 
@@ -651,6 +667,11 @@ DWORD CDirectInput::GetPadState(int cid)
 					else if( i==g_config.padcfg.pad_button[1][cid] ) padstate |= PADB;
 					else if( i==g_config.padcfg.pad_button[2][cid] ) padstate |= PADC;
 					else if( i==g_config.padcfg.pad_button[3][cid] ) padstate |= PADD;
+					else if( i==g_config.padcfg.pad_button[7][cid] ) padstate |= PADSTART;
+					else if( i==g_config.padcfg.pad_button[8][cid] ) padstate |= (PADA | PADB);
+					else if( i==g_config.padcfg.pad_button[9][cid] ) padstate |= (PADB | PADC);
+					else if( i==g_config.padcfg.pad_button[10][cid] ) padstate |= (PADC | PADA);
+					else if( i==g_config.padcfg.pad_button[11][cid] ) padstate |= (PADA | PADB | PADC);
 					/*else if( i==4 ) SendMessage(hwnd, WM_KEYDOWN, VK_F7, 0L);
 					else if( i==5 ) SendMessage(hwnd, WM_KEYDOWN, VK_F8, 0L);*/
 				}

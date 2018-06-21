@@ -20,7 +20,7 @@ struct KEYCONFIG  //.\\system\\config.dat
 	int key_down[2];
 	int key_left[2];
 	int key_right[2];
-	int key_button[4][2];
+	int key_button[12][2];
 };
 
 /*!
@@ -30,7 +30,7 @@ struct KEYCONFIG  //.\\system\\config.dat
 struct PADCONFIG
 {
 	//!ボタンの割り当て　[A-D][PAD]
-	int pad_button[4][NUM_PAD];
+	int pad_button[12][NUM_PAD];
 };
 
 /*!

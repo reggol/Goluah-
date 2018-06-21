@@ -21,6 +21,11 @@ CDlgKeyConfig::CDlgKeyConfig(CWnd* pParent , KEYCONFIG& cfg)
 	, sstr_1_6(_T(""))
 	, sstr_1_7(_T(""))
 	, sstr_1_8(_T(""))
+	, sstr_1_9(_T(""))
+	, sstr_1_10(_T(""))
+	, sstr_1_11(_T(""))
+	, sstr_1_12(_T(""))
+	, sstr_1_13(_T(""))
 	, sstr_2_1(_T(""))
 	, sstr_2_2(_T(""))
 	, sstr_2_3(_T(""))
@@ -29,6 +34,11 @@ CDlgKeyConfig::CDlgKeyConfig(CWnd* pParent , KEYCONFIG& cfg)
 	, sstr_2_6(_T(""))
 	, sstr_2_7(_T(""))
 	, sstr_2_8(_T(""))
+	, sstr_2_9(_T(""))
+	, sstr_2_10(_T(""))
+	, sstr_2_11(_T(""))
+	, sstr_2_12(_T(""))
+	, sstr_2_13(_T(""))
 {
 	m_cfg = cfg;
 }
@@ -48,6 +58,11 @@ void CDlgKeyConfig::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_TEXT_1_6, sstr_1_6);
 	DDX_Text(pDX, IDC_TEXT_1_7, sstr_1_7);
 	DDX_Text(pDX, IDC_TEXT_1_8, sstr_1_8);
+	DDX_Text(pDX, IDC_TEXT_1_9, sstr_1_9);
+	DDX_Text(pDX, IDC_TEXT_1_10, sstr_1_10);
+	DDX_Text(pDX, IDC_TEXT_1_11, sstr_1_11);
+	DDX_Text(pDX, IDC_TEXT_1_12, sstr_1_12);
+	DDX_Text(pDX, IDC_TEXT_1_13, sstr_1_13);
 	DDX_Text(pDX, IDC_TEXT_2_1, sstr_2_1);
 	DDX_Text(pDX, IDC_TEXT_2_2, sstr_2_2);
 	DDX_Text(pDX, IDC_TEXT_2_3, sstr_2_3);
@@ -56,6 +71,11 @@ void CDlgKeyConfig::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_TEXT_2_6, sstr_2_6);
 	DDX_Text(pDX, IDC_TEXT_2_7, sstr_2_7);
 	DDX_Text(pDX, IDC_TEXT_2_8, sstr_2_8);
+	DDX_Text(pDX, IDC_TEXT_2_9, sstr_2_9);
+	DDX_Text(pDX, IDC_TEXT_2_10, sstr_2_10);
+	DDX_Text(pDX, IDC_TEXT_2_11, sstr_2_11);
+	DDX_Text(pDX, IDC_TEXT_2_12, sstr_2_12);
+	DDX_Text(pDX, IDC_TEXT_2_13, sstr_2_13);
 }
 
 
@@ -68,6 +88,11 @@ BEGIN_MESSAGE_MAP(CDlgKeyConfig, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_SETKEY_1_6, &CDlgKeyConfig::OnBnClickedButtonSetkey16)
 	ON_BN_CLICKED(IDC_BUTTON_SETKEY_1_7, &CDlgKeyConfig::OnBnClickedButtonSetkey17)
 	ON_BN_CLICKED(IDC_BUTTON_SETKEY_1_8, &CDlgKeyConfig::OnBnClickedButtonSetkey18)
+	ON_BN_CLICKED(IDC_BUTTON_SETKEY_1_9, &CDlgKeyConfig::OnBnClickedButtonSetkey19)
+	ON_BN_CLICKED(IDC_BUTTON_SETKEY_1_10, &CDlgKeyConfig::OnBnClickedButtonSetkey110)
+	ON_BN_CLICKED(IDC_BUTTON_SETKEY_1_11, &CDlgKeyConfig::OnBnClickedButtonSetkey111)
+	ON_BN_CLICKED(IDC_BUTTON_SETKEY_1_12, &CDlgKeyConfig::OnBnClickedButtonSetkey112)
+	ON_BN_CLICKED(IDC_BUTTON_SETKEY_1_13, &CDlgKeyConfig::OnBnClickedButtonSetkey113)
 	ON_BN_CLICKED(IDC_BUTTON_SETKEY_2_1, &CDlgKeyConfig::OnBnClickedButtonSetkey21)
 	ON_BN_CLICKED(IDC_BUTTON_SETKEY_2_2, &CDlgKeyConfig::OnBnClickedButtonSetkey22)
 	ON_BN_CLICKED(IDC_BUTTON_SETKEY_2_3, &CDlgKeyConfig::OnBnClickedButtonSetkey23)
@@ -77,6 +102,10 @@ BEGIN_MESSAGE_MAP(CDlgKeyConfig, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_SETKEY_2_7, &CDlgKeyConfig::OnBnClickedButtonSetkey27)
 	ON_BN_CLICKED(IDC_BUTTON_SETKEY_2_8, &CDlgKeyConfig::OnBnClickedButtonSetkey28)
 	ON_BN_CLICKED(IDC_BUTTON_SETKEY_2_9, &CDlgKeyConfig::OnBnClickedButtonSetkey29)
+	ON_BN_CLICKED(IDC_BUTTON_SETKEY_2_10, &CDlgKeyConfig::OnBnClickedButtonSetkey210)
+	ON_BN_CLICKED(IDC_BUTTON_SETKEY_2_11, &CDlgKeyConfig::OnBnClickedButtonSetkey211)
+	ON_BN_CLICKED(IDC_BUTTON_SETKEY_2_12, &CDlgKeyConfig::OnBnClickedButtonSetkey212)
+	ON_BN_CLICKED(IDC_BUTTON_SETKEY_2_13, &CDlgKeyConfig::OnBnClickedButtonSetkey213)
 	ON_BN_CLICKED(IDC_BUTTON_DEFAULT, &CDlgKeyConfig::OnBnClickedButtonDefault)
 	ON_BN_CLICKED(IDOK, &CDlgKeyConfig::OnBnClickedOk)
 END_MESSAGE_MAP()
@@ -184,6 +213,61 @@ void CDlgKeyConfig::OnBnClickedButtonSetkey18()
 	UpdateNames();
 }
 
+//ボタンSTART
+void CDlgKeyConfig::OnBnClickedButtonSetkey19()
+{
+	CDlgKBKeyGet dlg(this);
+	int ret = (int)dlg.DoModal();
+
+	if(ret==0)return;
+	m_cfg.key_button[7][0] = ret;
+	UpdateNames();
+}
+
+//ボタンA+B
+void CDlgKeyConfig::OnBnClickedButtonSetkey110()
+{
+	CDlgKBKeyGet dlg(this);
+	int ret = (int)dlg.DoModal();
+
+	if (ret == 0)return;
+	m_cfg.key_button[8][0] = ret;
+	UpdateNames();
+}
+
+//ボタンB+C
+void CDlgKeyConfig::OnBnClickedButtonSetkey111()
+{
+	CDlgKBKeyGet dlg(this);
+	int ret = (int)dlg.DoModal();
+
+	if (ret == 0)return;
+	m_cfg.key_button[9][0] = ret;
+	UpdateNames();
+}
+
+//ボタンC+A
+void CDlgKeyConfig::OnBnClickedButtonSetkey112()
+{
+	CDlgKBKeyGet dlg(this);
+	int ret = (int)dlg.DoModal();
+
+	if (ret == 0)return;
+	m_cfg.key_button[10][0] = ret;
+	UpdateNames();
+}
+
+//ボタンA+B+C
+void CDlgKeyConfig::OnBnClickedButtonSetkey113()
+{
+	CDlgKBKeyGet dlg(this);
+	int ret = (int)dlg.DoModal();
+
+	if (ret == 0)return;
+	m_cfg.key_button[11][0] = ret;
+	UpdateNames();
+}
+
 /*-----------------------------------------------------------------
 	キー設定(2P)
 -------------------------------------------------------------------*/
@@ -275,6 +359,61 @@ void CDlgKeyConfig::OnBnClickedButtonSetkey28()
 	UpdateNames();
 }
 
+//ボタンSTART
+void CDlgKeyConfig::OnBnClickedButtonSetkey29()
+{
+	CDlgKBKeyGet dlg(this);
+	int ret = (int)dlg.DoModal();
+
+	if(ret==0)return;
+	m_cfg.key_button[7][1] = ret;
+	UpdateNames();
+}
+
+//ボタンA+B
+void CDlgKeyConfig::OnBnClickedButtonSetkey210()
+{
+	CDlgKBKeyGet dlg(this);
+	int ret = (int)dlg.DoModal();
+
+	if (ret == 0)return;
+	m_cfg.key_button[8][1] = ret;
+	UpdateNames();
+}
+
+//ボタンB+C
+void CDlgKeyConfig::OnBnClickedButtonSetkey211()
+{
+	CDlgKBKeyGet dlg(this);
+	int ret = (int)dlg.DoModal();
+
+	if (ret == 0)return;
+	m_cfg.key_button[9][1] = ret;
+	UpdateNames();
+}
+
+//ボタンC+A
+void CDlgKeyConfig::OnBnClickedButtonSetkey212()
+{
+	CDlgKBKeyGet dlg(this);
+	int ret = (int)dlg.DoModal();
+
+	if (ret == 0)return;
+	m_cfg.key_button[10][1] = ret;
+	UpdateNames();
+}
+
+//ボタンA+B+C
+void CDlgKeyConfig::OnBnClickedButtonSetkey213()
+{
+	CDlgKBKeyGet dlg(this);
+	int ret = (int)dlg.DoModal();
+
+	if (ret == 0)return;
+	m_cfg.key_button[11][1] = ret;
+	UpdateNames();
+}
+
 /*-----------------------------------------------------------------
 	表示更新
 -------------------------------------------------------------------*/
@@ -290,7 +429,12 @@ void CDlgKeyConfig::UpdateNames()
 	sstr_1_6.Format("B(中) : %s", keycode.GetStr( m_cfg.key_button[1][0] ));
 	sstr_1_7.Format("C(強) : %s", keycode.GetStr( m_cfg.key_button[2][0] ));
 	sstr_1_8.Format("D(特) : %s", keycode.GetStr( m_cfg.key_button[3][0] ));
-	
+	sstr_1_9.Format("START : %s", keycode.GetStr( m_cfg.key_button[7][0] ));
+	sstr_1_10.Format("A+B : %s", keycode.GetStr( m_cfg.key_button[8][0] ));
+	sstr_1_11.Format("B+C : %s", keycode.GetStr( m_cfg.key_button[9][0] ));
+	sstr_1_12.Format("C+A : %s", keycode.GetStr( m_cfg.key_button[10][0] ));
+	sstr_1_13.Format("A+B+C : %s", keycode.GetStr( m_cfg.key_button[11][0] ));
+
 	sstr_2_3.Format("↑ : %s", keycode.GetStr( m_cfg.key_up[1] ));
 	sstr_2_4.Format("↓ : %s", keycode.GetStr( m_cfg.key_down[1] ));
 	sstr_2_1.Format("← : %s", keycode.GetStr( m_cfg.key_left[1] ));
@@ -299,6 +443,11 @@ void CDlgKeyConfig::UpdateNames()
 	sstr_2_6.Format("B(中) : %s", keycode.GetStr( m_cfg.key_button[1][1] ));
 	sstr_2_7.Format("C(強) : %s", keycode.GetStr( m_cfg.key_button[2][1] ));
 	sstr_2_8.Format("D(特) : %s", keycode.GetStr( m_cfg.key_button[3][1] ));
+	sstr_2_9.Format("START : %s", keycode.GetStr( m_cfg.key_button[7][1] ));
+	sstr_2_10.Format("A+B : %s", keycode.GetStr( m_cfg.key_button[8][1] ));
+	sstr_2_11.Format("B+C : %s", keycode.GetStr( m_cfg.key_button[9][1] ));
+	sstr_2_12.Format("C+A : %s", keycode.GetStr( m_cfg.key_button[10][1] ));
+	sstr_2_13.Format("A+B+C : %s", keycode.GetStr( m_cfg.key_button[11][1] ));
 
 	UpdateData(FALSE);
 }
