@@ -114,7 +114,8 @@ void CTBattlePause::Draw()
 	g_draw.SetTransform(FALSE);
 	g_draw.d3ddev->SetVertexShader(FVF_3DVERTEX);
 
-	float ar = 320.0f/240.0f;
+	const float ar = 320.0f/240.0f;
+	const float adj = 0.004f;
 
 	MYVERTEX3D vb[4];
 
@@ -146,15 +147,15 @@ void CTBattlePause::Draw()
 		vb[2].color = 
 		vb[3].color = 0xFF000000 | (col<<16) | (col<<8) | col;
 
-		vb[0].x =  0.0f*ar;
-		vb[1].x =  0.0f*ar;
-		vb[2].x =  2.0f*ar;
-		vb[3].x =  2.0f*ar;
+		vb[0].x =  adj;
+		vb[1].x =  adj;
+		vb[2].x =  (2.0f-adj)*ar;
+		vb[3].x =  (2.0f-adj)*ar;
 
 		vb[0].y =  0.0f;
-		vb[1].y =  2.0f;
+		vb[1].y =  (2.0f-adj);
 		vb[2].y =  0.0f;
-		vb[3].y =  2.0f;
+		vb[3].y =  (2.0f-adj);
 
 		g_draw.d3ddev->SetTexture(0,tex_fb);
 		g_draw.d3ddev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,2,vb,sizeof(MYVERTEX3D));
