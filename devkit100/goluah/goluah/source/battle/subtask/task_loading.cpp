@@ -203,15 +203,15 @@ void CTNowLoading::DrawIcon()
 		vb[2].color = 
 		vb[3].color = 0xFF66FF99;
 
-		vb[0].x =  (400.0f-200.0f)/240.0f;
-		vb[1].x =  (400.0f-200.0f)/240.0f;
-		vb[2].x =  (400.0f+200.0f)/240.0f;
-		vb[3].x =  (400.0f+200.0f)/240.0f;
+		vb[0].x =  (400.0f-202.0f)/240.0f;
+		vb[1].x =  (400.0f-202.0f)/240.0f;
+		vb[2].x =  (400.0f+202.0f)/240.0f;
+		vb[3].x =  (400.0f+202.0f)/240.0f;
 
-		vb[0].y =  (400.0f-60.0f)/240.0f;
-		vb[1].y =  (400.0f+60.0f)/240.0f;
-		vb[2].y =  (400.0f-60.0f)/240.0f;
-		vb[3].y =  (400.0f+60.0f)/240.0f;
+		vb[0].y =  (400.0f-71.0f)/240.0f;
+		vb[1].y =  (400.0f+71.0f)/240.0f;
+		vb[2].y =  (400.0f-71.0f)/240.0f;
+		vb[3].y =  (400.0f+71.0f)/240.0f;
 
 		g_draw.d3ddev->SetTexture(0,tex_AA);
 		g_draw.d3ddev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,2,vb,sizeof(MYVERTEX3D));
