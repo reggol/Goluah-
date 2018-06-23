@@ -30,6 +30,13 @@ enum NowLoading_IconItem
 #define HALF_HEIGHT		(g_DISPLAYHEIGHT*0.5f)
 #define HALF_HEIGHT2	(240.0f)
 
+// もうちょっと早く対応して欲しかった…
+#if _MSC_VER < 1910
+#pragma push_macro("constexpr")
+#define constexpr const
+#define GSL_USE_STATIC_CONSTEXPR_WORKAROUND
+#endif // _MSC_VER < 1910
+
 /*---------------------------------------------------------------------------------
 	エディターの場合の設定
 -----------------------------------------------------------------------------------*/
@@ -2208,9 +2215,9 @@ void CDirectDraw::CheckBlt2(MYSURFACE *dds,int x,int y,RECT r,
 		//全てのテクスチャに関して描画するかどうか調べて描画する
 		float vl,vr,vt,vb;//各頂点の座標
 		float tumin,tumax,tvmin,tvmax;//u,v座標の範囲
-		const float ar = 640.0f/480.0f;//アスペクト比
-		const float ar2 = 2.0f/480.0f;
-		const float centerx = (float)640.0f/2.0f;//x方向画面中心
+		constexpr float ar = 640.0f/480.0f;//アスペクト比
+		constexpr float ar2 = 2.0f / 480.0f;
+		constexpr float centerx = (float)640.0f / 2.0f;//x方向画面中心
 		MYVERTEX3D* vrtxarr;//頂点配列
 		D3DXMATRIXA16 matw;//ワールド座標変換行列
 		D3DXMATRIXA16 tmpmat;//テンポラリ行列
@@ -2412,36 +2419,33 @@ void CDirectDraw::MyBlt3D(MYSURFACE *dds,RECT src,MYRECT3D dst,DWORD flag,DWORD 
 		//全てのテクスチャに関して描画するかどうか調べて描画する
 		float vl,vr,vt,vb;//各頂点の座標
 		float tumin,tumax,tvmin,tvmax;//u,v座標の範囲
-		float ar = 640.0f/480.0f;//アスペクト比
-		float ar2 = 2.0f/480.0f;
-		float centerx = 640.0f/2.0f;//x方向画面中心
+		constexpr float ar = 640.0f / 480.0f;//アスペクト比
+		constexpr float ar2 = 2.0f / 480.0f;
+		constexpr float centerx = 640.0f / 2.0f;//x方向画面中心
 		MYVERTEX3D* vrtxarr;//頂点配列
 		D3DXMATRIXA16 matw;//ワールド座標変換行列
 		D3DXMATRIXA16 tmpmat;//テンポラリ行列
 		D3DXMATRIXA16 matpres;//プリセット変換行列
 
 		// プリセット準備
-		D3DXMatrixIdentity(&matpres);
 
 		//(0,0)-(1,1)の範囲に入るように縮小
 		sclx = 1.0f / (float)(r_right - r_left);
 		scly = 1.0f / (float)(r_bottom - r_top);
-		D3DXMatrixScaling(&tmpmat,sclx,scly,1.0f);
-		matpres *= tmpmat;
 		
 		//指定されたMYRECT3Dまで拡大&移動
-		sclx=dst.right/* * HALF_HEIGHT*/-dst.left/* * HALF_HEIGHT*/;
-		scly=dst.bottom/* * HALF_HEIGHT*/-dst.top/* * HALF_HEIGHT*/;
-		D3DXMatrixScaling(&tmpmat,sclx,scly,1.0f);
-		matpres *= tmpmat;
+		sclx*=dst.right/* * HALF_HEIGHT*/-dst.left/* * HALF_HEIGHT*/;
+		scly*=dst.bottom/* * HALF_HEIGHT*/-dst.top/* * HALF_HEIGHT*/;
 		
-		//移動
-		D3DXMatrixTranslation(&tmpmat,dst.left/* * HALF_HEIGHT*/,dst.top/* * HALF_HEIGHT*/,/*dst.z*/0);
-		matpres *= tmpmat;
-		if(flag & CKBLT_YUREY){//揺れ
-			D3DXMatrixTranslation(&tmpmat,0,yurey*ar2,0);
-			matpres *= tmpmat;
-		}
+		auto tempY = dst.top/* * HALF_HEIGHT*/;
+		if (flag & CKBLT_YUREY)//揺れ
+			tempY += yurey*ar2;
+		
+		D3DXMatrixTransformation(&matpres,
+			NULL, NULL,
+			&D3DXVECTOR3(sclx, scly, 1.0f),//拡大縮小
+			NULL, NULL,
+			&D3DXVECTOR3(dst.left/* * HALF_HEIGHT*/, tempY,/*dst.z*/0));//移動
 		//設定された親の変換と合わせる
 		matpres *= matparent;
 
@@ -2680,7 +2684,7 @@ void CDirectDraw::CellDraw090(MYSURFACE **pbuf,//!< GCDで利用するビット�
 	{
 		D3DXMATRIXA16 matp,mat,tmt,matprv,matprv2;
 		D3DXQUATERNION quat;
-		const float ar2 = 2.0f / 480.0f;
+		constexpr float ar2 = 2.0f / 480.0f;
 
 		//ZW/ZTフラグ操作
 		if((cdat[cn].flag & GCDCELL2_DISABLE_ZT) || (cdat[cn].flag & GCDCELL2_DISABLE_ZW))
@@ -2947,7 +2951,7 @@ void CDirectDraw::CellDraw070(
 	{
 		D3DXMATRIXA16 matp,mat,tmt,matprv,matprv2;
 		D3DXQUATERNION quat;
-		const float ar2 = 2.0f / 480.0f;
+		constexpr float ar2 = 2.0f / 480.0f;
 
 		//キャラクターの変換行列
 		const auto center = D3DXVECTOR3((float)(cdat[cn].gcx)*ar2, (float)(cdat[cn].gcy)*ar2, 0);//重心
