@@ -1374,7 +1374,8 @@ void CBattleTask::Draw()
 	{
 		if (efct_fadein > 0)
 		{
-			float ar = 320.0f/240.0f;
+			const float ar = 320.0f/240.0f;
+			const float adj = 0.004f;
 
 			vb[0].color = 
 			vb[1].color = 
@@ -1383,13 +1384,13 @@ void CBattleTask::Draw()
 
 			vb[0].x =  0.0f*ar;
 			vb[1].x =  0.0f*ar;
-			vb[2].x =  2.0f*ar;
-			vb[3].x =  2.0f*ar;
+			vb[2].x =  (2.0f-adj)*ar;
+			vb[3].x =  (2.0f-adj)*ar;
 
 			vb[0].y =  0.0f;
-			vb[1].y =  2.0f;
+			vb[1].y =  (2.0f-adj);
 			vb[2].y =  0.0f;
-			vb[3].y =  2.0f;
+			vb[3].y =  (2.0f-adj);
 
 			vb[0].z = 
 			vb[1].z = 

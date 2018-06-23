@@ -177,6 +177,7 @@ void CYouWin::Draw()
 	//フロントバッファコピー描画
 	{
 		MYVERTEX3D* vb;
+		const float adj = 0.004f;
 
 		if ( !g_draw.pMyVertex || FAILED(g_draw.pMyVertex->Lock(0, 0, (BYTE**)&vb, D3DLOCK_DISCARD)) )
 			return;
@@ -203,13 +204,13 @@ void CYouWin::Draw()
 
 		vb[0].x =  0.0f;
 		vb[1].x =  0.0f;
-		vb[2].x =  2.0f*320.0f/240.0f;
-		vb[3].x =  2.0f*320.0f/240.0f;
+		vb[2].x =  (2.0f-adj)*320.0f/240.0f;
+		vb[3].x =  (2.0f-adj)*320.0f/240.0f;
 
 		vb[0].y =  0.0f;
-		vb[1].y =  2.0f*360.0f/480.0f;
+		vb[1].y =  (2.0f-adj)*360.0f/480.0f;
 		vb[2].y =  0.0f;
-		vb[3].y =  2.0f*360.0f/480.0f;
+		vb[3].y =  (2.0f-adj)*360.0f/480.0f;
 
 		if (g_draw.pMyVertex) g_draw.pMyVertex->Unlock();
 
