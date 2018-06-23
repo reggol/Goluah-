@@ -780,22 +780,22 @@ BYTE CDirectInput::VirtKeyToDInputKey(int vKey)
 		return DIK_RCONTROL;
 
 	case VK_OEM_1:
-		return DIK_SEMICOLON;
-
-	case VK_OEM_PLUS:
 		return DIK_COLON;
 
+	case VK_OEM_PLUS:
+		return DIK_SEMICOLON;
+
 	case VK_OEM_7:
-		return DIK_APOSTROPHE;
+		return DIK_CIRCUMFLEX;
 
 	case VK_OEM_3:
-		return DIK_GRAVE;
+		return DIK_AT;
 
 	case VK_LSHIFT:
 		return DIK_LSHIFT;
 
 	case VK_OEM_5:
-		return DIK_BACKSLASH;
+		return DIK_YEN;
 
 	case VK_OEM_COMMA:
 		return DIK_COMMA;
@@ -837,7 +837,7 @@ BYTE CDirectInput::VirtKeyToDInputKey(int vKey)
 		return DIK_DECIMAL;
 
 	case VK_OEM_102:
-		return DIK_OEM_102;
+		return DIK_BACKSLASH;
 
 	case VK_UP:
 		return DIK_UP;
