@@ -891,6 +891,29 @@ MYSURFACE* AkiGlobal::GetBigFace(int cindex,int col,int alt)
 	return bfc->Get(cindex,col,alt);
 }
 
+/*----------------------------------------------------------------
+	技表取得
+------------------------------------------------------------------*/
+MYSURFACE * AkiGlobal::GetInst(int cindex, UINT alt)
+{
+	TCHAR filepath[256];
+	MYSURFACE* ret = NULL;
+	TCHAR altstr[2] = {'\0','\0'};
+
+	if (alt != 0){
+		altstr[0] = 'a' + alt - 1;
+	}
+
+	_stprintf(filepath, _T("%s\\inst%s"),
+		g_charlist.GetCharacterDir(cindex),
+		altstr);
+
+	ret = g_draw.CreateSurfaceFrom256Image(filepath);
+	if (!ret){
+		ret = g_draw.CreateSurfaceFrom256Image(_T("system\\inst"));
+	}
+	return ret;
+}
 
 /*----------------------------------------------------------------
 	ブランク用アイコン取得

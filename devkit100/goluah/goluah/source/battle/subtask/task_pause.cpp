@@ -350,25 +350,9 @@ void CTBattlePause::Draw()
 
 void CTBattlePause::ChangeInst(UINT t)
 {
-	TCHAR *filepath = new TCHAR[256];
-	TCHAR altstr[2] ={'\0','\0'};
-	int alt = OPT2ALT(g_battleinfo.GetCharacterOption(t,m_face_idx[t]));
-	if(alt!=0)
-	{
-		altstr[0] = 'a' + alt - 1;
-	}
+	UINT alt = OPT2ALT(g_battleinfo.GetCharacterOption(t,m_face_idx[t]));
 	UINT char_index = g_battleinfo.GetCharacter(t,m_face_idx[t]);
 	
-	_stprintf(filepath,_T("%s\\inst%s"),
-		g_charlist.GetCharacterDir(char_index),
-		altstr);
-
-	ms_inst[t] = g_draw.CreateSurfaceFrom256Image(filepath);
-	if(!ms_inst[t])
-	{
-		ms_inst[t] = g_draw.CreateSurfaceFrom256Image(_T("system\\inst"));
-	}
-
-	DELETE_ARRAY(filepath);
+	ms_inst[t] = gbl.GetInst(char_index, alt);
 }
 

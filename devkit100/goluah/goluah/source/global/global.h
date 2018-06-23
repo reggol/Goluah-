@@ -123,6 +123,9 @@ public:
 	//!デカ顔イメージ(face2.bmp)取得
 	MYSURFACE* GetBigFace(int cindex,int col,int alt);
 
+	//!技表(inst.bmp)取得
+	MYSURFACE* GetInst(int cindex, UINT alt);
+
 	//!ブランクアイコン取得
 	MYSURFACE* GetBlankIcon();
 
