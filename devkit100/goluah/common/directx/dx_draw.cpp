@@ -140,7 +140,7 @@ BOOL CDirectDraw::Initialize(HWND hwnd,BOOL win)
 	lpFont[2]=CreateMyFont(22);
 	lpFont[3]=CreateMyFont(32);
 
-	D3DXMATRIX mat;
+	D3DXMATRIXA16 mat;
 	D3DXMatrixIdentity(&mat);
 	SetParentMatrix(mat,TRUE);
 
@@ -2212,9 +2212,9 @@ void CDirectDraw::CheckBlt2(MYSURFACE *dds,int x,int y,RECT r,
 		const float ar2 = 2.0f/480.0f;
 		const float centerx = (float)640.0f/2.0f;//x方向画面中心
 		MYVERTEX3D* vrtxarr;//頂点配列
-		D3DXMATRIX matw;//ワールド座標変換行列
-		D3DXMATRIX tmpmat;//テンポラリ行列
-		D3DXMATRIX matpres;//プリセット変換行列
+		D3DXMATRIXA16 matw;//ワールド座標変換行列
+		D3DXMATRIXA16 tmpmat;//テンポラリ行列
+		D3DXMATRIXA16 matpres;//プリセット変換行列
 
 		// プリセット準備
 		//反転処理
@@ -2416,9 +2416,9 @@ void CDirectDraw::MyBlt3D(MYSURFACE *dds,RECT src,MYRECT3D dst,DWORD flag,DWORD 
 		float ar2 = 2.0f/480.0f;
 		float centerx = 640.0f/2.0f;//x方向画面中心
 		MYVERTEX3D* vrtxarr;//頂点配列
-		D3DXMATRIX matw;//ワールド座標変換行列
-		D3DXMATRIX tmpmat;//テンポラリ行列
-		D3DXMATRIX matpres;//プリセット変換行列
+		D3DXMATRIXA16 matw;//ワールド座標変換行列
+		D3DXMATRIXA16 tmpmat;//テンポラリ行列
+		D3DXMATRIXA16 matpres;//プリセット変換行列
 
 		// プリセット準備
 		D3DXMatrixIdentity(&matpres);
@@ -2521,16 +2521,12 @@ void CDirectDraw::MyBlt3D(MYSURFACE *dds,RECT src,MYRECT3D dst,DWORD flag,DWORD 
 					if (pMyVertex) pMyVertex->Unlock();
 
 					//(4) ワールド座標変換行列用意
-					//単位行列
-					D3DXMatrixIdentity(&matw);
-
 					//矩形内変換
 					if(r_left>dds->xsufindx[i])transx=0;
 					else transx = (float)( dds->xsufindx[i] - r_left );//pixel単位
 					if(r_top>dds->ysufindx[j])transy=0;
 					else transy = (float)( dds->ysufindx[j] - r_top );//pixel単位
-					D3DXMatrixTranslation(&tmpmat,transx,transy,0);
-					matw *= tmpmat;
+					D3DXMatrixTranslation(&matw,transx,transy,0);
 
 					//プリセットのやつをかける
 					matw *= matpres;
@@ -2682,7 +2678,7 @@ void CDirectDraw::CellDraw090(MYSURFACE **pbuf,//!< GCDで利用するビット�
 	}
 	else
 	{
-		D3DXMATRIX matp,mat,tmt,matprv,matprv2;
+		D3DXMATRIXA16 matp,mat,tmt,matprv,matprv2;
 		D3DXQUATERNION quat;
 		const float ar2 = 2.0f / 480.0f;
 
@@ -2838,7 +2834,7 @@ void CDirectDraw::CellDraw090(MYSURFACE **pbuf,//!< GCDで利用するビット�
 				if (shadowed)
 				{
 					D3DXPLANE Plane = D3DXPLANE(0, -1, 0, -0.01);
-					D3DXMATRIX matp;
+					D3DXMATRIXA16 matp;
 
 					if (stencil_enable)
 					{
@@ -2949,7 +2945,7 @@ void CDirectDraw::CellDraw070(
 	}
 	else
 	{
-		D3DXMATRIX matp,mat,tmt,matprv,matprv2;
+		D3DXMATRIXA16 matp,mat,tmt,matprv,matprv2;
 		D3DXQUATERNION quat;
 		const float ar2 = 2.0f / 480.0f;
 
@@ -3031,7 +3027,7 @@ void CDirectDraw::CellDraw070(
 				if (shadowed)
 				{
 					D3DXPLANE Plane = D3DXPLANE(0, -1, 0, -0.01);
-					D3DXMATRIX matp;
+					D3DXMATRIXA16 matp;
 
 					if (stencil_enable)
 					{
@@ -3142,7 +3138,7 @@ void CDirectDraw::CellDrawED(
 	DWORD color2 = (color2_a<<24) | (color2_r<<16) | (color2_g<<8) | color2_b;
 	//-------------------------------------------------------------------------------------------------
 
-	D3DXMATRIX matp,mat,tmt,matprv,matprv2;
+	D3DXMATRIXA16 matp,mat,tmt,matprv,matprv2;
 	float ar2 = 1.0f/HALF_HEIGHT;
 	
 	//ZW/ZTフラグ操作
@@ -3333,7 +3329,7 @@ void CDirectDraw::HanteiDraw(
 	GCD_CELL2 *cdat=(GCD_CELL2*)pcdat;
 	GCD_HANTEI *hdat=(GCD_HANTEI*)phdat;
 
-	D3DXMATRIX matp,mat,tmt,matprv,matprv2;
+	D3DXMATRIXA16 matp,mat,tmt,matprv,matprv2;
 	float ar2 = 2.0f/480.0f;
 
 	//キャラクターの変換行列
@@ -3487,7 +3483,7 @@ void CDirectDraw::HRectDraw(LPVOID pcdat,
 	GCD_CELL2 *cdat=(GCD_CELL2*)pcdat;
 	GCD_HANTEI *hdat=(GCD_HANTEI*)phdat;
 
-	D3DXMATRIX matp,mat,tmt,matprv,matprv2;
+	D3DXMATRIXA16 matp,mat,tmt,matprv,matprv2;
 	float ar2 = 2.0f/480.0f;
 
 	//キャラクターの変換行列
@@ -3576,7 +3572,7 @@ void CDirectDraw::GCenterDraw(
 
 	GCD_CELL2 *cdat=(GCD_CELL2*)pcdat;
 
-	D3DXMATRIX matp,mat,tmt,matprv,matprv2;
+	D3DXMATRIXA16 matp,mat,tmt,matprv,matprv2;
 	float ar2 = 2.0f/480.0f;
 
 	//キャラクターの変換行列
@@ -3626,9 +3622,9 @@ void CDirectDraw::GCenterDraw(
 *	@param insert TRUEの場合、設定されるマトリクスは、新マトリクス*旧マトリクス　の掛け算をしたもんである
 *	@return 関数の実行前に設定されていた古いマトリクス
 */
-D3DXMATRIX CDirectDraw::SetParentMatrix(D3DXMATRIX& mat,BOOL root,BOOL insert)
+D3DXMATRIXA16 CDirectDraw::SetParentMatrix(D3DXMATRIX& mat,BOOL root,BOOL insert)
 {
-	D3DXMATRIX matprv=matparent;
+	D3DXMATRIXA16 matprv=matparent;
 
 	if(root)ResetParentMatrix();
 
@@ -3658,9 +3654,9 @@ void CDirectDraw::SetParentMatrix2(D3DXMATRIX *mat,BOOL root,D3DXMATRIX *matprv)
 *	@brief 「親」マトリクスに単位行列を設定する
 *	@sa SetParentMatrix
 */
-D3DXMATRIX CDirectDraw::ResetParentMatrix()
+D3DXMATRIXA16 CDirectDraw::ResetParentMatrix()
 {
-	D3DXMATRIX matprv=matparent;
+	D3DXMATRIXA16 matprv=matparent;
 	D3DXMatrixIdentity(&matparent);
 	return(matprv);
 }
@@ -3681,7 +3677,7 @@ D3DXMATRIX CDirectDraw::ResetParentMatrix()
 */
 void CDirectDraw::ResetTransformMatrix()
 {
-	D3DXMATRIX matw,matv,matp;
+	D3DXMATRIXA16 matw,matv,matp;
 
 	D3DXMatrixLookAtRH(&matv,
 		&D3DXVECTOR3(camera_x + camera_zurax,camera_y+camera_zuray,camera_z),
@@ -3784,7 +3780,7 @@ void CDirectDraw::DrawCircle(int x,			//!< 円の中心位置x
 	vb[NUMCIRCLEDIVIDE*2  ] = vb[0];
 	vb[NUMCIRCLEDIVIDE*2+1] = vb[1];
 
-	D3DXMATRIX matw,mattrans,matrot,matrh;
+	D3DXMATRIXA16 matw,mattrans,matrot,matrh;
 	D3DXMatrixTranslation(&mattrans,x/HALF_HEIGHT2,y/HALF_HEIGHT2,0);
 	if(rot_y){
 		D3DXMatrixRotationY(&matrh,(float)atan2(camera_x - x/HALF_HEIGHT2,-3));
