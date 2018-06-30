@@ -135,7 +135,10 @@ public:
 	//!指定ディレクトリ下からランダムなBGM再生
 	void PlayRandomBGM(TCHAR *dir);
 
-	
+	//!指定キャラのディレクトリ下から取説(readme.txt)を開く
+	BOOL OpenReadmeTxt(UINT cindex);
+
+
 	void ods(const TCHAR *format, ...);	//!OpuputDebugStringする。改行を付加
 	void ods2(const TCHAR *format, ...);	//!OpuputDebugStringする。改行を付加しない
 

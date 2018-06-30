@@ -946,6 +946,24 @@ float AkiGlobal::RandomOne()
 }
 
 /*----------------------------------------------------------------
+	指定キャラのディレクトリ下から取説(readme.txt)を開く
+	@return TRUE:成功, FALSE:失敗
+------------------------------------------------------------------*/
+BOOL AkiGlobal::OpenReadmeTxt(UINT cindex)
+{
+	TCHAR filename[MAX_PATH];
+	HINSTANCE hInst = NULL;
+
+	_stprintf(filename, _T("%s\\readme.txt"), g_charlist.GetCharacterDir(cindex));
+
+	hInst = ShellExecute(NULL, "open", filename, NULL, NULL, SW_SHOWNORMAL);
+
+	if (32 >= (int)hInst)
+		return FALSE;
+	return TRUE;
+}
+
+/*----------------------------------------------------------------
 	ファイル丸ごと読み込み
 ------------------------------------------------------------------*/
 

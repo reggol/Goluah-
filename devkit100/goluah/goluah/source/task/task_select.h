@@ -36,8 +36,8 @@ public:
 	virtual void OnSelect(CTCharacterRing *pring,int cindex)=0;	//!< キャラクタ選択時処理。マイナスはランダム扱い
 	virtual void OnChangeColor(CTCharacterRing *pring)=0;		//!< 色変更時処理
 	virtual void OnChangeColorEx(CTCharacterRing *pring)=0;		//!< 色変更時処理(拡張版)
-	virtual void OnOpenReadme(CTCharacterRing *pring) = 0;		//!< readme表示時処理
 	virtual void OnInstOnOff(CTCharacterRing *pring)=0;			//!< インストON/OFF時処理
+	virtual void OnOpenReadme(CTCharacterRing *pring,UINT cindex) = 0;		//!< readme表示時処理
 	virtual void OnOptionSelect(CTOptionSelecter *pselecter,DWORD option)=0;	//!< オプション選択時処理
 	virtual void OnStageSelect(CTStageSelecter *spelecter,int sindex)=0;		//!< ステージ選択時処理
 	virtual void OnEndAnimComplete(CTaskBase* ptask)=0;			//!< 終了アニメーション完了を通知
@@ -65,7 +65,7 @@ public:
 	void OnChangeColor(CTCharacterRing *pring);			//!< 色変更時処理
 	void OnChangeColorEx(CTCharacterRing *pring);		//!< 色変更時処理(拡張版)
 	void OnInstOnOff(CTCharacterRing *pring);			//!< インストON/OFF時処理
-	void OnOpenReadme(CTCharacterRing *pring);			//!< readme表示時処理
+	void OnOpenReadme(CTCharacterRing *pring,UINT cindex);			//!< readme表示時処理
 	void OnOptionSelect(CTOptionSelecter *pselecter,DWORD option);	//!< オプション選択時処理
 	void OnStageSelect(CTStageSelecter *spelecter,int sindex);		//!< ステージ選択時処理
 	void OnEndAnimComplete(CTaskBase* ptask);						//!< 終了アニメーション完了を通知

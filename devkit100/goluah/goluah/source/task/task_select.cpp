@@ -464,7 +464,7 @@ void CCharacterSelect::OnChangeColorEx(CTCharacterRing *pring)
 /*-----------------------------------------------------------
 	readme表示時処理
 -------------------------------------------------------------*/
-void CCharacterSelect::OnOpenReadme(CTCharacterRing *pring)
+void CCharacterSelect::OnOpenReadme(CTCharacterRing *pring, UINT cindex)
 {
 	//どのリングから？
 	DWORD team = 3;
@@ -472,9 +472,7 @@ void CCharacterSelect::OnOpenReadme(CTCharacterRing *pring)
 	if (pring == m_ring[1])	team = 1;
 	if (team>1)return;
 
-	TCHAR filename[MAX_PATH];
-	_stprintf(filename, _T("%s\\readme.txt"), g_charlist.GetCharacterDir(pring->GetSelected()));
-	ShellExecute(NULL, "open", filename, NULL, NULL, SW_SHOWNORMAL);
+	gbl.OpenReadmeTxt(cindex);
 }
 
 
