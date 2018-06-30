@@ -894,7 +894,7 @@ MYSURFACE* AkiGlobal::GetBigFace(int cindex,int col,int alt)
 /*----------------------------------------------------------------
 	技表取得
 ------------------------------------------------------------------*/
-MYSURFACE * AkiGlobal::GetInst(int cindex, UINT alt)
+MYSURFACE * AkiGlobal::GetInst(UINT cindex, UINT alt)
 {
 	TCHAR filepath[256];
 	MYSURFACE* ret = NULL;
