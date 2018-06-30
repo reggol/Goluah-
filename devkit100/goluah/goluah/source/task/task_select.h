@@ -20,6 +20,7 @@ class CTOptionSelecter;
 class CTSimpleOptionSelecter;
 class CTStageSelecter;
 class CTConditionSelecter;
+class CTCharacterInst;
 
 /*!
 *	@brief キャラセレクラス・ベース
@@ -108,6 +109,7 @@ protected:
 	CTCharacterBigFace* m_bface[2];		//!< デカface
 	CTCharacterSelectBelt* m_belt[2];	//!< オビ
 	CTSimpleOptionSelecter* m_selecter[2];	//!< オプションセレクタ
+	CTCharacterInst* m_inst[2];			//!< インスト
 
 	//描画プライオリティ設定
 	static int m_pri_background;
@@ -117,6 +119,7 @@ protected:
 	static int m_pri_oselecter;
 	static int m_pri_sselecter;
 	static int m_pri_firstSetting;
+	static int m_pri_inst;
 
 	//!キャラ選択キー入力割り当て
 	void AssignKeys(int team);
@@ -249,6 +252,43 @@ protected:
 	DWORD m_counter;		//!<カウンタ
 	MYVERTEX3D vbg[4];		//!<頂点
 	LPDIRECT3DTEXTURE8 ptex_cs1;//!<背景用テクスチャ
+};
+
+
+/*!
+*	@brief VSモード選択時　キャラクター・インスト表示
+*	@ingroup Tasks
+*/
+class CTCharacterInst : public CTaskBase
+{
+public:
+	virtual ~CTCharacterInst() {}
+	virtual void Initialize();
+	virtual void Terminate();
+	virtual BOOL Execute(DWORD time);
+	virtual void Draw();
+
+	virtual int GetDrawPriority() { return m_draw_priority; }
+	virtual void SetPriority(int pri) { m_draw_priority = pri; }
+
+	void Show() { Show(!m_state); }
+	void Show(BOOL b);
+	void Hide();
+	void Restore();
+	void SetLeftRight(BOOL left) { m_left = left; }
+	void Set(UINT cid);
+
+protected:
+	int m_draw_priority;	//!<描画プライオリティ
+	BOOL m_state;			//!<表示中か否か
+	BOOL m_state_stash;		//!<隠す直前のm_stateを記憶させる
+	BOOL m_left;			//!<左側か、右側か？
+	UINT m_cindex;			//!<現在読み込まれているものが、どのキャラクターのものか
+	UINT m_counter;			//!<選択が変化したときに必要
+	MYSURFACE* ms_inst;		//!<1P/2P インストbmp
+	MYVERTEX3D vb[4];		//!<頂点
+	RECT rsrc;
+	MYRECT3D rdst;
 };
 
 /*---------------------------------------------------

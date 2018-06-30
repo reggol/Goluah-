@@ -24,6 +24,7 @@ int CCharacterSelect::m_pri_face		= 1500;
 int CCharacterSelect::m_pri_firstSetting= 1060;
 int CCharacterSelect::m_pri_belt		= 1050;
 int CCharacterSelect::m_pri_cselecter	= 1040;
+int CCharacterSelect::m_pri_inst		= 1030;
 int CCharacterSelect::m_pri_oselecter	= 1020;
 int CCharacterSelect::m_pri_sselecter	= 1010;
 
@@ -91,6 +92,7 @@ BOOL CCharacterSelect::Execute(DWORD time)
 				//デカface更新
 				m_bface[i]->SetTemporary(m_ring[i]->GetSelected(), selected_color[i][num_selected[i]], OPT2ALT(selected_option[i][num_selected[i]]));	//ランセレ時にもm_ring[i]->GetSelected()の絵で更新されてしまうのを防止する
 			}
+			m_inst[i]->Set(m_ring[i]->GetSelected());	//inst更新
 			//オビ表示更新
 			m_belt[i]->SetRing(m_ring[i]->GetRing());
 		}
@@ -198,6 +200,11 @@ void CCharacterSelect::OnConditionDecided(CTConditionSelecter *pcsel)
 		m_selecter[i] = new CTSimpleOptionSelecter;
 		m_selecter[i]->SetPriority( m_pri_oselecter );
 		g_system.AddTask(m_selecter[i]);
+		//■インスト表示クラス登録
+		m_inst[i] = new CTCharacterInst();
+		m_inst[i]->SetPriority(m_pri_inst);
+		m_inst[i]->SetLeftRight(i == 0 ? TRUE : FALSE);
+		g_system.AddTask(m_inst[i]);
 	}
 	
 	//キャラ選択キー入力割り当て
@@ -300,6 +307,7 @@ void CCharacterSelect::OnCancel()
 	{
 		m_ring[i]->Hide();
 		m_belt[i]->Show(FALSE);
+		m_inst[i]->Show(FALSE);
 		m_bface[i]->SetPriority(0);
 		m_bface[i]->ResetNum();
 //		g_system.RemoveTask(m_selecter[i]->GetID());	// 今のところ効果無し
@@ -358,6 +366,7 @@ void CCharacterSelect::OnSelect(CTCharacterRing *pring,int cindex)
 
 	if(cindex>=0){
 		m_ring[team]->Hide();
+		m_inst[team]->Hide();
 		/* 同じチーム内での同キャラ選択に対応しようとして保留中。カラーが問題になる。
 		if (g_charlist.GetCharacterVer(cindex) < 1000 &&
 			g_charlist.GetCharacterVer(cindex) >= 680)*/
@@ -421,6 +430,7 @@ void CCharacterSelect::OnOptionSelect(CTOptionSelecter *pselecter,DWORD option)
 	{
 		charsel_ok[team] = TRUE;
 		m_belt[team]->Show(FALSE);
+		m_inst[team]->Show(FALSE);
 		CheckCharacterSelectOK();
 	}
 	else//続行
@@ -428,6 +438,7 @@ void CCharacterSelect::OnOptionSelect(CTOptionSelecter *pselecter,DWORD option)
 		AssignKeys(team);//キー再割り当て
 		m_ring[team]->Restore();
 		m_belt[team]->Restore();
+		m_inst[team]->Restore();
 	}
 }
 
@@ -484,8 +495,10 @@ void CCharacterSelect::OnInstOnOff(CTCharacterRing *pring)
 	//どのリングから？
 	DWORD team = 3;
 	if(pring==m_ring[0])	team = 0;
-	if(pring==m_ring[2])	team = 1;
+	if(pring==m_ring[1])	team = 1;
 	if(team>1)return;
+
+	m_inst[team]->Show();
 }
 
 
@@ -1211,6 +1224,160 @@ void CTCharacterSelectBG::ChangeState(BOOL f)
 {
 	m_state = f;
 	m_counter = 60*4 - m_counter;
+}
+
+
+
+/*=======================================================================================
+
+	インスト表示クラス
+
+=========================================================================================*/
+
+/*-----------------------------------------------------------
+	初期化
+-------------------------------------------------------------*/
+void CTCharacterInst::Initialize()
+{
+	//パラメータリセット
+	ms_inst = NULL;
+	m_cindex = 0;
+	m_counter = 255;
+	m_state = FALSE;
+	m_state_stash = FALSE;
+}
+
+/*-----------------------------------------------------------
+	破棄
+-------------------------------------------------------------*/
+void CTCharacterInst::Terminate()
+{
+	RELSURFACE(ms_inst);
+}
+
+/*-----------------------------------------------------------
+	実行
+-------------------------------------------------------------*/
+BOOL CTCharacterInst::Execute(DWORD time)
+{
+	//特にやること無し
+	++m_counter;
+	return TRUE;
+}
+
+/*-----------------------------------------------------------
+	描画
+-------------------------------------------------------------*/
+void CTCharacterInst::Draw()
+{
+	if (m_state && ms_inst)
+	{
+		float x, y;
+		const float z = -0.5f;	//CTCharacterRing(z=-0.42)より手前に配置する
+		DWORD alpha;
+		float camz = g_draw.camera_z * -1;
+		float adj = (1.0f + (z / camz));	//z軸由来の座標ズレ補正
+
+		x = m_left == TRUE ? ((320.0f - (300.0f * adj)) / 240.0f) : ((320.0f + (300.0f - ms_inst->wg) * adj) / 240.0f);	//左右の端から20空ける
+		y = (240.0f + ((220.0f - ms_inst->hg) * adj)) / 240.0f;	//下端から20空ける
+		if (y < (240.0f - (220.0f * adj)) / 240.0f)
+		{
+			y = (240.0f - (220.0f * adj)) / 240.0f;	//上にはみ出すなら上端から20空ける。（下ははみ出す）
+		}
+
+		//下地
+		vb[0].x =
+			vb[1].x = x;
+		vb[2].x =
+			vb[3].x = vb[0].x + (ms_inst->wg * adj) / 240.0f;
+
+		vb[0].y =
+			vb[2].y = y;
+		vb[1].y =
+			vb[3].y = vb[0].y + (ms_inst->hg * adj) / 240.0f;
+
+		vb[0].z =
+			vb[1].z =
+			vb[2].z =
+			vb[3].z = z;
+
+		alpha = m_counter * 10>220 ? 220 : m_counter * 10;
+
+		vb[0].color =
+			vb[1].color =
+			vb[2].color =
+			vb[3].color = alpha << 24 | 0x00FFFFFF;
+
+		D3DXMATRIX mat;
+		D3DXMatrixIdentity(&mat);
+		g_draw.d3ddev->SetTransform(D3DTS_WORLD, &mat);
+
+		g_draw.d3ddev->SetTexture(0, NULL);
+		g_draw.d3ddev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vb, sizeof(MYVERTEX3D));
+
+		//ビットマップ
+		rsrc.top = rsrc.left = 0;
+		rsrc.right = (LONG)ms_inst->wg;
+		rsrc.bottom = (LONG)ms_inst->hg;
+		rdst.z = vb[0].z;
+		rdst.left = vb[0].x;
+		rdst.right = vb[2].x;
+		rdst.top = vb[0].y;
+		rdst.bottom = vb[1].y;
+		alpha = m_counter * 10>255 ? 255 : m_counter * 10;
+		g_draw.ResetParentMatrix();
+
+		g_draw.MyBlt3D(ms_inst, rsrc, rdst, 0, alpha << 24 | 0x00FFFFFF);
+
+	}
+}
+
+/*-----------------------------------------------------------
+	インスト取得
+-------------------------------------------------------------*/
+void CTCharacterInst::Set(UINT cid)
+{
+	if (m_cindex != cid || m_state == FALSE)
+	{ //同キャラのが表示されてるなら更新しない
+		m_cindex = cid;
+		RELSURFACE(ms_inst);
+		ms_inst = gbl.GetInst(m_cindex);
+		m_counter = 0;
+	}
+}
+
+/*-----------------------------------------------------------
+	ONOFF切り替え
+-------------------------------------------------------------*/
+void CTCharacterInst::Show(BOOL b)
+{
+	if (m_state == FALSE && b == TRUE)
+	{	//OFF→ON
+		m_counter = 0;
+	}
+	else if (m_state == TRUE && b == FALSE)
+	{	//ON→OFF
+		RELSURFACE(ms_inst);
+	}
+	m_state = b;
+}
+
+/*-----------------------------------------------------------
+	隠す
+-------------------------------------------------------------*/
+void CTCharacterInst::Hide()
+{
+	m_state_stash = m_state;
+	m_state = FALSE;
+}
+
+/*-----------------------------------------------------------
+	隠す前の状態に戻す
+-------------------------------------------------------------*/
+void CTCharacterInst::Restore()
+{
+	m_state = m_state_stash;
+	m_counter = 0;
 }
 
 
