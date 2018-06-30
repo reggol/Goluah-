@@ -86,14 +86,14 @@ BOOL CCharacterSelect::Execute(DWORD time)
 
 	//■step2
 	if(!charsel_ok[0] || !charsel_ok[1]){
-		//デカface更新
-		if (optsel_ok[0])	//ランセレ時にもm_ring[0]->GetSelected()の絵で更新されてしまうのを防止する
-			m_bface[0]->SetTemporary(m_ring[0]->GetSelected(),selected_color[0][num_selected[0]],OPT2ALT(selected_option[0][num_selected[0]]));
-		if (optsel_ok[1])
-			m_bface[1]->SetTemporary(m_ring[1]->GetSelected(), selected_color[1][num_selected[1]], OPT2ALT(selected_option[1][num_selected[1]]));
-		//オビ表示更新
-		m_belt[0]->SetRing(m_ring[0]->GetRing());
-		m_belt[1]->SetRing(m_ring[1]->GetRing());
+		for (int i = 0; i < 2; i++){
+			if (optsel_ok[i]){
+				//デカface更新
+				m_bface[i]->SetTemporary(m_ring[i]->GetSelected(), selected_color[i][num_selected[i]], OPT2ALT(selected_option[i][num_selected[i]]));	//ランセレ時にもm_ring[i]->GetSelected()の絵で更新されてしまうのを防止する
+			}
+			//オビ表示更新
+			m_belt[i]->SetRing(m_ring[i]->GetRing());
+		}
 		return TRUE;
 	}
 
