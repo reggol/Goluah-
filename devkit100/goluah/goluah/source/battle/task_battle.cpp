@@ -2516,6 +2516,16 @@ void CBattleTask::T_UpdateStatus_Fighting()
 		}
 	}
 
+	// 交代中なのにキャラが降りてこない場合の救済措置
+	for (int i = 0; i<2; i++){
+		auto pdat = GetGObject(charobjid[i][active_character[i]]);
+		if (pdat->data.aid & ACTID_INOUT && pdat->data.counter > 600){
+			pdat->data.aid = ACTID_NEUTRAL;
+			pdat->data.y = 0;
+			pdat->data.x = (150 + 50 * active_character[i]) *(i == 0 ? -1 : 1);
+		}
+	}
+
 	//死亡フラグ更新
 	Update_DeadFlag();
 
