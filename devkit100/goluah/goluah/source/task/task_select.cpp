@@ -814,21 +814,25 @@ void CTCharacterRing::OnButtonDown(DWORD key)
 	if(!ccselect)return;
 
 	//決定
-	if(key & KEYSTA_BA2){//「A」決定
+	if (key & KEYSTA_BA2 && key & KEYSTA_BB2){//on/off instruction
+		ccselect->OnInstOnOff(this);
+	}
+	else if ((key & KEYSTA_BB2) && (key & KEYSTA_BC2)){//open readme.txt
+		ccselect->OnOpenReadme(this, GetSelected());
+	}
+	else if ((key & KEYSTA_BC2) && (key & KEYSTA_BA2)){//change color (ex)
+		ccselect->OnChangeColorEx(this);
+	}
+	else if(key & KEYSTA_BA2){//「A」決定
 		if(!IsSelected(GetSelected())){
 			ccselect->OnSelect(this,GetSelected());
 		}
 	}
-	else if ((key & KEYSTA_BC) && (key & KEYSTA_BD2))
-	{//change color
-		ccselect->OnChangeColorEx(this);
-	}
 	else if(key & KEYSTA_BD2){//ランダム決定
 		ccselect->OnSelect(this,-1);
 	}
-	else if(key & KEYSTA_BB2){//× on/off instruction
-		//ccselect->OnInstOnOff(this);
-		ccselect->OnCancel();	// 臨時(キャンセル)
+	else if(key & KEYSTA_BB2){// 臨時(キャンセル)
+		ccselect->OnCancel();
 	}
 	else if(key & KEYSTA_BC2){//change color
 		ccselect->OnChangeColor(this);
