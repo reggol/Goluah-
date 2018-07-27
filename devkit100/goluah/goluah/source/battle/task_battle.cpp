@@ -458,6 +458,22 @@ BOOL CBattleTask::Execute(DWORD time)
 	_stprintf(execute_tag,_T("%s (%s)"),__FUNCTION__,GetBattleStateString());
 	g_system.PushSysTag(execute_tag);
 
+	//STARTボタンでポーズ
+	DWORD key = g_input.GetAllKey();
+	if (key & KEYSTA_BSTART2)
+	{
+		if (m_pause_task)
+		{
+			m_pause_task->Kill();
+			m_pause_task = NULL;
+		}
+		else
+		{
+			m_pause_task = new CTBattlePause;
+			g_system.AddTask(m_pause_task);
+		}
+	}
+
 	if(m_pause_task){
 		g_system.PopSysTag();
 		return TRUE;
