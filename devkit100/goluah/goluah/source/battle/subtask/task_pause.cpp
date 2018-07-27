@@ -195,53 +195,7 @@ void CTBattlePause::Draw()
 	for (t = 1; t >= 0; t--)
 	{
 		if(!m_inst_on[t])continue;
-/*
-オプション状況を表示しようとしていた残骸。
-イテレータが分からず＝オプション名が拾ってこれず凍結中。
-0と1だけでいいのであればすぐ表示できるはず。
-		DWORD setting_now = g_battleinfo.GetCharacterOption(t,m_face_idx[t]);//これは簡単に拾えるが・・・
-		2進数に変換→各桁forで回して1のとこはリストから名前引っ張ってくるという力技するならこれも使える
-		int nisin[28],i;	//face用の部分は計算しないから28でおｋ
-		DWORD jyu = setting_now;
-		double xxx = 300.0;
-		double yyy = 20.0;
-		CharOptionList::iterator ite;
-		CCOptionSelecter::GetSettings;
-		DWORD k=0;
 
-		for (ite = list->begin(); ite != m_selecter->list->end(); ite++)
-		{
-		g_system.DrawBMPTextEx(xxx, yyy, 0.0f, ite->name, 0xFFFFFFFF, 0.8f, 0.8f, 0);
-		yyy += 10.0;
-		}
-
-		イテレータ資料（global.cppより）
-		//ファイル名リスト
-		std::vector<TCHAR*> filelist;
-		std::vector<TCHAR*>::iterator ite;
-		std::vector<TCHAR*>::iterator itee;
-		//再生を試みる
-		ite = filelist.begin();
-		itee= filelist.end();
-		for(;ite!=itee;ite++)
-		{
-		_stprintf( filepath, "%s\\%s",dir,*ite);
-		if(g_sound.BGMPlay( filepath ))
-		{
-		break;//再生に成功したら終了
-		}
-		gbl.ods2("AkiGlobal::PlayRandomBGM : %s ...failed",filepath);
-		}
-		//	delete [] filepath;
-
-		//ファイル名のリストを破棄
-		ite = filelist.begin();
-		itee= filelist.end();
-		for(;ite!=itee;ite++)
-		{
-		delete [] (*ite);
-		}
-*/
 		//デカ顔
 
 		alt = OPT2ALT(g_battleinfo.GetCharacterOption(t,m_face_idx[t]));
