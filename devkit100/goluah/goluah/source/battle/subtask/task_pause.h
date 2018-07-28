@@ -21,18 +21,23 @@ public:
 	int GetDrawPriority(){return 500;}		//描画プライオリティ。低いほど手前に（後に）描画。マイナスならば表示しない
 
 	void Kill()	{m_kill_flag=TRUE;}
-	void ChangeInst(UINT i);
+	void ChangeInst();
 
 protected:
 	LPDIRECT3DTEXTURE8 tex_fb;				//!< フロントバッファをコピーしたテクスチャ
 	LPDIRECT3DTEXTURE8 tex_pause;			//!< "Pause Press F7 Key" 表示用テクスチャ
-	MYSURFACE* ms_inst[2];					//!< 1P/2P インストbmp
+	MYSURFACE* ms_inst;						//!< インストbmp
 
 	UINT m_counter;
-	UINT m_face_counter[2];
+	UINT m_face_counter;
 	UINT m_face_idx[2];
+	UINT m_face_teamid;
 	BOOL m_kill_flag;
-	BOOL m_inst_on[2];
+	BOOL m_inst_on;
 	int m_shiftY;
+	DWORD m_selected;
 };
 
+//selectedgamemodeの項目
+#define OPEN_INST				0
+#define RETURN_TO_TITLE			1//!< これを項目の最後とみなしている

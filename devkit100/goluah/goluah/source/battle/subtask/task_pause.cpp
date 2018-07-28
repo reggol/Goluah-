@@ -17,8 +17,7 @@ void CTBattlePause::Initialize()
 	D3DXCreateTextureFromFileA(g_draw.d3ddev,_T("system\\texture\\pause.png"),&tex_pause);
 
 	m_counter = 0;
-	m_face_counter[0] = 0;
-	m_face_counter[1] = 0;
+	m_face_counter = 0;
 
 	CBattleTaskBase* battleTask = dynamic_cast<CBattleTaskBase*>( g_system.GetCurrentMainTask() );
 	if(!battleTask)
@@ -33,10 +32,11 @@ void CTBattlePause::Initialize()
 	}
 
 	m_kill_flag = FALSE;
-	m_inst_on[0] = m_inst_on[1] = FALSE;
-
-	ms_inst[0] = ms_inst[1] = NULL;
+	m_inst_on = FALSE;
+	ms_inst = NULL;
 	m_shiftY = 0;
+	m_selected = OPEN_INST;
+	m_face_teamid = 0;
 }
 
 void CTBattlePause::Terminate()
@@ -44,64 +44,98 @@ void CTBattlePause::Terminate()
 	RELEASE(tex_fb);
 	RELEASE(tex_pause);
 
-	g_draw.RelSurface( ms_inst[0] );
-	g_draw.RelSurface( ms_inst[1] );
+	g_draw.RelSurface( ms_inst );
 }
 
 BOOL CTBattlePause::Execute(DWORD time)
 {
-	m_counter ++;
-
-	for(UINT i=0;i<2;i++)
+	if (m_counter < UINT_MAX)
 	{
-		DWORD key = 0;
+		m_counter++;
+	}
 
-		if(m_inst_on[i])
+	DWORD key = g_input.GetAllKey();
+	if (m_selected == OPEN_INST && key&KEYSTA_BA2)
+	{
+		m_inst_on = !m_inst_on;
+		if(!m_inst_on)
 		{
-			m_face_counter[i] ++;
+			g_draw.RelSurface( ms_inst );
+			ms_inst = NULL;
+			m_face_counter = 0;
+		}
+		else
+		{
+			m_face_teamid = 0;
+			m_face_idx[m_face_teamid] = 0;
+			ChangeInst();
+		}
+	}
+	else if (m_selected == RETURN_TO_TITLE && key&KEYSTA_BA2)
+	{//タイトルに戻る
+		g_system.ReturnTitle();
+		return FALSE;
+	}
+	else if (key & KEYSTA_DOWN2)
+	{
+		if (m_selected == RETURN_TO_TITLE)m_selected = OPEN_INST;
+		else m_selected++;
+	}
+	else if (key & KEYSTA_UP2)
+	{
+		if (m_selected == OPEN_INST)m_selected = RETURN_TO_TITLE;
+		else m_selected--;
+	}
+
+	if(m_inst_on)
+	{
+		if (m_face_counter < UINT_MAX)
+		{
+			m_face_counter++;
 		}
 
-		//そのチームでのキー入力の総和をとる
-		for(UINT j=0;j<MAXNUM_TEAM;j++)
+		if (key & KEYSTA_RIGHT2)
 		{
-			UINT ki = g_battleinfo.GetKeyAssign(i,j);
-			if(!(ki&CASSIGN_SPECIFIC))
+			if (m_face_idx[m_face_teamid] == (g_battleinfo.GetNumTeam(m_face_teamid) - 1))
 			{
-				key |= g_input.GetKey(ki,0);
-			}
-		}
-
-		if(m_inst_on[i])
-		{
-			if(key & KEYSTA_LEFT2)
-			{
-				m_face_idx[i] --;
-				m_face_idx[i] = (m_face_idx[i]+g_battleinfo.GetNumTeam(i)) % g_battleinfo.GetNumTeam(i);
-				m_face_counter[i] = 0;
-				ChangeInst(i);
-			}
-			if(key & KEYSTA_RIGHT2)
-			{
-				m_face_idx[i] ++;
-				m_face_idx[i] %= g_battleinfo.GetNumTeam(i);
-				m_face_counter[i] = 0;
-				ChangeInst(i);
-			}
-		}
-
-		if((key & KEYSTA_BA2) || (key & KEYSTA_BB2) || (key & KEYSTA_BC2)/* || (key & KEYSTA_BD2)*/)
-		{
-			m_inst_on[i] = !m_inst_on[i];
-			if(!m_inst_on[i])
-			{
-				g_draw.RelSurface( ms_inst[i] );
-				ms_inst[i] = NULL;
-				m_face_counter[i] = 0;
+				m_face_teamid = (m_face_teamid == 0) ? 1 : 0;
+				m_face_idx[m_face_teamid] = 0;
 			}
 			else
 			{
-				ChangeInst(i);
+				m_face_idx[m_face_teamid]++;
 			}
+			m_face_counter = 0;
+			m_shiftY = 0;
+			ChangeInst();
+		}
+		else if (key & KEYSTA_LEFT2)
+		{
+			if (m_face_idx[m_face_teamid] == 0)
+			{
+				m_face_teamid = (m_face_teamid == 0) ? 1 : 0;
+				m_face_idx[m_face_teamid] = (g_battleinfo.GetNumTeam(m_face_teamid) - 1);
+			}
+			else
+			{
+				m_face_idx[m_face_teamid]--;
+			}
+			m_face_counter = 0;
+			m_shiftY = 0;
+			ChangeInst();
+		}
+		else if (key & KEYSTA_UP)
+		{
+			m_shiftY++;
+		}
+		else if (key & KEYSTA_DOWN)
+		{
+			m_shiftY--;
+		}
+
+		if (key & KEYSTA_BD2)
+		{
+			m_shiftY = 0;
 		}
 	}
 
@@ -161,59 +195,74 @@ void CTBattlePause::Draw()
 		g_draw.d3ddev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,2,vb,sizeof(MYVERTEX3D));
 	}
 	
-	//"Pause - Press F7 Key"
-	g_draw.SetAlphaMode(GBLEND_KASAN);
-	if(tex_pause)
+	if (!m_inst_on)
 	{
-		vb[0].color = 
-		vb[1].color = 
-		vb[2].color = 
-		vb[3].color = 0xFF55FF33;
+		//"Pause - Press F7 Key"
+		g_draw.SetAlphaMode(GBLEND_KASAN);
+		if (tex_pause)
+		{
+			vb[0].color =
+			vb[1].color =
+			vb[2].color =
+			vb[3].color = 0xFF55FF33;
 
-		vb[0].x =  (320.0f-128.0f)/240.0f;
-		vb[1].x =  (320.0f-128.0f)/240.0f;
-		vb[2].x =  (320.0f+128.0f)/240.0f;
-		vb[3].x =  (320.0f+128.0f)/240.0f;
+			vb[0].x = (320.0f - 128.0f) / 240.0f;
+			vb[1].x = (320.0f - 128.0f) / 240.0f;
+			vb[2].x = (320.0f + 128.0f) / 240.0f;
+			vb[3].x = (320.0f + 128.0f) / 240.0f;
 
-		vb[0].y =  (105.0f-32.0f)/240.0f;
-		vb[1].y =  (105.0f+32.0f)/240.0f;
-		vb[2].y =  (105.0f-32.0f)/240.0f;
-		vb[3].y =  (105.0f+32.0f)/240.0f;
+			vb[0].y = (105.0f - 32.0f) / 240.0f;
+			vb[1].y = (105.0f + 32.0f) / 240.0f;
+			vb[2].y = (105.0f - 32.0f) / 240.0f;
+			vb[3].y = (105.0f + 32.0f) / 240.0f;
 
-		g_draw.d3ddev->SetTexture(0,tex_pause);
-		g_draw.d3ddev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,2,vb,sizeof(MYVERTEX3D));
+			g_draw.d3ddev->SetTexture(0, tex_pause);
+			g_draw.d3ddev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vb, sizeof(MYVERTEX3D));
+		}
+		g_draw.SetAlphaMode(0);
+
+		DWORD text_color;
+		const DWORD text2_color = 0xFF4455AA;//選択されているときの色
+		const DWORD text1_color = 0xFF55FF33;//選択されていないときの色
+		DWORD top_y = 300;
+		DWORD step_y = 30;
+
+		if (m_selected == OPEN_INST)text_color = text1_color;
+		else text_color = text2_color;
+		g_system.DrawBMPText(320 - 68, top_y, 0, _T("OPEN INST"), text_color);
+		top_y += step_y;
+
+		if (m_selected == RETURN_TO_TITLE)text_color = text1_color;
+		else text_color = text2_color;
+		g_system.DrawBMPText(320 - 113, top_y, 0, _T("RETURN TO TITLE"), text_color);
+		top_y += step_y;
+
+		return;
 	}
-	g_draw.SetAlphaMode(0);
-
-	if(!m_inst_on)return;
 
 	int alt;
-	int t;
 	MYSURFACE *dds_face;
 	RECT r_face;
 	int x,y;
-	for (t = 1; t >= 0; t--)
+
+	//デカ顔
+
+	alt = OPT2ALT(g_battleinfo.GetCharacterOption(m_face_teamid, m_face_idx[m_face_teamid]));
+	dds_face = gbl.GetBigFace(g_battleinfo.GetCharacter(m_face_teamid, m_face_idx[m_face_teamid]),g_battleinfo.GetColor(m_face_teamid, m_face_idx[m_face_teamid]),alt);
+
+	if (dds_face)
 	{
-		if(!m_inst_on[t])continue;
-
-		//デカ顔
-
-		alt = OPT2ALT(g_battleinfo.GetCharacterOption(t,m_face_idx[t]));
-		dds_face = gbl.GetBigFace(g_battleinfo.GetCharacter(t,m_face_idx[t]),g_battleinfo.GetColor(t,m_face_idx[t]),alt);
-
-		if(!dds_face)continue;
-
 		r_face.top = 0;
 		r_face.left = 0;
 		r_face.right = (int)dds_face->wg;
 		r_face.bottom = (int)dds_face->hg;
 
-		if(t==0){
-			x = m_face_counter[t]*30 - (int)dds_face->wg;
+		if(m_face_teamid ==0){
+			x = m_face_counter*30 - (int)dds_face->wg;
 			if(x>0)x=0;
 		}
 		else{
-			x = 640 - m_face_counter[t]*30;
+			x = 640 - m_face_counter*30;
 			if(x< 640-(int)dds_face->wg)x=640-(int)dds_face->wg;
 		}
 
@@ -222,56 +271,42 @@ void CTBattlePause::Draw()
 					x,
 					240-(DWORD)dds_face->hg/2,
 					r_face,
-					t==0 ? FALSE : TRUE,
+					m_face_teamid == 0 ? FALSE : TRUE,
 					FALSE,
 					0,
 					-0.01f,
 					0xFFFFFFFF);
 		//inst
-		if(ms_inst[t])
+		if(ms_inst)
 		{
 			r_face.top = 0;
 			r_face.left = 0;
-			r_face.right = (int)ms_inst[t]->wg;
-			r_face.bottom = (int)ms_inst[t]->hg;
+			r_face.right = (int)ms_inst->wg;
+			r_face.bottom = (int)ms_inst->hg;
 
 			DWORD alpha ;
 
-			x = t==0 ? 20 : 620-(int)ms_inst[t]->wg;
-			y = 450-(DWORD)ms_inst[t]->hg+m_shiftY;
-
-			DWORD key = 0;
-				for(UINT j=0;j<MAXNUM_TEAM;j++){
-					UINT ki = g_battleinfo.GetKeyAssign(t,j);
-					if(!(ki&CASSIGN_SPECIFIC)){
-					key |= g_input.GetKey(ki,0);
-					}
-				if(key & KEYSTA_UP)
-					m_shiftY +=1;
-				else if (key & KEYSTA_DOWN)
-					m_shiftY -=1;
-				else if(key & KEYSTA_BD2)
-					m_shiftY =0;
-			}
+			x = m_face_teamid ==0 ? 20 : 620-(int)ms_inst->wg;
+			y = 450-(DWORD)ms_inst->hg+m_shiftY;
 
 			//下地
 			int mgn = 0;
 			vb[0].x =  (x-mgn)/240.0f;
 			vb[1].x =  (x-mgn)/240.0f;
-			vb[2].x =  (x+mgn+ms_inst[t]->wg)/240.0f;
-			vb[3].x =  (x+mgn+ms_inst[t]->wg)/240.0f;
+			vb[2].x =  (x+mgn+ms_inst->wg)/240.0f;
+			vb[3].x =  (x+mgn+ms_inst->wg)/240.0f;
 
 			vb[0].y =  (y-mgn)/240.0f;
-			vb[1].y =  (y+mgn+ms_inst[t]->hg)/240.0f;
+			vb[1].y =  (y+mgn+ms_inst->hg)/240.0f;
 			vb[2].y =  (y-mgn)/240.0f;
-			vb[3].y =  (y+mgn+ms_inst[t]->hg)/240.0f;
+			vb[3].y =  (y+mgn+ms_inst->hg)/240.0f;
 			
 			vb[0].z = 
 			vb[1].z = 
 			vb[2].z = 
 			vb[3].z = -0.02f;
 			
-			alpha = m_face_counter[t]*10>220 ? 220 : m_face_counter[t]*10;
+			alpha = m_face_counter*10>220 ? 220 : m_face_counter*10;
 
 			vb[0].color = 
 			vb[1].color = 
@@ -286,9 +321,9 @@ void CTBattlePause::Draw()
 			g_draw.d3ddev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,2,vb,sizeof(MYVERTEX3D));
 
 			//ビットマップ
-			alpha = m_face_counter[t]*10>255 ? 255 : m_face_counter[t]*10;
+			alpha = m_face_counter*10>255 ? 255 : m_face_counter*10;
 			g_draw.CheckBlt(
-					ms_inst[t],
+					ms_inst,
 					x,
 					y,
 					r_face,
@@ -302,11 +337,11 @@ void CTBattlePause::Draw()
 }
 
 
-void CTBattlePause::ChangeInst(UINT t)
+void CTBattlePause::ChangeInst()
 {
-	UINT alt = OPT2ALT(g_battleinfo.GetCharacterOption(t,m_face_idx[t]));
-	UINT char_index = g_battleinfo.GetCharacter(t,m_face_idx[t]);
+	UINT alt = OPT2ALT(g_battleinfo.GetCharacterOption(m_face_teamid, m_face_idx[m_face_teamid]));
+	UINT char_index = g_battleinfo.GetCharacter(m_face_teamid, m_face_idx[m_face_teamid]);
 	
-	ms_inst[t] = gbl.GetInst(char_index, alt);
+	ms_inst = gbl.GetInst(char_index, alt);
 }
 
