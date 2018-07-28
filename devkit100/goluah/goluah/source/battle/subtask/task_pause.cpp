@@ -206,15 +206,15 @@ void CTBattlePause::Draw()
 			vb[2].color =
 			vb[3].color = 0xFF55FF33;
 
-			vb[0].x = (320.0f - 128.0f) / 240.0f;
-			vb[1].x = (320.0f - 128.0f) / 240.0f;
-			vb[2].x = (320.0f + 128.0f) / 240.0f;
-			vb[3].x = (320.0f + 128.0f) / 240.0f;
+			vb[0].x = (320.0f - 144.0f) / 240.0f;
+			vb[1].x = (320.0f - 144.0f) / 240.0f;
+			vb[2].x = (320.0f + 144.0f) / 240.0f;
+			vb[3].x = (320.0f + 144.0f) / 240.0f;
 
-			vb[0].y = (105.0f - 32.0f) / 240.0f;
-			vb[1].y = (105.0f + 32.0f) / 240.0f;
-			vb[2].y = (105.0f - 32.0f) / 240.0f;
-			vb[3].y = (105.0f + 32.0f) / 240.0f;
+			vb[0].y = 50.0f / 240.0f;
+			vb[1].y = (50.0f + 91.0f) / 240.0f;
+			vb[2].y = 50.0f / 240.0f;
+			vb[3].y = (50.0f + 91.0f) / 240.0f;
 
 			g_draw.d3ddev->SetTexture(0, tex_pause);
 			g_draw.d3ddev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vb, sizeof(MYVERTEX3D));
