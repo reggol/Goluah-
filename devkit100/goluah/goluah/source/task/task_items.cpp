@@ -103,9 +103,7 @@ void CTIconRingBase::Exec_Ready()
 		//ボタン押された
 		if(keystate & KEYSTA_BUTTONS){OnButtonDown(keystate);}
 		//←・→
-		else if(keystate & KEYSTA_ARIGHT && g_input.SeekKey(m_keyindex, 1, 30, KEYSTA_ARIGHT2) < 0 &&
-				this->m_counter >= 5){
-			// 変な条件分岐だが、要するにSeekKeyに引っかからなければ真。
+		else if(keystate & KEYSTA_ARIGHT && this->m_counter >= 5){
 			if(m_selected_index==0)m_selected_index =GetMaxIndex(m_selected_ring)-1;
 			else m_selected_index--;
 			m_state = CTCRS_RotateLeft;
@@ -113,9 +111,7 @@ void CTIconRingBase::Exec_Ready()
 			Exec_RotateLeft();
 			OnChangeIndex();
 		}
-		else if(keystate & KEYSTA_ALEFT && g_input.SeekKey(m_keyindex, 1, 30, KEYSTA_ALEFT2) < 0 &&
-				this->m_counter >= 5){
-			// 変な条件分岐だが、要するにSeekKeyに引っかからなければ真。
+		else if(keystate & KEYSTA_ALEFT && this->m_counter >= 5){
 			m_selected_index++;
 			if((int)m_selected_index >= GetMaxIndex(m_selected_ring))
 				m_selected_index=0;
