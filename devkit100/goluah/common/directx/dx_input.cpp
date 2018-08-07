@@ -407,8 +407,13 @@ int CDirectInput::SeekKeyEx(DWORD cid,		//!< 入力インデックス(PLAYER)
 */
 int CDirectInput::SeekKey(DWORD cid,int offset,int num_seek,DWORD key)
 {
+	DWORD key1 = (key & 0x00001111);
+	DWORD key2 = (key & 0x00002222);
+	DWORD gk;
+
 	for(int i=offset;i<num_seek;i++){
-		if((GetKey(cid,i)&0x00003333) == key){
+		gk = GetKey(cid, i);
+		if(((gk & 0x00001111) == key1) && ((key2 == 0) || ((gk & 0x00002222) == key2))){
 			return(i);
 		}
 	}
