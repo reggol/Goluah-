@@ -1998,17 +1998,17 @@ int CTConditionSelecter::m_limit_time[5] = {40,60,99,120,-1};
 
 //キー移動先一覧
 const CTConditionSelecter::CTConditionSelecter_Item_Goto CTConditionSelecter::m_item_dest_table[10] =
-{	 //up			down			left				right
-	{CTCoS_Title,	CTCoS_Team1_1,	CTCoS_Time,			CTCoS_Time		},	//CTCoS_BattleType
-	{CTCoS_Title,	CTCoS_Team2_1,	CTCoS_BattleType,	CTCoS_BattleType},	//CTCoS_Time
-	{CTCoS_Title,	CTCoS_Team1_2,	CTCoS_Team2_1,		CTCoS_Team2_1	},	//CTCoS_Team1_1
-	{CTCoS_Team1_1,	CTCoS_Team1_3,	CTCoS_Team2_2,		CTCoS_Team2_2	},	//CTCoS_Team1_2
-	{CTCoS_Team1_2,	CTCoS_OK,		CTCoS_Team2_3,		CTCoS_Team2_3	},	//CTCoS_Team1_3
-	{CTCoS_Time,	CTCoS_Team2_2,	CTCoS_Team1_1,		CTCoS_Team1_1	},	//CTCoS_Team2_1
-	{CTCoS_Team2_1,	CTCoS_Team2_3,	CTCoS_Team1_2,		CTCoS_Team1_2	},	//CTCoS_Team2_2
-	{CTCoS_Team2_2,	CTCoS_OK,		CTCoS_Team1_3,		CTCoS_Team1_3	},	//CTCoS_Team2_3
-	{CTCoS_Team2_3,	CTCoS_Title,	CTCoS_OK,			CTCoS_OK		},	//CTCoS_OK
-	{CTCoS_OK,		CTCoS_Time,		CTCoS_Title,		CTCoS_Title		}	//CTCoS_Title
+{	 //up				down				left				right
+	{CTCoS_Title,		CTCoS_Team1_1,		CTCoS_Time,			CTCoS_Time		},	//CTCoS_BattleType
+	{CTCoS_Title,		CTCoS_Team2_1,		CTCoS_BattleType,	CTCoS_BattleType},	//CTCoS_Time
+	{CTCoS_BattleType,	CTCoS_Team1_2,		CTCoS_Team2_1,		CTCoS_Team2_1	},	//CTCoS_Team1_1
+	{CTCoS_Team1_1,		CTCoS_Team1_3,		CTCoS_Team2_2,		CTCoS_Team2_2	},	//CTCoS_Team1_2
+	{CTCoS_Team1_2,		CTCoS_OK,			CTCoS_Team2_3,		CTCoS_Team2_3	},	//CTCoS_Team1_3
+	{CTCoS_Time,		CTCoS_Team2_2,		CTCoS_Team1_1,		CTCoS_Team1_1	},	//CTCoS_Team2_1
+	{CTCoS_Team2_1,		CTCoS_Team2_3,		CTCoS_Team1_2,		CTCoS_Team1_2	},	//CTCoS_Team2_2
+	{CTCoS_Team2_2,		CTCoS_OK,			CTCoS_Team1_3,		CTCoS_Team1_3	},	//CTCoS_Team2_3
+	{CTCoS_Team2_3,		CTCoS_Title,		CTCoS_OK,			CTCoS_OK		},	//CTCoS_OK
+	{CTCoS_OK,			CTCoS_Time,			CTCoS_Title,		CTCoS_Title		}	//CTCoS_Title
 };
 
 /*---------------------------------------------------------------------------------------
