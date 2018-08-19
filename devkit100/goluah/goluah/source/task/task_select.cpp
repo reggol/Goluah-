@@ -837,6 +837,9 @@ void CTCharacterRing::OnButtonDown(DWORD key)
 	else if(key & KEYSTA_BC2){//change color
 		ccselect->OnChangeColor(this);
 	}
+	else if(key & KEYSTA_BSTART2){//タイトルに戻る
+		g_system.ReturnTitle();
+	}
 }
 
 /*--------------------------------------------------------------------------------------
@@ -1959,6 +1962,10 @@ void CTStageSelecter::HandlePad()
 		if(g_stagelist.GetStageCountRing(m_selected_ring)-1 < (int)m_selected_index)
 			m_selected_index = g_stagelist.GetStageCountRing(m_selected_ring)-1 ;
 		m_state = CTSSS_Change2;
+	}
+	//タイトルに戻る
+	else if( keystate & KEYSTA_BSTART2 ){
+		g_system.ReturnTitle();
 	}
 	
 	if( prvring != m_selected_ring || prvindx != m_selected_index )

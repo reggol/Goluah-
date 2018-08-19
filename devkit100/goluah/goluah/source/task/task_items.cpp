@@ -101,7 +101,7 @@ void CTIconRingBase::Exec_Ready()
 	if(m_keyindex>=0 && m_sleepCount==0){
 		DWORD keystate = g_input.GetKey(m_keyindex,0);
 		//ボタン押された
-		if(keystate & KEYSTA_BUTTONS){OnButtonDown(keystate);}
+		if(keystate & KEYSTA_BUTTONS || keystate & KEYSTA_BSTART2){OnButtonDown(keystate);}
 		//←・→
 		else if(keystate & KEYSTA_ARIGHT && this->m_counter >= 5){
 			if(m_selected_index==0)m_selected_index =GetMaxIndex(m_selected_ring)-1;

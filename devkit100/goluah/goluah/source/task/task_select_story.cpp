@@ -353,7 +353,7 @@ void CTStorySelecterRing::OnButtonDown(DWORD key)
 	if(key & KEYSTA_BA2){
 		csselect->OnSelect(this);
 	}
-	if(key & KEYSTA_BB2){
+	if(key & KEYSTA_BB2 || key & KEYSTA_BSTART2){
 //		csselect->OnCancel();
 		g_system.ReturnTitle();
 	}
