@@ -2089,19 +2089,22 @@ BOOL CTConditionSelecter::Execute(DWORD time)
 			m_ratio = 1.0f;
 
 			DWORD key = g_input.GetAllKey();
-			if(m_selected==CTCoS_OK && key&KEYSTA_BUTTONS && m_ok){//ケテーイ
+			if(m_selected==CTCoS_OK && key&KEYSTA_BA2 && m_ok){//ケテーイ
 				CCharacterSelect* ccselect = dynamic_cast<CCharacterSelect*>(g_system.GetCurrentMainTask());
 				ccselect->OnConditionDecided(this);
 				m_state = CTCoS_Hide;
 			}
+			else if(key&KEYSTA_BB2){//タイトルに戻るに移動
+				m_selected=CTCoS_Title;
+			}
 			else if(key&KEYSTA_BC2){//OKに移動
 				m_selected=CTCoS_OK;
 			}
-			else if( m_selected==CTCoS_Title && key&KEYSTA_BUTTONS ){//タイトルに戻る
+			else if(key&KEYSTA_BSTART2 || (m_selected==CTCoS_Title && (key&KEYSTA_BA2 || key & KEYSTA_BB2))){//タイトルに戻る
 				g_system.ReturnTitle();
 				return FALSE;
 			}
-			else if (key&(KEYSTA_BA2 | KEYSTA_BB2) && m_selected != CTCoS_OK)//項目選択
+			else if (key&KEYSTA_BA2 && m_selected != CTCoS_OK)//項目選択
 			{
 				m_state = CTCoS_Selected;
 			}
