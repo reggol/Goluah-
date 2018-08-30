@@ -4,13 +4,13 @@
 
 	（ネットワーク非対応版）
 
-	Goluah!!Copyright(C) 2001-2004 aki, 2014-2015 logger, 2004-2015 At-sushi
+    Goluah!! Copyright (C) 2001-2004 aki, 2014-2015 logger, 2004-2018 At-sushi
 
-	This program is free software; you can redistribute it and / or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or(at your option) any later version.
+    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110 - 1301 USA.
+    You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 ==============================================================================*/
 
@@ -70,8 +70,8 @@ void CBattleTask::Initialize()
 	if (!g_config.IsFullScreen())
 		AfxGetApp()->DoWaitCursor(1);
 	// 動的配列初期化
-	p_objects.clear();
-	object_regno.clear();
+    p_objects.resize(OBJECTS_MEMINCRATE, nullptr);
+    object_regno.resize(OBJECTS_MEMINCRATE);
 	suicide_list.resize(0);
 
 	CBattleTaskBase::Initialize();
@@ -793,7 +793,7 @@ void CBattleTask::T_AtariHantei()
 	BOOL revx1,revx2;
 	UINT magmode1,magmode2;
 
-	int i,j,k,l;
+    int i, j, k, l;
 	if(!hantaihantei){
 		for(i=0;i<(int)p_objects.size();i++){
 			if(p_objects[i]!=NULL){//オブジェクトが存在する
@@ -1193,6 +1193,7 @@ void CBattleTask::Draw()
 	//描画用リスト準備
 	DWORD i;
 	std::vector<CGObject*> objlist;
+    objlist.reserve(p_objects.size());
 	for(i=0;i<(int)p_objects.size();i++){
 		if(p_objects[i]!=NULL){
 			objlist.push_back(p_objects[i]);
@@ -1456,9 +1457,16 @@ DWORD CBattleTask::CreateGObject()
 {
 	g_system.PushSysTag(__FUNCTION__);
 
-	for(DWORD i=0;i<(DWORD)p_objects.size() + 1;i++){
+	for(DWORD i=0;i<(DWORD)p_objects.size();i++){
 		if(p_objects[i]==NULL){
 			p_objects[i] = new CGObject( i | ((object_regno[i]<<16) & 0xFFFF0000) );
+
+            if (i == p_objects.size() - 1)
+            {
+                // 最大値なので、配列を広げる
+                p_objects.resize(p_objects.size() + OBJECTS_MEMINCRATE);
+                object_regno.resize(object_regno.size() + OBJECTS_MEMINCRATE);
+            }
 
 			g_system.PopSysTag();
 			return(p_objects[i]->data.id);
