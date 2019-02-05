@@ -26,7 +26,7 @@ You should have received a copy of the GNU General Public License along with thi
 class CHeart;
 class CDashWind;
 
-#define NEEDGAUGE_GC	(0.5f)
+#define NEEDGAUGE_GC	(0.3f)
 #define NEEDGAUGE_SA	(0.1f)
 
 #define AIF_NUM			(32)

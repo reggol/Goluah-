@@ -37,8 +37,8 @@ class CMiniGunB;
 
 #define NUM_MINIGUN (3)
 
-#define NEEDGAUGE_REV	(0.3)
-#define NEEDGAUGE_GC	(0.5)
+#define NEEDGAUGE_REV	(0.5)
+#define NEEDGAUGE_GC	(0.3)
 
 /*--------------------------------------------------------------
 	メインキャラクタークラス
