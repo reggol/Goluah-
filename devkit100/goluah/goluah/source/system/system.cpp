@@ -32,14 +32,13 @@ CSystem::CSystem()
 
 	//サウンドのアンロード
 	for(i=0;i<NUM_SYSTEMSOUND;i++){
-		RELEASE(dsb_efct[0][i]);
-		RELEASE(dsb_efct[1][i]);
+		dsb_efct[0][i] = nullptr;
+		dsb_efct[1][i] = nullptr;
 	}
 
 	//システムグラフィック破棄
 	for(i=0;i<GCDMAX_IMAGES;i++)
 	{
-		g_draw.RelSurface(sdds[i]);
 		sdds[i] = NULL;
 	}
 
