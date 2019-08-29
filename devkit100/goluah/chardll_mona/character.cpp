@@ -1,15 +1,4 @@
-﻿/*=====================================================================================
-
-Goluah!! Copyright (C) 2001-2004 aki, 2004-2016 At-sushi, 2014-2016 logger
-
-This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
-=======================================================================================*/
-
+﻿
 /*=====================================================================================
 
 	キャラクター定義
@@ -152,54 +141,56 @@ DWORD CCharacter::Message(DWORD msg,LPVOID dat,DWORD prm)
 BOOL CCharacter::Command_OnHissatuAttacking(DWORD key_now)
 {
 	//レイク、追加入力コマンド判定
-	if(pdat->aid==ACTID_REIKU1A){
-		if(com214(30)){
-			if(key_now & 0x22220000){
-				pdat->aid=ACTID_REIKU1B;
+    if (pdat->counter >= 2) {
+        if (pdat->aid == ACTID_REIKU1A){
+            if (com214(30)){
+                if (key_now & 0x22220000){
+                    pdat->aid = ACTID_REIKU1B;
 				return TRUE;
 			}
 		}
 	}
-	else if(pdat->aid==ACTID_REIKU1B){
-		if(com214(30)){
-			if(key_now & 0x22220000){
-				pdat->aid=ACTID_REIKU1C;
+        else if (pdat->aid == ACTID_REIKU1B){
+            if (com214(30)){
+                if (key_now & 0x22220000){
+                    pdat->aid = ACTID_REIKU1C;
 				return TRUE;
 			}
 		}
 	}
-	else if(pdat->aid==ACTID_REIKU2A){
-		if(com214(30)){
-			if(key_now & 0x22220000){
-				pdat->aid=ACTID_REIKU2B;
+        else if (pdat->aid == ACTID_REIKU2A){
+            if (com214(30)){
+                if (key_now & 0x22220000){
+                    pdat->aid = ACTID_REIKU2B;
 				return TRUE;
 			}
 		}
 	}
-	else if(pdat->aid==ACTID_REIKU2B){
-		if(com214(30)){
-			if(key_now & 0x22220000){
-				pdat->aid=ACTID_REIKU2C;
+        else if (pdat->aid == ACTID_REIKU2B){
+            if (com214(30)){
+                if (key_now & 0x22220000){
+                    pdat->aid = ACTID_REIKU2C;
 				return TRUE;
 			}
 		}
 	}
-	else if(pdat->aid==ACTID_REIKU3A){
-		if(com214(30)){
-			if(key_now & 0x22220000){
-				pdat->aid=ACTID_REIKU3B;
+        else if (pdat->aid == ACTID_REIKU3A){
+            if (com214(30)){
+                if (key_now & 0x22220000){
+                    pdat->aid = ACTID_REIKU3B;
 				return TRUE;
 			}
 		}
 	}
-	else if(pdat->aid==ACTID_REIKU3B){
-		if(com214(30)){
-			if(key_now & 0x22220000){
-				pdat->aid=ACTID_REIKU3C;
+        else if (pdat->aid == ACTID_REIKU3B){
+            if (com214(30)){
+                if (key_now & 0x22220000){
+                    pdat->aid = ACTID_REIKU3C;
 				return TRUE;
 			}
 		}
 	}
+    }
 
 	return CCharacterBase::Command_OnHissatuAttacking(key_now);
 }

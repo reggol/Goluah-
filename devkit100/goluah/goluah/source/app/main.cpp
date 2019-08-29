@@ -107,7 +107,13 @@ LRESULT WINAPI MsgProc( HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam )
 	switch( msg )
     {
 	case WM_KEYDOWN:
-		if(wparam==VK_ESCAPE)DestroyWindow(hWnd);
+        if (wparam == VK_ESCAPE) {
+            const auto taskID = g_system.GetCurrentMainTask()->GetID();
+            if (taskID == 'titl' || taskID == 'debg')
+                DestroyWindow(hWnd);
+            else
+                g_system.ReturnTitle();
+        }
 		break;
 
 	case WM_SIZE:
