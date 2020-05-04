@@ -61,7 +61,6 @@ BOOL CTitle::Inactivate(DWORD taskId)
 BOOL CTitle::Execute(DWORD time)
 {
 	counter++;
-	if(counter < 20)return TRUE;//イキナリ決定されてしまうのを防止
 
 	if(setting_now){
 		Settings();
@@ -331,6 +330,7 @@ void CTitle::MainMenu()
 
 	//↓移動
 	if(keystate & KEYSTA_DOWN){
+		if ((counter < 20) && !(keystate & KEYSTA_DOWN2))return;//イキナリ決定されてしまうのを防止
 		selectedgamemode++;
 		if(selectedgamemode>TITLE_OPMOVIE)selectedgamemode=0;
 		g_system.PlaySystemSound(SYSTEMSOUND_HIT1);
@@ -338,6 +338,7 @@ void CTitle::MainMenu()
 	}
 	//↑移動
 	if(keystate & KEYSTA_UP){
+		if ((counter < 20) && !(keystate & KEYSTA_UP2))return;//イキナリ決定されてしまうのを防止
 		if(selectedgamemode==0)selectedgamemode=TITLE_OPMOVIE;
 		else selectedgamemode--;
 		g_system.PlaySystemSound(SYSTEMSOUND_HIT1);
