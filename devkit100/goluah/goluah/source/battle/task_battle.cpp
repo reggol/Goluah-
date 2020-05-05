@@ -3142,6 +3142,7 @@ BYTE CBattleTask::GetTimeOverWinner()
 				hpwariai[j][0] = (hpwariai[j][0] + hpwariai[j][1] + hpwariai[j][2]) / tmp_num;//平均する
 			}
 		}
+		break;
 		case TAISENKEISIKI_JYUNBAN:
 		{
 			for (j = 0; j < 2; j++)
@@ -3150,6 +3151,7 @@ BYTE CBattleTask::GetTimeOverWinner()
 				hpwariai[j][0] = (double)pobj->data.hp / (double)pobj->data.hpmax;
 			}
 		}
+		break;
 	}
 
 	if (hpwariai[0][0] < hpwariai[1][0])j = 1;//1p側の負け
