@@ -465,7 +465,6 @@ BOOL CBattleTask::Execute(DWORD time)
 		if (m_pause_task)
 		{
 			m_pause_task->Kill();
-			m_pause_task = NULL;
 		}
 		else
 		{
@@ -475,8 +474,15 @@ BOOL CBattleTask::Execute(DWORD time)
 	}
 
 	if(m_pause_task){
-		g_system.PopSysTag();
-		return TRUE;
+		if (m_pause_task->GetKillFlag())
+		{
+			m_pause_task = NULL;
+		}
+		else
+		{
+			g_system.PopSysTag();
+			return TRUE;
+		}
 	}
 
 	//local vals
@@ -3202,7 +3208,6 @@ void CBattleTask::WndMessage(HWND hWnd,UINT msg,WPARAM wparam, LPARAM lparam)
 			if(m_pause_task)
 			{
 				m_pause_task->Kill();
-				m_pause_task = NULL;
 			}
 			else
 			{

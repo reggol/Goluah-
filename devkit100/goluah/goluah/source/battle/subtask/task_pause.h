@@ -21,6 +21,7 @@ public:
 	int GetDrawPriority(){return 500;}		//描画プライオリティ。低いほど手前に（後に）描画。マイナスならば表示しない
 
 	void Kill()	{m_kill_flag=TRUE;}
+	BOOL GetKillFlag() {return m_kill_flag;}
 	void ChangeInst();
 
 protected:
@@ -39,5 +40,6 @@ protected:
 };
 
 //selectedgamemodeの項目
-#define OPEN_INST				0
-#define RETURN_TO_TITLE			1//!< これを項目の最後とみなしている
+#define CONTINUE_BATTLE			0
+#define OPEN_INST				1
+#define RETURN_TO_TITLE			2//!< これを項目の最後とみなしている

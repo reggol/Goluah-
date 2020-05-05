@@ -71,6 +71,10 @@ BOOL CTBattlePause::Execute(DWORD time)
 			ChangeInst();
 		}
 	}
+	else if (m_selected == CONTINUE_BATTLE && key & KEYSTA_BA2)
+	{//試合再開
+		Kill();
+	}
 	else if (m_selected == RETURN_TO_TITLE && key&KEYSTA_BA2)
 	{//タイトルに戻る
 		g_system.ReturnTitle();
@@ -78,12 +82,12 @@ BOOL CTBattlePause::Execute(DWORD time)
 	}
 	else if (key & KEYSTA_DOWN2)
 	{
-		if (m_selected == RETURN_TO_TITLE)m_selected = OPEN_INST;
+		if (m_selected == RETURN_TO_TITLE)m_selected = CONTINUE_BATTLE;
 		else m_selected++;
 	}
 	else if (key & KEYSTA_UP2)
 	{
-		if (m_selected == OPEN_INST)m_selected = RETURN_TO_TITLE;
+		if (m_selected == CONTINUE_BATTLE)m_selected = RETURN_TO_TITLE;
 		else m_selected--;
 	}
 
@@ -226,6 +230,11 @@ void CTBattlePause::Draw()
 		const DWORD text1_color = 0xFF55FF33;//選択されていないときの色
 		DWORD top_y = 300;
 		DWORD step_y = 30;
+
+		if (m_selected == CONTINUE_BATTLE)text_color = text1_color;
+		else text_color = text2_color;
+		g_system.DrawBMPText(320 - 68, top_y, 0, _T("CONTINUE"), text_color);
+		top_y += step_y;
 
 		if (m_selected == OPEN_INST)text_color = text1_color;
 		else text_color = text2_color;
