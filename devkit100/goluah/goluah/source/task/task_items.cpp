@@ -324,7 +324,7 @@ void CTIconRingBase::Draw()
 		for(i=0;i<r_num;i++)
 		{
 			//座標算出
-			rot = (drot)*i - rotbase - m_rotation2 + 90 ;
+			rot = (drot)*i - rotbase - m_rotation2;
 			rot = rot/180.0*3.1415;//radに変換
 			x = ring_x_len*(cos(rot)) ;
 			y = ring_y_len*(sin(rot)) ;
