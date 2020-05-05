@@ -130,11 +130,11 @@ BOOL CTBattlePause::Execute(DWORD time)
 		}
 		else if (key & KEYSTA_UP)
 		{
-			m_shiftY++;
+			m_shiftY += 2;
 		}
 		else if (key & KEYSTA_DOWN)
 		{
-			m_shiftY--;
+			m_shiftY -= 2;
 		}
 
 		if (key & KEYSTA_BD2)
