@@ -133,6 +133,8 @@ void CTIconRingBase::Exec_Ready()
 			if(GetMaxIndex(m_selected_ring)-1 < (int)m_selected_index)
 				m_selected_index = GetMaxIndex(m_selected_ring)-1 ;
 			m_state = CTCRS_ChangeUp;
+			m_counter = 0;
+			Exec_ChangeUp();
 			OnChangeRing();
 		}
 		else if( keystate & KEYSTA_DOWN2 ){
@@ -147,6 +149,8 @@ void CTIconRingBase::Exec_Ready()
 			if(GetMaxIndex(m_selected_ring)-1 < (int)m_selected_index)
 				m_selected_index = GetMaxIndex(m_selected_ring)-1 ;
 			m_state = CTCRS_ChangeDown;
+			m_counter = 0;
+			Exec_ChangeDown();
 			OnChangeRing();
 		}
 	}
