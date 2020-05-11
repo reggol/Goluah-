@@ -1472,7 +1472,7 @@ BOOL CTStoryParamWindow::COptionSelecter::Execute(DWORD time)
 	float anmSpd = 0.08f;
 
 	// 以下無理矢理気味、よい子はマネしない。
-	if (m_customselect.State() == CTOPTSS_Ready)
+	if (m_customselect.State() == CTOPTSS_Ready || m_customselect.State() == CTOPTSS_NotReady)
 		customend = false;	// ↓の処理が終わった瞬間に立てるためのフラグ
 
 	if (custom_mode && m_customselect.State() == CTOPTSS_Hide){		// CUSTOM選択が終わったとき
