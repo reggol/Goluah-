@@ -1538,7 +1538,7 @@ void CBattleTask::DeleteGObject(DWORD oid)
 
 	DELETECLASS(pgobj);
 	p_objects[oid&0x0000FFFF]=NULL;
-	object_regno[oid&0x0000FFFF]++;
+	object_regno[oid&0x0000FFFF] = (object_regno[oid & 0x0000FFFF] + 1) % 0x8000;
 
 	g_system.PopSysTag();
 }
