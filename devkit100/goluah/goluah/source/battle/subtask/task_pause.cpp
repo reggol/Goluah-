@@ -233,7 +233,7 @@ void CTBattlePause::Draw()
 
 		if (m_selected == CONTINUE_BATTLE)text_color = text1_color;
 		else text_color = text2_color;
-		g_system.DrawBMPText(320 - 68, top_y, 0, _T("CONTINUE"), text_color);
+		g_system.DrawBMPText(320 - 63, top_y, 0, _T("CONTINUE"), text_color);
 		top_y += step_y;
 
 		if (m_selected == OPEN_INST)text_color = text1_color;
